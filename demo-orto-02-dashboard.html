@@ -190,6 +190,104 @@
     .stat-card .delta { font-size: 12.5px; color: var(--n500); }
     .stat-card .delta strong { color: var(--n700); }
 
+    .priority-queue-block {
+      background: var(--bone);
+      border: 1px solid var(--n200);
+      border-left: 4px solid var(--clinical);
+      border-radius: 14px;
+      padding: 24px 28px;
+      margin: 0 0 32px;
+    }
+    .pqb-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--n200);
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .pqb-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--clinical);
+      font-weight: 600;
+    }
+    .pqb-meta {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--n500);
+      letter-spacing: 0.05em;
+    }
+    .pqb-headline {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      margin: 0 0 20px;
+      line-height: 1.2;
+    }
+    .pqb-headline strong { font-weight: 600; color: var(--clinical); }
+    .pqb-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .pqb-item {
+      display: grid;
+      grid-template-columns: 32px 1fr 170px;
+      gap: 14px;
+      padding: 12px 16px;
+      background: var(--cream);
+      border-radius: 8px;
+      align-items: center;
+      transition: all 0.15s ease;
+    }
+    .pqb-item:hover { background: var(--n100); }
+    .pqb-rank {
+      font-family: var(--font-mono);
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--n500);
+    }
+    .pqb-name {
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: 15px;
+      color: var(--ink);
+      letter-spacing: -0.005em;
+    }
+    .pqb-reason {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      color: var(--n700);
+      margin-top: 2px;
+      line-height: 1.4;
+    }
+    .action-cell {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      font-weight: 600;
+      text-align: center;
+      padding: 7px 10px;
+      border-radius: 6px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .action-cell.urgent { background: rgba(194, 65, 12, 0.15); color: var(--warmth); }
+    .action-cell.ready { background: rgba(4, 120, 87, 0.15); color: var(--recovery); }
+    .action-cell.navy { background: rgba(30, 58, 138, 0.12); color: var(--clinical); }
+    @media (max-width: 880px) {
+      .priority-queue-block { padding: 20px 22px; margin-bottom: 24px; }
+      .pqb-headline { font-size: 18px; }
+      .pqb-item { grid-template-columns: 24px 1fr; gap: 10px; padding: 12px 14px; }
+      .pqb-item .action-cell { grid-column: 1 / -1; justify-self: start; margin-top: 2px; }
+    }
+
     .filter-bar {
       display: flex; gap: 8px;
       margin-bottom: 16px;
@@ -568,6 +666,56 @@
         <div class="lab">Con fisio collegato</div>
         <div class="val navy">32 / 47</div>
         <div class="delta"><strong>68%</strong> · Aderenza media <strong>+35%</strong></div>
+      </div>
+    </div>
+
+    <div class="priority-queue-block fade-up d-2">
+      <div class="pqb-header">
+        <span class="pqb-label">⊹ AI Priority Queue · oggi</span>
+        <span class="pqb-meta">Aggiornato 1 min fa</span>
+      </div>
+      <h2 class="pqb-headline"><strong>8 pazienti</strong> richiedono attenzione · 39 in linea</h2>
+      <div class="pqb-list">
+        <div class="pqb-item">
+          <div class="pqb-rank">①</div>
+          <div>
+            <div class="pqb-name">Carlo Bruno</div>
+            <div class="pqb-reason">Non risponde da 9 giorni · D+12 acromionplastica</div>
+          </div>
+          <div class="action-cell urgent">Chiama paziente</div>
+        </div>
+        <div class="pqb-item">
+          <div class="pqb-rank">②</div>
+          <div>
+            <div class="pqb-name">Giovanni Russo</div>
+            <div class="pqb-reason">Non risponde da 8 giorni · ha ripreso antidolorifici</div>
+          </div>
+          <div class="action-cell urgent">Chiama paziente</div>
+        </div>
+        <div class="pqb-item">
+          <div class="pqb-rank">③</div>
+          <div>
+            <div class="pqb-name">Paolo Greco</div>
+            <div class="pqb-reason">PTG D+49, KOOS 51 fermo da 3 settimane</div>
+          </div>
+          <div class="action-cell urgent">Rivedi protocollo</div>
+        </div>
+        <div class="pqb-item">
+          <div class="pqb-rank">④</div>
+          <div>
+            <div class="pqb-name">Anna Romano</div>
+            <div class="pqb-reason">Senza fisio collegato · dolore HOOS 38 in salita</div>
+          </div>
+          <div class="action-cell urgent">Prescrivi fisio</div>
+        </div>
+        <div class="pqb-item">
+          <div class="pqb-rank">⑤</div>
+          <div>
+            <div class="pqb-name">Giuseppina Russo</div>
+            <div class="pqb-reason">Sintesi pre-controllo pronta · D+30 lunedì</div>
+          </div>
+          <a href="demo-orto-05-detail-giuseppina.html" class="action-cell navy">Apri AI Resume</a>
+        </div>
       </div>
     </div>
 

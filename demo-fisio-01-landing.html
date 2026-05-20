@@ -749,6 +749,61 @@
       text-transform: uppercase;
     }
 
+    .evolution-stages {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 32px;
+    }
+    .stage {
+      padding: 28px;
+      background: var(--bone);
+      border-radius: 12px;
+      border: 1px solid var(--n200);
+      border-top: 3px solid var(--n300);
+      transition: all 0.22s ease;
+    }
+    .stage.s1 { border-top-color: var(--n500); }
+    .stage.s2 { border-top-color: var(--warmth); }
+    .stage.s3 { border-top-color: var(--sun); }
+    .stage:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px -16px rgba(0,0,0,0.1);
+    }
+    .stage-num {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--n500);
+      margin-bottom: 12px;
+    }
+    .stage h4 {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: -0.012em;
+      line-height: 1.15;
+      margin: 0 0 10px;
+    }
+    .stage p {
+      font-size: 13.5px;
+      color: var(--n700);
+      line-height: 1.5;
+      margin: 0;
+    }
+    .evolution-lead {
+      font-size: 16.5px;
+      color: var(--n700);
+      max-width: 740px;
+      line-height: 1.55;
+      margin-bottom: 4px;
+    }
+    @media (max-width: 880px) {
+      .evolution-stages { grid-template-columns: 1fr; gap: 12px; }
+      .stage { padding: 22px; }
+    }
+
     .disclaimer-strip {
       background: var(--cream);
       border-top: 1px solid var(--n200);
@@ -1219,6 +1274,36 @@
           <div class="ev-desc">recovery rate più rapido.</div>
           <div class="ev-src">Lancet Digital Health · 2022</div>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="container">
+    <div class="section-eyebrow">Data moat</div>
+    <h2 class="section-title">Diventa <em>più intelligente</em> ogni mese.</h2>
+    <p class="evolution-lead">
+      Ogni check-in, ogni ROM, ogni PROM costruisce una curva di recupero.
+      All'inizio RecoveryOS ti mostra trend e alert. Con più dati,
+      potrà confrontare pazienti simili, identificare drop-off precoci,
+      e aiutarti a capire quali protocolli funzionano meglio nella tua pratica.
+    </p>
+    <div class="evolution-stages">
+      <div class="stage s1">
+        <div class="stage-num">Mese 1–3</div>
+        <h4>Descrittivo</h4>
+        <p>Dashboard live, check-in automatici, alert rule-based, report mensile al medico inviante.</p>
+      </div>
+      <div class="stage s2">
+        <div class="stage-num">Mese 4–12</div>
+        <h4>Comparativo</h4>
+        <p>Curve recovery vs target del protocollo, paziente sotto/sopra l'atteso, benchmark interno tra i tuoi casi.</p>
+      </div>
+      <div class="stage s3">
+        <div class="stage-num">Anno 2+</div>
+        <h4>Predittivo</h4>
+        <p>Drop-off risk, milestone probability, protocol optimization sui tuoi dati clinici aggregati.</p>
       </div>
     </div>
   </div>
