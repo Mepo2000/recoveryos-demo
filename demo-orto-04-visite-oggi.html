@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RecoveryOS — Le visite di oggi</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Manrope:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --ink: #0F1419;
+      --bone: #FBF8F2;
+      --cream: #F4EEDF;
+      --clinical: #1E3A8A;
+      --recovery: #047857;
+      --signal: #B91C1C;
+      --warmth: #C2410C;
+      --sun: #EAB308;
+      --n100: #F0EADC;
+      --n200: #E0D8C5;
+      --n300: #C9C0A8;
+      --n500: #8C8474;
+      --n700: #4A4434;
+      --font-display: 'Fraunces', Georgia, serif;
+      --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-body);
+      color: var(--ink);
+      background: var(--bone);
+      line-height: 1.5;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+    }
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      pointer-events: none; z-index: -1;
+      background: radial-gradient(ellipse 80% 50% at 0% 0%, rgba(30, 58, 138, 0.06), transparent);
+    }
+
+    nav {
+      position: sticky; top: 0;
+      background: rgba(251, 248, 242, 0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--n200);
+      padding: 14px 32px;
+      display: flex; justify-content: space-between; align-items: center;
+      z-index: 100;
+    }
+    .logo {
+      font-family: var(--font-display); font-weight: 500;
+      font-size: 20px; letter-spacing: -0.02em;
+      color: var(--ink); text-decoration: none;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .logo .mark {
+      width: 26px; height: 26px;
+      background: var(--ink); color: var(--bone);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-weight: 600;
+      font-size: 14px; font-style: italic;
+    }
+    .nav-right { display: flex; gap: 16px; align-items: center; }
+    .demo-badge {
+      background: var(--clinical); color: var(--bone);
+      padding: 5px 11px;
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      border-radius: 100px;
+    }
+    .nav-link {
+      color: var(--n700); text-decoration: none;
+      font-size: 13.5px; font-weight: 500;
+      padding: 6px 12px; border-radius: 6px;
+      transition: all 0.2s ease;
+    }
+    .nav-link:hover { color: var(--ink); background: var(--cream); }
+    .nav-link.back { color: var(--clinical); }
+
+    .app {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      min-height: calc(100vh - 60px);
+    }
+    .sidebar {
+      border-right: 1px solid var(--n200);
+      padding: 24px 16px;
+      background: rgba(244, 238, 223, 0.4);
+    }
+    .sidebar-section { margin-bottom: 28px; }
+    .sidebar-title {
+      font-family: var(--font-mono); font-size: 10px;
+      text-transform: uppercase; letter-spacing: 0.12em;
+      color: var(--n500); padding: 0 12px; margin-bottom: 8px;
+    }
+    .sidebar-link {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 12px; border-radius: 8px;
+      color: var(--n700); text-decoration: none;
+      font-size: 14px; font-weight: 500;
+      transition: all 0.15s ease;
+      margin-bottom: 2px;
+    }
+    .sidebar-link:hover { background: var(--cream); color: var(--ink); }
+    .sidebar-link.active { background: var(--ink); color: var(--bone); }
+    .sidebar-link .count {
+      margin-left: auto;
+      font-family: var(--font-mono); font-size: 11px;
+      background: var(--n200); color: var(--n700);
+      padding: 1px 7px; border-radius: 100px;
+      font-weight: 500;
+    }
+    .sidebar-link.active .count { background: var(--clinical); color: var(--bone); }
+    .sidebar-link .icon { width: 18px; flex-shrink: 0; }
+
+    .main { padding: 32px 40px 64px; }
+    .page-header {
+      display: flex; justify-content: space-between; align-items: end;
+      margin-bottom: 24px; flex-wrap: wrap; gap: 16px;
+    }
+    .page-title h1 {
+      font-family: var(--font-display);
+      font-size: 38px; font-weight: 400;
+      letter-spacing: -0.022em; line-height: 1;
+      margin-bottom: 8px;
+    }
+    .page-title h1 em { font-style: italic; color: var(--clinical); }
+    .page-title .sub { font-size: 14px; color: var(--n700); }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 16px; border: none;
+      font-family: var(--font-body);
+      font-size: 13.5px; font-weight: 600;
+      cursor: pointer; text-decoration: none;
+      transition: all 0.2s ease; border-radius: 7px;
+    }
+    .btn-primary { background: var(--ink); color: var(--bone); }
+    .btn-primary:hover { background: var(--clinical); }
+    .btn-secondary { background: var(--cream); color: var(--ink); border: 1px solid var(--n200); }
+    .btn-secondary:hover { background: var(--n100); border-color: var(--n300); }
+
+    /* ===== DAY HERO ===== */
+    .day-hero {
+      background: linear-gradient(135deg, var(--ink) 0%, #1a2530 100%);
+      color: var(--bone);
+      padding: 40px;
+      border-radius: 16px;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 24px 56px -28px rgba(15, 20, 25, 0.4);
+    }
+    .day-hero::before {
+      content: '';
+      position: absolute;
+      top: -80px; right: -80px;
+      width: 320px; height: 320px;
+      background: radial-gradient(circle, rgba(234, 179, 8, 0.18), transparent 70%);
+      pointer-events: none;
+    }
+    .day-hero > * { position: relative; z-index: 1; }
+    .day-hero-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--sun);
+      margin-bottom: 12px;
+    }
+    .day-hero h1 {
+      font-family: var(--font-display);
+      font-size: 36px;
+      font-weight: 400;
+      letter-spacing: -0.022em;
+      line-height: 1.12;
+      margin: 0 0 8px;
+      color: var(--bone);
+    }
+    .day-hero h1 em { font-style: italic; color: var(--sun); }
+    .day-hero p {
+      color: rgba(251, 248, 242, 0.72);
+      font-size: 15px;
+      margin: 0;
+    }
+    .day-stat-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 28px;
+    }
+    .day-stat {
+      background: rgba(251, 248, 242, 0.06);
+      padding: 18px;
+      border-radius: 10px;
+      border-left: 3px solid var(--sun);
+    }
+    .day-stat.attention { border-left-color: var(--warmth); }
+    .day-stat-value {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 500;
+      color: var(--bone);
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+    .day-stat-label {
+      font-size: 10.5px;
+      color: rgba(251, 248, 242, 0.65);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-top: 6px;
+      font-family: var(--font-mono);
+    }
+    .day-stat-value .star {
+      color: var(--n500);
+      font-size: 0.45em;
+      vertical-align: super;
+      margin-left: 2px;
+      font-weight: 400;
+    }
+
+    /* ===== VISIT TIMELINE ===== */
+    .visit-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      position: relative;
+    }
+    .visit-timeline::before {
+      content: "";
+      position: absolute;
+      left: 78px;
+      top: 30px;
+      bottom: 30px;
+      width: 2px;
+      background: linear-gradient(180deg, var(--clinical) 0%, var(--n200) 100%);
+    }
+    .visit-item {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 24px;
+      padding: 20px 0;
+      position: relative;
+    }
+    .visit-time {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--clinical);
+      text-align: right;
+      padding-right: 16px;
+      padding-top: 4px;
+      position: relative;
+    }
+    .visit-time::after {
+      content: "";
+      position: absolute;
+      right: -7px;
+      top: 8px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--clinical);
+      border: 3px solid var(--bone);
+      z-index: 1;
+    }
+    .visit-time.status-attention::after { background: var(--warmth); }
+    .visit-time.status-excellent::after { background: var(--recovery); }
+    .visit-time.status-break::after { background: var(--n300); }
+
+    .visit-card {
+      background: var(--bone);
+      border-radius: 12px;
+      padding: 22px 26px;
+      border: 1px solid var(--n200);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+      transition: all 0.18s ease;
+    }
+    .visit-card:hover {
+      border-color: var(--n300);
+      box-shadow: 0 6px 22px rgba(0, 0, 0, 0.06);
+    }
+    .visit-card.attention { border-left: 4px solid var(--warmth); }
+    .visit-card.excellent { border-left: 4px solid var(--recovery); }
+    .visit-card.in-linea { border-left: 4px solid var(--clinical); }
+
+    .visit-patient-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 14px;
+      margin-bottom: 4px;
+      border-bottom: 1px solid var(--n200);
+      padding-bottom: 12px;
+    }
+    .visit-patient-name {
+      font-family: var(--font-display);
+      font-size: 19px;
+      font-weight: 500;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+    }
+    .visit-patient-context {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      color: var(--n700);
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+    .visit-status-pill {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 11px;
+      border-radius: 100px;
+      background: rgba(30, 58, 138, 0.1);
+      color: var(--clinical);
+      white-space: nowrap;
+      flex-shrink: 0;
+      font-weight: 600;
+    }
+    .visit-status-pill.attention {
+      background: rgba(194, 65, 12, 0.12);
+      color: var(--warmth);
+    }
+    .visit-status-pill.excellent {
+      background: rgba(4, 120, 87, 0.15);
+      color: var(--recovery);
+    }
+    .visit-ai-resume {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--ink);
+      margin: 14px 0 12px;
+    }
+    .visit-ai-resume strong {
+      font-family: var(--font-mono);
+      font-weight: 600;
+      color: var(--clinical);
+    }
+    .visit-conclusion {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--n200);
+      font-size: 12.5px;
+      color: var(--n700);
+      line-height: 1.5;
+    }
+    .visit-conclusion strong {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .visit-card.break {
+      background: var(--cream);
+      border: 1px dashed var(--n200);
+      box-shadow: none;
+      padding: 14px 26px;
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--n500);
+      letter-spacing: 0.05em;
+    }
+    .visit-item.break-row { opacity: 0.6; }
+    .visit-item.break-row .visit-time { color: var(--n500); }
+
+    /* ===== BACKGROUND SECTION ===== */
+    .background-section {
+      background: var(--cream);
+      border-radius: 14px;
+      padding: 36px;
+      margin-top: 48px;
+      border: 1px solid var(--n200);
+    }
+    .bg-section-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--clinical);
+      margin-bottom: 14px;
+    }
+    .background-section h3 {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 400;
+      letter-spacing: -0.018em;
+      margin: 0 0 16px;
+    }
+    .background-section h3 em { font-style: italic; color: var(--clinical); }
+    .background-section p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--n700);
+      margin-bottom: 12px;
+      max-width: 760px;
+    }
+    .background-section p strong { color: var(--ink); }
+
+    /* ===== APP FOOTER ===== */
+    .app-footer {
+      padding: 18px 32px 24px;
+      border-top: 1px solid var(--n200);
+      background: rgba(244, 238, 223, 0.4);
+    }
+    .app-footer .data-footnote {
+      max-width: 900px;
+      margin: 0 auto 10px;
+      font-size: 11px;
+      color: var(--n500);
+      line-height: 1.55;
+      text-align: center;
+      font-style: italic;
+    }
+    .app-footer .fineprint {
+      max-width: 900px;
+      margin: 0 auto;
+      font-size: 11px;
+      color: var(--n500);
+      line-height: 1.55;
+      text-align: center;
+      font-style: italic;
+    }
+
+    @media (max-width: 1100px) {
+      .day-stat-row { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 880px) {
+      .app { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .main { padding: 24px 20px; }
+      .day-hero { padding: 28px 22px; }
+      .day-hero h1 { font-size: 28px; }
+      .day-stat-row { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .day-stat { padding: 14px; }
+      .day-stat-value { font-size: 22px; }
+      .visit-item { grid-template-columns: 60px 1fr; gap: 14px; }
+      .visit-timeline::before { left: 58px; }
+      .visit-card { padding: 18px 20px; }
+      .visit-patient-row { flex-direction: column; gap: 6px; align-items: flex-start; }
+      .background-section { padding: 26px 22px; }
+      .app-footer { padding: 16px 20px 24px; }
+      .app-footer .fineprint,
+      .app-footer .data-footnote { text-align: left; }
+    }
+
+    .fade-up {
+      opacity: 0; transform: translateY(16px);
+      animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    .d-1 { animation-delay: 0.05s; }
+    .d-2 { animation-delay: 0.14s; }
+    .d-3 { animation-delay: 0.24s; }
+    .visit-item.fade-row {
+      opacity: 0;
+      animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .visit-item.fade-row:nth-child(1) { animation-delay: 0.20s; }
+    .visit-item.fade-row:nth-child(2) { animation-delay: 0.26s; }
+    .visit-item.fade-row:nth-child(3) { animation-delay: 0.32s; }
+    .visit-item.fade-row:nth-child(4) { animation-delay: 0.38s; }
+    .visit-item.fade-row:nth-child(5) { animation-delay: 0.44s; }
+    .visit-item.fade-row:nth-child(6) { animation-delay: 0.50s; }
+    .visit-item.fade-row:nth-child(7) { animation-delay: 0.56s; }
+    .visit-item.fade-row:nth-child(8) { animation-delay: 0.62s; }
+    .visit-item.fade-row:nth-child(9) { animation-delay: 0.68s; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="demo-orto-01-landing.html" class="logo">
+    <span class="mark">R</span>
+    RecoveryOS
+  </a>
+  <div class="nav-right">
+    <span class="demo-badge">Demo Orto · Visite oggi</span>
+    <a href="demo-orto-02-dashboard.html" class="nav-link back">← Tutti gli operati</a>
+    <a href="https://tally.so/r/recoveryos-orto?source=demo_visite" class="nav-link">Questionario →</a>
+  </div>
+</nav>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">Workspace</div>
+      <a href="#" class="sidebar-link active">
+        <span class="icon">⊹</span>
+        Visite oggi
+        <span class="count">8</span>
+      </a>
+      <a href="demo-orto-02-dashboard.html" class="sidebar-link">
+        <span class="icon">⊕</span>
+        Operati
+        <span class="count">47</span>
+      </a>
+      <a href="#" class="sidebar-link">
+        <span class="icon">⌁</span>
+        Alert
+        <span class="count">3</span>
+      </a>
+      <a href="demo-orto-03-outcome-storytelling.html" class="sidebar-link">
+        <span class="icon">↗</span>
+        Outcome
+      </a>
+      <a href="demo-orto-03-outcome-storytelling.html" class="sidebar-link">
+        <span class="icon">◆</span>
+        Case study
+        <span class="count">12</span>
+      </a>
+      <a href="#" class="sidebar-link">
+        <span class="icon">↻</span>
+        Recall
+        <span class="count">8</span>
+      </a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">Network</div>
+      <a href="#" class="sidebar-link">
+        <span class="icon">✷</span>
+        Medici colleghi
+        <span class="count">2</span>
+      </a>
+      <a href="#" class="sidebar-link">
+        <span class="icon">✦</span>
+        Fisio partner
+        <span class="count">5</span>
+      </a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">Studio</div>
+      <a href="#" class="sidebar-link">
+        <span class="icon">⌂</span>
+        Il mio studio
+      </a>
+      <a href="#" class="sidebar-link">
+        <span class="icon">⌀</span>
+        Impostazioni
+      </a>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="page-header fade-up">
+      <div class="page-title">
+        <h1>Le tue <em>visite di oggi</em></h1>
+        <div class="sub">Martedì 21 maggio · 8 controlli programmati · briefing AI Resume pronto in cima</div>
+      </div>
+    </div>
+
+    <div class="day-hero fade-up d-1">
+      <div class="day-hero-eyebrow">⊹ Briefing della giornata · Aggiornato 5 min fa</div>
+      <h1>Tutto il contesto in <em>5 minuti.</em><br>Entri in studio sapendo dove guardare.</h1>
+      <p>Ogni paziente ha il suo AI Resume pre-generato dai 7 segnali raccolti negli ultimi 14–90 giorni: ROM, dolore, aderenza, milestone, note fisio, segnali caregiver.</p>
+
+      <div class="day-stat-row">
+        <div class="day-stat">
+          <div class="day-stat-value">8</div>
+          <div class="day-stat-label">Visite oggi</div>
+        </div>
+        <div class="day-stat">
+          <div class="day-stat-value">6</div>
+          <div class="day-stat-label">In linea o meglio</div>
+        </div>
+        <div class="day-stat attention">
+          <div class="day-stat-value">2</div>
+          <div class="day-stat-label">Da approfondire</div>
+        </div>
+        <div class="day-stat">
+          <div class="day-stat-value">~90 min<span class="star">*</span></div>
+          <div class="day-stat-label">Tempo risparmiato</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="visit-timeline">
+
+      <!-- 09:00 Giuseppina -->
+      <div class="visit-item fade-row">
+        <div class="visit-time">09:00</div>
+        <a href="demo-orto-05-detail-giuseppina.html" class="visit-card in-linea" style="text-decoration:none; color:inherit; display:block;">
+          <div class="visit-patient-row">
+            <div>
+              <div class="visit-patient-name">Giuseppina Russo, 78</div>
+              <div class="visit-patient-context">Fissazione femore · D+30 · Caregiver Andrea</div>
+            </div>
+            <span class="visit-status-pill">● In linea</span>
+          </div>
+          <div class="visit-ai-resume">
+            <strong>AI Resume:</strong> ROM in flessione anca <strong>80°</strong> (target 85°),
+            dolore stabile <strong>4/10</strong>, antidolorifici scesi a 1×/die da 5 giorni.
+            Fisio (Dr. Marcucci) segnala buon reclutamento muscolare. Caregiver Andrea attivo,
+            ha confermato aderenza esercizi 80%.
+          </div>
+          <div class="visit-conclusion">
+            → <strong>Recovery in linea.</strong> Visita di routine. Verificare ROM
+            prima della dimissione fisio. <em>Apri scheda completa →</em>
+          </div>
+        </a>
+      </div>
+
+      <!-- 09:30 Marco -->
+      <div class="visit-item fade-row">
+        <div class="visit-time status-excellent">09:30</div>
+        <div class="visit-card excellent">
+          <div class="visit-patient-row">
+            <div>
+              <div class="visit-patient-name">Marco Bianchi, 28</div>
+              <div class="visit-patient-context">Ricostruzione LCA · D+90 controllo trimestrale</div>
+            </div>
+            <span class="visit-status-pill excellent">★ Eccellente</span>
+          </div>
+          <div class="visit-ai-resume">
+            <strong>AI Resume:</strong> NPRS <strong>2/10</strong>, KOOS-Sport
+            <strong>68→78</strong> in 4 settimane, ritorno graduale a corsa controllata
+            da 3 settimane. Fisio (Dr. Pellegrini) conferma stabilità articolare.
+            Aderenza 92%.
+          </div>
+          <div class="visit-conclusion">
+            → <strong>Recovery sopra la media.</strong> Valutare progressione verso
+            sport contatto e tempistica ritorno completo. Candidato case study.
+          </div>
+        </div>
+      </div>
+
+      <!-- 10:00 Paolo (attention) -->
+      <div class="visit-item fade-row">
+        <div class="visit-time status-attention">10:00</div>
+        <div class="visit-card attention">
+          <div class="visit-patient-row">
+            <div>
+              <div class="visit-patient-name">Paolo Greco, 62</div>
+              <div class="visit-patient-context">PTG ginocchio dx · D+49</div>
+            </div>
+            <span class="visit-status-pill attention">⚠ Da approfondire</span>
+          </div>
+          <div class="visit-ai-resume">
+            <strong>AI Resume:</strong> KOOS <strong>51 in stallo da 3 sedute</strong>,
+            ROM <strong>95°</strong> (target 105°), aderenza fisio scesa al <strong>55%</strong>,
+            dolore notturno in lieve aumento (+1 punto in 7 giorni).
+            Fisio segnala difficoltà su catena cinetica chiusa.
+          </div>
+          <div class="visit-conclusion">
+            → <strong>Pattern da valutare:</strong> recupero rallentato. Considerare
+            modifica protocollo o approfondimento con esame clinico.
+          </div>
+        </div>
+      </div>
+
+      <!-- 10:30 Elena -->
+      <div class="visit-item fade-row">
+        <div class="visit-time">10:30</div>
+        <div class="visit-card in-linea">
+          <div class="visit-patient-row">
+            <div>
+              <div class="visit-patient-name">Elena Ferrari, 31</div>
+              <div class="visit-patient-context">LCA · D+42 · Sci agonistico</div>
+            </div>
+            <span class="visit-status-pill">● In linea</span>
+          </div>
+          <div class="visit-ai-resume">
+            <strong>AI Resume:</strong> NPRS <strong>4/10</strong>, KOOS <strong>71</strong>,
+            aderenza 85%. Fisio conferma stabilità a 6 settimane. Inizio progressione
+            propriocettiva su superficie instabile.
+          </div>
+          <div class="visit-conclusion">
+            → <strong>In linea con curva attesa.</strong> Programmare valutazione
+            isocinetica a 12 settimane.
+          </div>
+        </div>
+      </div>
+
+      <!-- 11:00 Luigi -->
+      <div class="visit-item fade-row">
+        <div class="visit-time">11:00</div>
+        <div class="visit-card in-linea">
+          <div class="visit-patient-row">
+            <div>
+              <div class="visit-patient-name">Luigi Esposito, 54</div>
+              <div class="visit-patient-context">Riparazione cuffia rotatori · D+63</div>
+            </div>
+            <span class="visit-status-pill">● In linea</span>
+          </div>
+          <div class="visit-ai-resume">
+            <strong>AI Resume:</strong> DASH <strong>58→24</strong>, NPRS <strong>2/10</strong>,
+            ROM elevazione <strong>160°</strong>. Aderenza 88%. Ritorno alle attività
+            quotidiane completo.
+          </div>
+          <div class="visit-conclusion">
+            → <strong>Candidato a dimissione.</strong> Valutare svincolo dalla fisio
+            e ripresa attività lavorativa con limitazioni residue.
+          </div>
+        </div>
+      </div>
+
+      <!-- 11:30 Break -->
+      <div class="visit-item break-row fade-row">
+        <div class="visit-time status-break">11:30</div>
+        <div class="visit-card break">⏸ Pausa pranzo · 2h 30 min</div>
+      </div>
+
+      <!-- 14:00 Sofia -->
+      <div class="visit-item fade-row">
+        <div class="visit-time status-excellent">14:00</div>
+        <div class="visit-card excellent">
+          <div class="visit-patient-row">
+            <div>
+              <div class="visit-patient-name">Sofia Conti, 35</div>
+              <div class="visit-patient-context">Meniscectomia mediale · D+17</div>
+            </div>
+            <span class="visit-status-pill excellent">★ Eccellente</span>
+          </div>
+          <div class="visit-ai-resume">
+            <strong>AI Resume:</strong> NPRS <strong>5→1</strong> in 2 settimane,
+            KOOS <strong>50→78</strong>. Ritorno running amatoriale già a 4 settimane.
+            Aderenza 94%. Nessuna red flag.
+          </div>
+          <div class="visit-conclusion">
+            → <strong>Candidato case study.</strong> Dimissione precoce possibile,
+            programma ritorno completo allo sport.
+          </div>
+        </div>
+      </div>
+
+      <!-- 14:30 Roberto -->
+      <div class="visit-item fade-row">
+        <div class="visit-time">14:30</div>
+        <div class="visit-card in-linea">
+          <div class="visit-patient-row">
+            <div>
+              <div class="visit-patient-name">Roberto Marini, 58</div>
+              <div class="visit-patient-context">PTG ginocchio sx · D+35</div>
+            </div>
+            <span class="visit-status-pill">● In linea</span>
+          </div>
+          <div class="visit-ai-resume">
+            <strong>AI Resume:</strong> NPRS <strong>3/10</strong>, KOOS <strong>65</strong>,
+            ROM <strong>100°</strong>. Fisio (Dr. Marcucci) conferma progressione
+            graduale. Aderenza 82%.
+          </div>
+          <div class="visit-conclusion">
+            → <strong>Routine.</strong> Verificare progressione vs Paolo (caso simile
+            a D+49 con stallo).
+          </div>
+        </div>
+      </div>
+
+      <!-- 15:00 Anna -->
+      <div class="visit-item fade-row">
+        <div class="visit-time status-attention">15:00</div>
+        <div class="visit-card attention">
+          <div class="visit-patient-row">
+            <div>
+              <div class="visit-patient-name">Anna Romano, 67</div>
+              <div class="visit-patient-context">PTA anca destra · D+21 · Senza fisio collegato</div>
+            </div>
+            <span class="visit-status-pill attention">⚠ Da approfondire</span>
+          </div>
+          <div class="visit-ai-resume">
+            <strong>AI Resume:</strong> HOOS <strong>38 in salita</strong> (dolore
+            che peggiora), nessun fisio collegato al percorso, aderenza esercizi
+            autonomi <strong>non monitorata</strong>. Paziente ha riferito
+            difficoltà nelle attività quotidiane.
+          </div>
+          <div class="visit-conclusion">
+            → <strong>Prescrivere fisio.</strong> Senza fisio collegato non hai
+            dati ROM oggettivi né monitoraggio aderenza.
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="background-section fade-up d-3">
+      <div class="bg-section-label">⊹ Cosa succede in background</div>
+      <h3>Mentre tu visiti, RecoveryOS <em>lavora per te</em>.</h3>
+      <p>Ogni AI Resume in questa pagina è generato in tempo reale dai
+      <strong>7 segnali clinici</strong> raccolti tra paziente, fisioterapista e caregiver
+      nelle 4–12 settimane precedenti.</p>
+      <p>Tu apri la pagina 5 minuti prima del primo controllo. Tutto il
+      contesto è già lì. Non chiami nessuno. Non leggi chat. Non ricostruisci
+      nulla. <strong>Entri in studio sapendo dove guardare.</strong></p>
+    </div>
+
+  </main>
+</div>
+
+<footer class="app-footer">
+  <div class="data-footnote">
+    *Dati illustrativi da letteratura o da validare con la raccolta reale nei primi 6 mesi di adozione.
+  </div>
+  <div class="fineprint">
+    RecoveryOS supporta follow-up, comunicazione e documentazione clinica.
+    Evidenzia pattern e anomalie nei dati raccolti, ma non fa diagnosi e non propone trattamenti.
+    Le decisioni cliniche restano sempre al professionista.
+  </div>
+</footer>
+
+</body>
+</html>

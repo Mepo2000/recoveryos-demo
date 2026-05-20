@@ -470,6 +470,41 @@
     }
     .insight-panel .ip-cta:hover { background: var(--bone); color: var(--ink); }
 
+    .quick-nav {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .quick-tab {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      padding: 7px 14px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.15s ease;
+      border: 1px solid transparent;
+    }
+    .quick-tab.primary {
+      background: var(--clinical);
+      color: var(--bone);
+    }
+    .quick-tab.primary:hover {
+      background: var(--ink);
+      transform: translateY(-1px);
+    }
+    .quick-tab.secondary {
+      background: var(--bone);
+      color: var(--n700);
+      border-color: var(--n200);
+    }
+    .quick-tab.secondary:hover {
+      background: var(--cream);
+      color: var(--ink);
+    }
+
     @media (max-width: 1280px) {
       .stat-row { grid-template-columns: repeat(2, 1fr); }
       .table-header, .table-row {
@@ -583,6 +618,11 @@
   <aside class="sidebar">
     <div class="sidebar-section">
       <div class="sidebar-title">Workspace</div>
+      <a href="demo-orto-04-visite-oggi.html" class="sidebar-link">
+        <span class="icon">⊹</span>
+        Visite oggi
+        <span class="count">8</span>
+      </a>
       <a href="#" class="sidebar-link active">
         <span class="icon">⊕</span>
         Operati
@@ -644,6 +684,11 @@
         <a href="#" class="btn btn-secondary">+ Nuovo intervento</a>
         <a href="#" class="btn btn-primary">Esporta report mensile</a>
       </div>
+    </div>
+
+    <div class="quick-nav fade-up d-1">
+      <a href="demo-orto-04-visite-oggi.html" class="quick-tab primary">⊹ Visite di oggi (8) →</a>
+      <a href="#" class="quick-tab secondary">Tutti gli operati (47)</a>
     </div>
 
     <div class="stat-row">
@@ -827,7 +872,7 @@
           <div class="adherence-label">85%</div>
         </div>
         <div><span class="alert-badge ok">In linea</span></div>
-        <div class="next-action none col-action">Nessuna azione</div>
+        <div class="next-action synth col-action">Invia PROM 90gg</div>
         <div class="row-arrow col-arrow">→</div>
       </a>
 
@@ -849,7 +894,7 @@
           <div class="adherence-label">88%</div>
         </div>
         <div><span class="alert-badge ok">In linea</span></div>
-        <div class="next-action case col-action">Candidato case study</div>
+        <div class="next-action synth col-action">Apri AI Resume</div>
         <div class="row-arrow col-arrow">→</div>
       </a>
 
@@ -937,7 +982,7 @@
           <div class="adherence-label">82%</div>
         </div>
         <div><span class="alert-badge ok">In linea</span></div>
-        <div class="next-action none col-action">Nessuna azione</div>
+        <div class="next-action review col-action">Verifica con fisio</div>
         <div class="row-arrow col-arrow">→</div>
       </a>
 
@@ -1003,7 +1048,7 @@
           <div class="adherence-label">90%</div>
         </div>
         <div><span class="alert-badge ok">In linea</span></div>
-        <div class="next-action case col-action">Candidato case study</div>
+        <div class="next-action synth col-action">Programma controllo 90gg</div>
         <div class="row-arrow col-arrow">→</div>
       </a>
     </div>

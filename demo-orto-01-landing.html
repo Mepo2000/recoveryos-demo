@@ -887,6 +887,26 @@
       max-width: 820px;
       font-style: italic;
     }
+    footer .data-footnote {
+      font-size: 11px;
+      color: var(--n500);
+      line-height: 1.55;
+      margin-bottom: 14px;
+      font-style: italic;
+      max-width: 820px;
+    }
+    .star {
+      color: var(--n500);
+      font-size: 0.45em;
+      vertical-align: super;
+      margin-left: 2px;
+      font-weight: 400;
+    }
+    .pill-num .star,
+    .sb-num .star {
+      font-size: 0.35em;
+      color: var(--n500);
+    }
 
     .network-section { padding: 88px 0; }
     .network-grid {
@@ -1026,7 +1046,7 @@
             <div class="pill-label">legale con audit-trail completo</div>
           </div>
           <div class="pill">
-            <div class="pill-num green">– 4h/sett</div>
+            <div class="pill-num green">– 4h/sett<span class="star">*</span></div>
             <div class="pill-label">di chiamate e richiami pazienti</div>
           </div>
         </div>
@@ -1212,7 +1232,8 @@
         <div class="feat-num">01</div>
         <div class="feat-title">AI Resume pre-controllo</div>
         <div class="feat-desc">Prima della visita di controllo, RecoveryOS genera in 5 secondi un Executive Summary di 4 righe: ROM attuale vs target del protocollo, trend dolore e farmaci, qualità della riabilitazione, pattern da valutare. Tu sai dove palpare ed esaminare prima ancora di entrare in studio.</div>
-        <div class="feat-tag"><span class="badge-val time">+ tempo</span><span class="badge-val outcome">+ outcome</span></div>
+        <a href="demo-orto-04-visite-oggi.html" style="display:inline-flex; align-items:center; gap:6px; font-family:var(--font-mono); font-size:11.5px; letter-spacing:0.05em; color:var(--clinical); text-decoration:none; margin-top:12px; font-weight:600;">Vedi briefing visite di oggi →</a>
+        <div class="feat-tag" style="margin-top:14px;"><span class="badge-val time">+ tempo</span><span class="badge-val outcome">+ outcome</span></div>
       </div>
 
       <div class="feature">
@@ -1266,7 +1287,7 @@
           <li>Outcome migliori = case study migliori = più pazienti che ti cercano</li>
         </ul>
         <div class="network-stat">
-          I pazienti con fisio collegato hanno <strong>aderenza +35%</strong> e completano il recovery <strong>22% più velocemente</strong>.
+          I pazienti con fisio collegato hanno <strong>aderenza +35%*</strong> e completano il recovery <strong>22%* più velocemente</strong>.
         </div>
       </div>
       <div class="network-diagram">
@@ -1316,12 +1337,12 @@
 
       <div class="sb-stat-row">
         <div class="sb-stat">
-          <div class="sb-num up">+32<span class="u">%</span></div>
+          <div class="sb-num up">+32<span class="u">%</span><span class="star">*</span></div>
           <div class="sb-desc">aderenza con AI-powered tele-rehab.</div>
           <div class="sb-src">Lancet Digital Health · 2022</div>
         </div>
         <div class="sb-stat">
-          <div class="sb-num up">+25<span class="u">%</span></div>
+          <div class="sb-num up">+25<span class="u">%</span><span class="star">*</span></div>
           <div class="sb-desc">recovery rate più rapido.</div>
           <div class="sb-src">Lancet Digital Health · 2022</div>
         </div>
@@ -1372,7 +1393,7 @@
     <p class="lead">
       Questa è una visione, non un prodotto finito. Stiamo decidendo cosa
       costruire prima. Sei minuti del tuo tempo decidono le priorità.
-      Chi compila può ottenere un anno gratuito al lancio.
+      I primi 10 ortopedici selezionati entrano nel <strong style="color: var(--bone);">Founding Program</strong>: beta gratuita 12 mesi, accesso anticipato a tutte le feature, e voce diretta sulla roadmap.
     </p>
     <div class="cta-row">
       <a href="https://tally.so/r/recoveryos-orto?source=demo_orto" class="btn btn-primary">
@@ -1389,6 +1410,9 @@
 
 <footer>
   <div class="container">
+    <div class="data-footnote">
+      *Dati illustrativi da letteratura o da validare con la raccolta reale nei primi 6 mesi di adozione.
+    </div>
     <div class="fineprint">
       RecoveryOS supporta follow-up, comunicazione e documentazione clinica.
       Evidenzia pattern e anomalie nei dati raccolti, ma non fa diagnosi e non propone trattamenti.

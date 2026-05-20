@@ -840,6 +840,275 @@
       max-width: 820px;
       font-style: italic;
     }
+    footer .data-footnote {
+      font-size: 11px;
+      color: var(--n500);
+      line-height: 1.55;
+      margin-bottom: 14px;
+      font-style: italic;
+      max-width: 820px;
+    }
+    .star {
+      color: var(--n500);
+      font-size: 0.45em;
+      vertical-align: super;
+      margin-left: 2px;
+      font-weight: 400;
+    }
+    .pill-num .star,
+    .ev-num .star {
+      font-size: 0.35em;
+      color: var(--n500);
+    }
+
+    /* ===== CHECK-IN PAZIENTE (WhatsApp mockup) ===== */
+    .patient-checkin-section {
+      background: linear-gradient(135deg, #FBF8F2 0%, #F4EEDF 100%);
+      border-radius: 18px;
+      padding: 48px;
+      margin: 40px 0;
+      border: 1px solid var(--n200);
+    }
+    .pcs-inner {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 48px;
+      align-items: center;
+    }
+    .pcs-text .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--warmth);
+      margin-bottom: 18px;
+    }
+    .pcs-text h2 {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin: 0 0 18px;
+    }
+    .pcs-text h2 em { font-style: italic; color: var(--warmth); }
+    .pcs-text p { font-size: 16px; line-height: 1.55; color: var(--n700); margin-bottom: 14px; }
+    .pcs-features {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 24px;
+    }
+    .pcs-feat {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--ink);
+      padding: 8px 12px;
+      background: rgba(194, 65, 12, 0.08);
+      border-radius: 6px;
+    }
+    .pcs-feat::before { content: "✓ "; color: var(--recovery); font-weight: 600; }
+
+    .whatsapp-mockup {
+      background: #E5DDD5;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+    }
+    .wam-header {
+      background: #075E54;
+      color: #FFF;
+      padding: 12px 16px;
+      border-radius: 8px 8px 0 0;
+      margin: -20px -20px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .wam-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #128C7E;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .wam-message {
+      background: #FFF;
+      padding: 12px 14px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      font-size: 13.5px;
+      line-height: 1.45;
+      max-width: 92%;
+      color: #111;
+    }
+    .wam-message.outgoing {
+      background: #DCF8C6;
+      margin-left: auto;
+      text-align: right;
+    }
+    .wam-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+      justify-content: flex-start;
+    }
+    .wam-btn {
+      font-size: 12px;
+      padding: 5px 10px;
+      background: #25D366;
+      color: #FFF;
+      border-radius: 14px;
+      font-weight: 500;
+    }
+    .wam-timestamp {
+      font-size: 10px;
+      color: #999;
+      text-align: center;
+      margin: 8px 0;
+    }
+
+    /* ===== REPORT MEDICO INVIANTE (PDF mockup) ===== */
+    .report-mockup-section {
+      background: var(--ink);
+      color: var(--bone);
+      border-radius: 18px;
+      padding: 56px;
+      margin: 40px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .rms-bg {
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(194,65,12,0.25) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .rms-inner {
+      display: grid;
+      grid-template-columns: 1fr 460px;
+      gap: 48px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+    .rms-text .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--warmth);
+      margin-bottom: 18px;
+    }
+    .rms-text h2 {
+      font-family: var(--font-display);
+      font-size: 36px;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.12;
+      margin: 0 0 18px;
+      color: var(--bone);
+    }
+    .rms-text h2 em { font-style: italic; color: var(--sun); }
+    .rms-text p { font-size: 16px; line-height: 1.55; color: rgba(251,248,242,0.78); margin-bottom: 14px; }
+    .rms-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+      margin-top: 24px;
+    }
+    .rms-stat {
+      padding: 14px;
+      background: rgba(251,248,242,0.06);
+      border-radius: 8px;
+      border-left: 3px solid var(--warmth);
+    }
+    .rms-stat-value {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--sun);
+    }
+    .rms-stat-label {
+      font-size: 11px;
+      color: rgba(251,248,242,0.6);
+      margin-top: 4px;
+    }
+
+    .pdf-mockup {
+      background: var(--bone);
+      color: var(--ink);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+      font-family: var(--font-body);
+    }
+    .pdf-header {
+      border-bottom: 2px solid var(--ink);
+      padding-bottom: 14px;
+      margin-bottom: 18px;
+    }
+    .pdf-title {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 500;
+      margin: 0 0 4px;
+    }
+    .pdf-meta {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: var(--n500);
+      text-transform: uppercase;
+    }
+    .pdf-section { margin-bottom: 16px; }
+    .pdf-section-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: var(--warmth);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .pdf-section-content {
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .pdf-metric-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 0;
+      border-bottom: 1px dotted var(--n200);
+      font-size: 12.5px;
+    }
+    .pdf-metric-row strong { font-family: var(--font-mono); font-size: 12.5px; }
+    .pdf-footer {
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid var(--n200);
+      font-size: 10.5px;
+      color: var(--n500);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    @media (max-width: 880px) {
+      .pcs-inner { grid-template-columns: 1fr; }
+      .patient-checkin-section { padding: 32px 24px; }
+      .rms-inner { grid-template-columns: 1fr; }
+      .report-mockup-section { padding: 36px 24px; }
+      .rms-text h2 { font-size: 28px; }
+    }
 
     .network-section { padding: 88px 0; }
     .network-grid {
@@ -943,7 +1212,7 @@
   </a>
   <div class="nav-right">
     <span class="badge">Demo · Fisioterapista</span>
-    <a href="#" class="nav-link">Versione ortopedico →</a>
+    <a href="demo-orto-01-landing.html" class="nav-link">Versione ortopedico →</a>
   </div>
 </nav>
 
@@ -978,7 +1247,7 @@
 
         <div class="benefit-pills fade-up d-4">
           <div class="pill">
-            <div class="pill-num warm">~5h</div>
+            <div class="pill-num warm">~5h<span class="star">*</span></div>
             <div class="pill-label">a settimana che ti ritornano</div>
           </div>
           <div class="pill">
@@ -986,7 +1255,7 @@
             <div class="pill-label">dagli ortopedici invianti</div>
           </div>
           <div class="pill">
-            <div class="pill-num navy">+30%</div>
+            <div class="pill-num navy">+30%<span class="star">*</span></div>
             <div class="pill-label">aderenza dei pazienti</div>
           </div>
         </div>
@@ -1156,6 +1425,64 @@
   </div>
 </section>
 
+<section>
+  <div class="container">
+    <div class="patient-checkin-section">
+      <div class="pcs-inner">
+        <div class="pcs-text">
+          <div class="eyebrow">⊹ Dal lato del paziente</div>
+          <h2>Il paziente risponde in <em>30 secondi.</em><br>Senza app. Senza login.</h2>
+          <p>Il check-in arriva via WhatsApp o link diretto. 4 domande tap-tap.
+          Niente account da creare, niente password da ricordare, niente
+          friction per il paziente anziano o poco digitale.</p>
+          <p>Tu vedi tutto in dashboard, aggregato e leggibile.</p>
+          <div class="pcs-features">
+            <div class="pcs-feat">Nessuna app obbligatoria</div>
+            <div class="pcs-feat">WhatsApp o link diretto</div>
+            <div class="pcs-feat">30 secondi compilazione</div>
+            <div class="pcs-feat">Caregiver può rispondere</div>
+            <div class="pcs-feat">Voice option per anziani</div>
+            <div class="pcs-feat">Niente account da creare</div>
+          </div>
+        </div>
+        <div class="whatsapp-mockup">
+          <div class="wam-header">
+            <div class="wam-avatar">R</div>
+            <div>
+              <div>RecoveryOS · Studio Bianchi</div>
+              <div style="font-size: 10px; opacity: 0.8;">online</div>
+            </div>
+          </div>
+          <div class="wam-timestamp">Venerdì 10:00</div>
+          <div class="wam-message">
+            Ciao Marco 👋 Come va oggi con il ginocchio?
+            Mi servono 30 secondi per aggiornare la tua scheda.
+          </div>
+          <div class="wam-message">
+            <strong>1/4 · Dolore oggi (0–10):</strong>
+            <div class="wam-buttons">
+              <span class="wam-btn">0</span><span class="wam-btn">2</span>
+              <span class="wam-btn">4</span><span class="wam-btn">6</span>
+              <span class="wam-btn">8</span><span class="wam-btn">10</span>
+            </div>
+          </div>
+          <div class="wam-message outgoing">3</div>
+          <div class="wam-message">
+            <strong>2/4 · Hai fatto gli esercizi questa settimana?</strong>
+            <div class="wam-buttons">
+              <span class="wam-btn">Tutti ✓</span>
+              <span class="wam-btn">Parziali</span>
+              <span class="wam-btn">Nessuno</span>
+            </div>
+          </div>
+          <div class="wam-message outgoing">Tutti ✓</div>
+          <div class="wam-timestamp">In corso · 2 domande rimanenti</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="alt">
   <div class="container">
     <div class="section-eyebrow">Le sei feature centrali</div>
@@ -1207,6 +1534,72 @@
   </div>
 </section>
 
+<section>
+  <div class="container">
+    <div class="report-mockup-section">
+      <div class="rms-bg"></div>
+      <div class="rms-inner">
+        <div class="rms-text">
+          <div class="eyebrow">⊕ Feature blue ocean #01</div>
+          <h2>Il medico inviante riceve <em>questo,</em> ogni mese.<br>Automaticamente.</h2>
+          <p>Mentre tu lavori, RecoveryOS aggrega NPRS, PROMs, milestone,
+          aderenza, ROM e note seduta. A fine mese genera un PDF firmato per
+          ogni medico che ti ha inviato pazienti.</p>
+          <p>Tu lo apri, leggi, invii in un click. Lui sa che i suoi pazienti
+          sono in mani sicure. Ti rimanda i prossimi.</p>
+          <div class="rms-stats">
+            <div class="rms-stat">
+              <div class="rms-stat-value">~30s</div>
+              <div class="rms-stat-label">per invio</div>
+            </div>
+            <div class="rms-stat">
+              <div class="rms-stat-value">PDF</div>
+              <div class="rms-stat-label">firmato</div>
+            </div>
+            <div class="rms-stat">
+              <div class="rms-stat-value">+ referrals*</div>
+              <div class="rms-stat-label">obiettivo</div>
+            </div>
+          </div>
+        </div>
+        <div class="pdf-mockup">
+          <div class="pdf-header">
+            <h3 class="pdf-title">Report mensile · Marco Rossi</h3>
+            <div class="pdf-meta">Per Dr. Bianchi · LCA · Settimana 6 · 21 mag 2026</div>
+          </div>
+          <div class="pdf-section">
+            <div class="pdf-section-label">Sintesi recovery</div>
+            <div class="pdf-section-content">
+              Paziente collaborativo, recovery in linea con curva attesa per
+              giovane sportivo. Aderenza eccellente al protocollo. Nessuna
+              red flag riferita. Trend dolore in calo costante.
+            </div>
+          </div>
+          <div class="pdf-section">
+            <div class="pdf-section-label">Outcome misurati</div>
+            <div class="pdf-metric-row"><span>NPRS</span><strong>7 → 3</strong></div>
+            <div class="pdf-metric-row"><span>KOOS</span><strong>32 → 68</strong></div>
+            <div class="pdf-metric-row"><span>Aderenza esercizi</span><strong>92%</strong></div>
+            <div class="pdf-metric-row"><span>ROM flessione</span><strong>0–115°</strong></div>
+            <div class="pdf-metric-row"><span>Milestone raggiunti</span><strong>4 / 5</strong></div>
+          </div>
+          <div class="pdf-section">
+            <div class="pdf-section-label">Prossimi step</div>
+            <div class="pdf-section-content">
+              Settimana 7–8: introduzione catena cinetica chiusa progressiva.
+              Controllo previsto sett. 8 per valutazione ritorno corsa.
+            </div>
+          </div>
+          <div class="pdf-footer">
+            <span>Firmato dr.ssa Lazzaro · Studio Fisio Bologna</span>
+            <span>Pagina 1 / 1</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="network-section">
   <div class="container">
     <div class="network-grid">
@@ -1220,7 +1613,7 @@
           <li>Quando il recovery riesce, l'orto ti rimanda i prossimi</li>
         </ul>
         <div class="network-stat">
-          Il <strong>67% degli ortopedici</strong> dichiara di voler vedere come va il recovery dei pazienti che invia.
+          Il <strong>67%*</strong> degli ortopedici dichiara di voler vedere come va il recovery dei pazienti che invia.
         </div>
       </div>
       <div class="network-diagram">
@@ -1260,17 +1653,17 @@
       </div>
       <div class="ev-stats">
         <div class="ev-stat">
-          <div class="ev-num problem">30–50<span class="u">%</span></div>
+          <div class="ev-num problem">30–50<span class="u">%</span><span class="star">*</span></div>
           <div class="ev-desc">aderenza al Home Exercise Program oggi.</div>
           <div class="ev-src">Rizzoli · NCT05026346</div>
         </div>
         <div class="ev-stat">
-          <div class="ev-num up">+32<span class="u">%</span></div>
+          <div class="ev-num up">+32<span class="u">%</span><span class="star">*</span></div>
           <div class="ev-desc">aderenza con AI-powered tele-rehab.</div>
           <div class="ev-src">Lancet Digital Health · 2022</div>
         </div>
         <div class="ev-stat">
-          <div class="ev-num up">+25<span class="u">%</span></div>
+          <div class="ev-num up">+25<span class="u">%</span><span class="star">*</span></div>
           <div class="ev-desc">recovery rate più rapido.</div>
           <div class="ev-src">Lancet Digital Health · 2022</div>
         </div>
@@ -1316,7 +1709,7 @@
     <p class="lead">
       Questa è una visione, non un prodotto finito. Stiamo decidendo cosa
       costruire prima. Sei minuti del tuo tempo decidono le priorità.
-      Chi compila può ottenere un anno gratuito al lancio.
+      I primi 10 fisioterapisti selezionati entrano nel <strong style="color: var(--bone);">Founding Program</strong>: beta gratuita 12 mesi, accesso anticipato a tutte le feature, e voce diretta sulla roadmap.
     </p>
     <div class="cta-row">
       <a href="https://tally.so/r/recoveryos-fisio?source=demo_fisio" class="btn btn-primary">
@@ -1333,6 +1726,9 @@
 
 <footer>
   <div class="container">
+    <div class="data-footnote">
+      *Dati illustrativi da letteratura o da validare con la raccolta reale nei primi 6 mesi di adozione.
+    </div>
     <div class="fineprint">
       RecoveryOS supporta follow-up, comunicazione e documentazione clinica.
       Evidenzia pattern e anomalie nei dati raccolti, ma non fa diagnosi e non propone trattamenti.
