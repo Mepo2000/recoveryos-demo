@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RecoveryOS — Dashboard Pazienti</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Manrope:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --ink: #0F1419;
+      --bone: #FBF8F2;
+      --cream: #F4EEDF;
+      --clinical: #1E3A8A;
+      --recovery: #047857;
+      --signal: #B91C1C;
+      --warmth: #C2410C;
+      --sun: #EAB308;
+
+      --n100: #F0EADC;
+      --n200: #E0D8C5;
+      --n300: #C9C0A8;
+      --n500: #8C8474;
+      --n700: #4A4434;
+
+      --font-display: 'Fraunces', Georgia, serif;
+      --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body);
+      color: var(--ink);
+      background: var(--bone);
+      line-height: 1.5;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      background: radial-gradient(ellipse 80% 50% at 0% 0%, rgba(234, 179, 8, 0.05), transparent);
+    }
+
+    /* ===== NAV ===== */
+    nav {
+      position: sticky;
+      top: 0;
+      background: rgba(251, 248, 242, 0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--n200);
+      padding: 14px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .logo {
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: 20px;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo .mark {
+      width: 26px;
+      height: 26px;
+      background: var(--ink);
+      color: var(--bone);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 14px;
+      font-style: italic;
+    }
+
+    .nav-right { display: flex; gap: 16px; align-items: center; }
+
+    .demo-badge {
+      background: var(--warmth);
+      color: var(--bone);
+      padding: 5px 11px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-radius: 100px;
+    }
+
+    .nav-link {
+      color: var(--n700);
+      text-decoration: none;
+      font-size: 13.5px;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .nav-link:hover { color: var(--ink); background: var(--cream); }
+    .nav-link.back { color: var(--warmth); }
+
+    /* ===== APP LAYOUT ===== */
+    .app {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      min-height: calc(100vh - 60px);
+    }
+
+    /* ===== SIDEBAR ===== */
+    .sidebar {
+      border-right: 1px solid var(--n200);
+      padding: 24px 16px;
+      background: rgba(244, 238, 223, 0.4);
+    }
+
+    .sidebar-section { margin-bottom: 28px; }
+
+    .sidebar-title {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--n500);
+      padding: 0 12px;
+      margin-bottom: 8px;
+    }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      color: var(--n700);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.15s ease;
+      margin-bottom: 2px;
+    }
+
+    .sidebar-link:hover { background: var(--cream); color: var(--ink); }
+
+    .sidebar-link.active {
+      background: var(--ink);
+      color: var(--bone);
+    }
+
+    .sidebar-link .count {
+      margin-left: auto;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      background: var(--n200);
+      color: var(--n700);
+      padding: 1px 7px;
+      border-radius: 100px;
+      font-weight: 500;
+    }
+
+    .sidebar-link.active .count {
+      background: var(--warmth);
+      color: var(--bone);
+    }
+
+    .sidebar-link .icon {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    .main { padding: 32px 40px 48px; }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .page-title h1 {
+      font-family: var(--font-display);
+      font-size: 42px;
+      font-weight: 400;
+      letter-spacing: -0.022em;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .page-title h1 em {
+      font-style: italic;
+      color: var(--warmth);
+    }
+
+    .page-title .sub {
+      font-size: 14px;
+      color: var(--n700);
+    }
+
+    .page-actions { display: flex; gap: 10px; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border: none;
+      font-family: var(--font-body);
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      border-radius: 7px;
+    }
+
+    .btn-primary { background: var(--ink); color: var(--bone); }
+    .btn-primary:hover { background: var(--warmth); }
+    .btn-secondary { background: var(--cream); color: var(--ink); border: 1px solid var(--n200); }
+    .btn-secondary:hover { background: var(--n100); border-color: var(--n300); }
+
+    /* ===== STAT CARDS ===== */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: var(--bone);
+      border: 1px solid var(--n200);
+      border-radius: 12px;
+      padding: 20px 22px;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+
+    .stat-card:hover {
+      border-color: var(--n300);
+      transform: translateY(-1px);
+    }
+
+    .stat-card .lab {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--n500);
+      margin-bottom: 12px;
+    }
+
+    .stat-card .val {
+      font-family: var(--font-display);
+      font-size: 38px;
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: -0.025em;
+      margin-bottom: 6px;
+    }
+
+    .stat-card .val.warn { color: var(--warmth); }
+    .stat-card .val.alert { color: var(--signal); }
+    .stat-card .val.ok { color: var(--recovery); }
+    .stat-card .val.neutral { color: var(--ink); }
+
+    .stat-card .delta {
+      font-size: 12.5px;
+      color: var(--n500);
+    }
+
+    .stat-card .delta strong { color: var(--n700); }
+
+    /* ===== FILTER BAR ===== */
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .filter-chip {
+      padding: 7px 14px;
+      border-radius: 100px;
+      background: transparent;
+      border: 1px solid var(--n200);
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--n700);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .filter-chip:hover { background: var(--cream); border-color: var(--n300); }
+    .filter-chip.active { background: var(--ink); color: var(--bone); border-color: var(--ink); }
+    .filter-chip .num { font-family: var(--font-mono); margin-left: 6px; opacity: 0.7; }
+
+    .search-input {
+      margin-left: auto;
+      padding: 8px 14px;
+      border: 1px solid var(--n200);
+      border-radius: 7px;
+      background: var(--bone);
+      font-family: var(--font-body);
+      font-size: 13px;
+      width: 200px;
+      transition: all 0.15s ease;
+    }
+
+    .search-input:focus { outline: none; border-color: var(--warmth); }
+
+    /* ===== PATIENT TABLE ===== */
+    .patient-table {
+      background: var(--bone);
+      border: 1px solid var(--n200);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .table-header {
+      display: grid;
+      grid-template-columns: 36px 1.25fr 70px 70px 80px 90px 90px 130px 32px;
+      gap: 12px;
+      padding: 14px 20px;
+      background: var(--cream);
+      border-bottom: 1px solid var(--n200);
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--n500);
+      font-weight: 500;
+    }
+
+    .table-row {
+      display: grid;
+      grid-template-columns: 36px 1.25fr 70px 70px 80px 90px 90px 130px 32px;
+      gap: 12px;
+      padding: 16px 20px;
+      align-items: center;
+      border-bottom: 1px solid var(--n200);
+      transition: all 0.15s ease;
+      cursor: pointer;
+      text-decoration: none;
+      color: var(--ink);
+    }
+
+    .table-row:last-child { border-bottom: none; }
+
+    .table-row:hover {
+      background: var(--cream);
+    }
+
+    .status-cell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .status-dot.ok { background: var(--recovery); }
+    .status-dot.warn { background: var(--sun); }
+    .status-dot.alert { background: var(--signal); }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.55; transform: scale(1.4); }
+    }
+
+    .status-dot.warn, .status-dot.alert {
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .patient-name {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .patient-name .n {
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: 16px;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+    }
+
+    .patient-name .pat {
+      font-size: 12px;
+      color: var(--n500);
+    }
+
+    .cell-mono {
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      color: var(--n700);
+    }
+
+    .cell-big {
+      font-family: var(--font-mono);
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .cell-big.high { color: var(--signal); }
+    .cell-big.mid { color: var(--warmth); }
+    .cell-big.low { color: var(--recovery); }
+    .cell-big.muted { color: var(--n500); }
+
+    .adherence-bar {
+      width: 80px;
+      height: 6px;
+      background: var(--n200);
+      border-radius: 100px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .adherence-fill {
+      height: 100%;
+      background: var(--recovery);
+      border-radius: 100px;
+      transition: width 0.4s ease;
+    }
+
+    .adherence-fill.warn { background: var(--sun); }
+    .adherence-fill.alert { background: var(--signal); }
+
+    .adherence-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--n700);
+      margin-top: 4px;
+    }
+
+    .last-checkin {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--n500);
+    }
+
+    .last-checkin.recent { color: var(--recovery); }
+    .last-checkin.late { color: var(--warmth); }
+    .last-checkin.alert { color: var(--signal); }
+
+    .alert-badge {
+      background: var(--warmth);
+      color: var(--bone);
+      padding: 3px 9px;
+      border-radius: 100px;
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .alert-badge.crit { background: var(--signal); }
+    .alert-badge.ok { background: var(--recovery); }
+
+    .row-arrow {
+      color: var(--n300);
+      font-family: var(--font-mono);
+      transition: all 0.15s ease;
+    }
+
+    .table-row:hover .row-arrow {
+      color: var(--warmth);
+      transform: translateX(3px);
+    }
+
+    /* ===== INSIGHT PANEL ===== */
+    .insight-panel {
+      margin-top: 32px;
+      background: var(--ink);
+      color: var(--bone);
+      border-radius: 14px;
+      padding: 28px 32px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .insight-panel .ip-eye {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--sun);
+      margin-bottom: 10px;
+    }
+
+    .insight-panel h3 {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 400;
+      letter-spacing: -0.015em;
+      margin-bottom: 6px;
+      line-height: 1.2;
+    }
+
+    .insight-panel p {
+      font-size: 14px;
+      color: var(--n300);
+      max-width: 580px;
+      line-height: 1.5;
+    }
+
+    .insight-panel .ip-cta {
+      background: var(--warmth);
+      color: var(--bone);
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .insight-panel .ip-cta:hover { background: var(--bone); color: var(--ink); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1280px) {
+      .stat-row { grid-template-columns: repeat(2, 1fr); }
+      .table-header, .table-row {
+        grid-template-columns: 36px 1.3fr 80px 90px 90px 130px 32px;
+      }
+      .col-checkin, .col-adherence { display: none; }
+    }
+
+    @media (max-width: 880px) {
+      .app { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .main { padding: 24px 20px; }
+      .stat-row { grid-template-columns: repeat(2, 1fr); }
+      .table-header, .table-row {
+        grid-template-columns: 24px 1fr auto;
+        gap: 12px;
+        padding: 14px 16px;
+      }
+      .col-adherence, .col-checkin, .col-nprs, .col-alert, .col-action, .col-arrow, .col-proms { display: none; }
+      .filter-bar { gap: 6px; }
+      .search-input { display: none; }
+      .insight-panel { grid-template-columns: 1fr; }
+    }
+
+    .next-action {
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--n700);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      line-height: 1.3;
+    }
+    .next-action::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--n300);
+      flex-shrink: 0;
+    }
+    .next-action.none { color: var(--n500); }
+    .next-action.call { color: var(--signal); font-weight: 600; }
+    .next-action.call::before { background: var(--signal); }
+    .next-action.review { color: var(--warmth); font-weight: 600; }
+    .next-action.review::before { background: var(--warmth); }
+    .next-action.report { color: var(--clinical); font-weight: 600; }
+    .next-action.report::before { background: var(--clinical); }
+    .next-action.synth { color: var(--clinical); font-weight: 600; }
+    .next-action.synth::before { background: var(--clinical); }
+    .next-action.reactivate { color: var(--signal); font-weight: 600; }
+    .next-action.reactivate::before { background: var(--signal); }
+
+    .app-footer {
+      padding: 18px 32px 24px;
+      border-top: 1px solid var(--n200);
+      background: rgba(244, 238, 223, 0.4);
+    }
+    .app-footer .fineprint {
+      max-width: 900px;
+      margin: 0 auto;
+      font-size: 11px;
+      color: var(--n500);
+      line-height: 1.55;
+      text-align: center;
+      font-style: italic;
+    }
+    @media (max-width: 880px) {
+      .app-footer { padding: 16px 20px 24px; }
+      .app-footer .fineprint { text-align: left; }
+    }
+
+    /* ===== ANIMATIONS ===== */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+    .d-1 { animation-delay: 0.05s; }
+    .d-2 { animation-delay: 0.12s; }
+    .d-3 { animation-delay: 0.22s; }
+    .d-4 { animation-delay: 0.34s; }
+
+    .table-row.fade-row {
+      opacity: 0;
+      animation: fadeIn 0.5s ease-out forwards;
+    }
+
+    @keyframes fadeIn { to { opacity: 1; } }
+
+    .table-row.fade-row:nth-child(1) { animation-delay: 0.2s; }
+    .table-row.fade-row:nth-child(2) { animation-delay: 0.27s; }
+    .table-row.fade-row:nth-child(3) { animation-delay: 0.34s; }
+    .table-row.fade-row:nth-child(4) { animation-delay: 0.41s; }
+    .table-row.fade-row:nth-child(5) { animation-delay: 0.48s; }
+    .table-row.fade-row:nth-child(6) { animation-delay: 0.55s; }
+    .table-row.fade-row:nth-child(7) { animation-delay: 0.62s; }
+    .table-row.fade-row:nth-child(8) { animation-delay: 0.69s; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="demo-fisio-01-landing.html" class="logo">
+    <span class="mark">R</span>
+    RecoveryOS
+  </a>
+  <div class="nav-right">
+    <span class="demo-badge">Demo · Live</span>
+    <a href="demo-fisio-01-landing.html" class="nav-link back">← Torna alla landing</a>
+    <a href="https://tally.so/r/recoveryos-fisio?source=demo_dashboard" class="nav-link">Questionario →</a>
+  </div>
+</nav>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">Workspace</div>
+      <a href="#" class="sidebar-link active">
+        <span class="icon">⊞</span>
+        Pazienti
+        <span class="count">33</span>
+      </a>
+      <a href="#" class="sidebar-link">
+        <span class="icon">⌁</span>
+        Alert
+        <span class="count">3</span>
+      </a>
+      <a href="#" class="sidebar-link">
+        <span class="icon">↗</span>
+        Outcome
+      </a>
+      <a href="demo-fisio-03-protocolli.html" class="sidebar-link">
+        <span class="icon">⊜</span>
+        Protocolli
+        <span class="count">12</span>
+      </a>
+      <a href="#" class="sidebar-link">
+        <span class="icon">⌗</span>
+        Report mensili
+      </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-title">Collaborazioni</div>
+      <a href="#" class="sidebar-link">
+        <span class="icon">✦</span>
+        Medici invianti
+        <span class="count">4</span>
+      </a>
+      <a href="#" class="sidebar-link">
+        <span class="icon">⊙</span>
+        Library esercizi
+      </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-title">Studio</div>
+      <a href="#" class="sidebar-link">
+        <span class="icon">⌂</span>
+        Il mio studio
+      </a>
+      <a href="#" class="sidebar-link">
+        <span class="icon">⊠</span>
+        Impostazioni
+      </a>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="page-header fade-up">
+      <div class="page-title">
+        <h1>I miei <em>pazienti</em></h1>
+        <div class="sub">Vista live · 33 pazienti attivi · aggiornato 2 minuti fa</div>
+      </div>
+      <div class="page-actions">
+        <a href="#" class="btn btn-secondary">
+          <span>+ Nuovo paziente</span>
+        </a>
+        <a href="#" class="btn btn-primary">
+          <span>Invia check-in di gruppo</span>
+          <span>→</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-card fade-up d-1">
+        <div class="lab">In linea</div>
+        <div class="val ok">27</div>
+        <div class="delta">82% del totale · <strong>+3</strong> da settimana scorsa</div>
+      </div>
+      <div class="stat-card fade-up d-2">
+        <div class="lab">Da seguire</div>
+        <div class="val warn">4</div>
+        <div class="delta">Aderenza sotto 60% o NPRS in salita</div>
+      </div>
+      <div class="stat-card fade-up d-3">
+        <div class="lab">Non rispondono</div>
+        <div class="val alert">2</div>
+        <div class="delta">Più di 5 giorni senza check-in</div>
+      </div>
+      <div class="stat-card fade-up d-4">
+        <div class="lab">Tempo risparmiato (stima)</div>
+        <div class="val neutral">4h 35m</div>
+        <div class="delta">questa settimana, vs gestione manuale</div>
+      </div>
+    </div>
+
+    <div class="filter-bar fade-up d-2">
+      <button class="filter-chip active">Tutti <span class="num">33</span></button>
+      <button class="filter-chip">Da seguire <span class="num">4</span></button>
+      <button class="filter-chip">Non rispondono <span class="num">2</span></button>
+      <button class="filter-chip">Post-op recente <span class="num">8</span></button>
+      <button class="filter-chip">In dimissione <span class="num">3</span></button>
+      <input type="text" class="search-input" placeholder="Cerca paziente...">
+    </div>
+
+    <div class="patient-table fade-up d-3">
+      <div class="table-header">
+        <div></div>
+        <div>Paziente</div>
+        <div>NPRS</div>
+        <div class="col-proms">PROMs</div>
+        <div class="col-adherence">Aderenza</div>
+        <div class="col-checkin">Check-in</div>
+        <div class="col-alert">Stato</div>
+        <div class="col-action">Prossima azione</div>
+        <div></div>
+      </div>
+
+      <a href="#" class="table-row fade-row">
+        <div class="status-cell"><span class="status-dot ok"></span></div>
+        <div class="patient-name">
+          <span class="n">Marco Rossi</span>
+          <span class="pat">28 anni · LCA · settimana 3 · Dr. Bianchi</span>
+        </div>
+        <div class="cell-big low">3</div>
+        <div class="cell-mono col-proms">KOOS 68</div>
+        <div class="col-adherence">
+          <div class="adherence-bar"><div class="adherence-fill" style="width:92%;"></div></div>
+          <div class="adherence-label">92%</div>
+        </div>
+        <div class="last-checkin recent col-checkin">2g fa</div>
+        <div class="col-alert"><span class="alert-badge ok">In linea</span></div>
+        <div class="next-action none col-action">Nessuna azione</div>
+        <div class="row-arrow col-arrow">→</div>
+      </a>
+
+      <a href="#" class="table-row fade-row">
+        <div class="status-cell"><span class="status-dot warn"></span></div>
+        <div class="patient-name">
+          <span class="n">Maria Conti</span>
+          <span class="pat">72 anni · PTA anca · settimana 4 · Dr. Bianchi</span>
+        </div>
+        <div class="cell-big mid">6</div>
+        <div class="cell-mono col-proms">HOOS 42</div>
+        <div class="col-adherence">
+          <div class="adherence-bar"><div class="adherence-fill warn" style="width:40%;"></div></div>
+          <div class="adherence-label">40%</div>
+        </div>
+        <div class="last-checkin late col-checkin">5g fa</div>
+        <div class="col-alert"><span class="alert-badge">Attenzione</span></div>
+        <div class="next-action call col-action">Chiama paziente</div>
+        <div class="row-arrow col-arrow">→</div>
+      </a>
+
+      <a href="#" class="table-row fade-row">
+        <div class="status-cell"><span class="status-dot ok"></span></div>
+        <div class="patient-name">
+          <span class="n">Luigi Esposito</span>
+          <span class="pat">54 anni · Cuffia rotatori · settimana 8 · Dr. Pellegrini</span>
+        </div>
+        <div class="cell-big low">2</div>
+        <div class="cell-mono col-proms">DASH 24</div>
+        <div class="col-adherence">
+          <div class="adherence-bar"><div class="adherence-fill" style="width:88%;"></div></div>
+          <div class="adherence-label">88%</div>
+        </div>
+        <div class="last-checkin recent col-checkin">1g fa</div>
+        <div class="col-alert"><span class="alert-badge ok">In linea</span></div>
+        <div class="next-action report col-action">Report pronto per orto</div>
+        <div class="row-arrow col-arrow">→</div>
+      </a>
+
+      <a href="#" class="table-row fade-row">
+        <div class="status-cell"><span class="status-dot ok"></span></div>
+        <div class="patient-name">
+          <span class="n">Elena Ferrari</span>
+          <span class="pat">31 anni · LCA · settimana 6 · Dr. Bianchi</span>
+        </div>
+        <div class="cell-big low">4</div>
+        <div class="cell-mono col-proms">KOOS 71</div>
+        <div class="col-adherence">
+          <div class="adherence-bar"><div class="adherence-fill" style="width:85%;"></div></div>
+          <div class="adherence-label">85%</div>
+        </div>
+        <div class="last-checkin recent col-checkin">3g fa</div>
+        <div class="col-alert"><span class="alert-badge ok">In linea</span></div>
+        <div class="next-action none col-action">Nessuna azione</div>
+        <div class="row-arrow col-arrow">→</div>
+      </a>
+
+      <a href="#" class="table-row fade-row">
+        <div class="status-cell"><span class="status-dot alert"></span></div>
+        <div class="patient-name">
+          <span class="n">Giovanni Russo</span>
+          <span class="pat">45 anni · Lombalgia · settimana 2 · Dr. Marini</span>
+        </div>
+        <div class="cell-big muted">—</div>
+        <div class="cell-mono col-proms">ODI 58</div>
+        <div class="col-adherence">
+          <div class="adherence-bar"><div class="adherence-fill alert" style="width:0%;"></div></div>
+          <div class="adherence-label">0%</div>
+        </div>
+        <div class="last-checkin alert col-checkin">8g fa</div>
+        <div class="col-alert"><span class="alert-badge crit">Non risponde</span></div>
+        <div class="next-action reactivate col-action">Da riattivare</div>
+        <div class="row-arrow col-arrow">→</div>
+      </a>
+
+      <a href="#" class="table-row fade-row">
+        <div class="status-cell"><span class="status-dot ok"></span></div>
+        <div class="patient-name">
+          <span class="n">Anna Bianchi</span>
+          <span class="pat">38 anni · Cuffia rotatori · settimana 5 · Dr. Pellegrini</span>
+        </div>
+        <div class="cell-big low">3</div>
+        <div class="cell-mono col-proms">DASH 31</div>
+        <div class="col-adherence">
+          <div class="adherence-bar"><div class="adherence-fill" style="width:94%;"></div></div>
+          <div class="adherence-label">94%</div>
+        </div>
+        <div class="last-checkin recent col-checkin">1g fa</div>
+        <div class="col-alert"><span class="alert-badge ok">In linea</span></div>
+        <div class="next-action none col-action">Nessuna azione</div>
+        <div class="row-arrow col-arrow">→</div>
+      </a>
+
+      <a href="#" class="table-row fade-row">
+        <div class="status-cell"><span class="status-dot warn"></span></div>
+        <div class="patient-name">
+          <span class="n">Paolo Greco</span>
+          <span class="pat">62 anni · Protesi ginocchio · settimana 7 · Dr. Bianchi</span>
+        </div>
+        <div class="cell-big mid">5</div>
+        <div class="cell-mono col-proms">KOOS 51</div>
+        <div class="col-adherence">
+          <div class="adherence-bar"><div class="adherence-fill warn" style="width:55%;"></div></div>
+          <div class="adherence-label">55%</div>
+        </div>
+        <div class="last-checkin recent col-checkin">3g fa</div>
+        <div class="col-alert"><span class="alert-badge">Stallo recovery</span></div>
+        <div class="next-action review col-action">Rivedi piano</div>
+        <div class="row-arrow col-arrow">→</div>
+      </a>
+
+      <a href="#" class="table-row fade-row">
+        <div class="status-cell"><span class="status-dot ok"></span></div>
+        <div class="patient-name">
+          <span class="n">Giulia Romano</span>
+          <span class="pat">24 anni · Distorsione caviglia · settimana 2 · Dr. Marini</span>
+        </div>
+        <div class="cell-big low">2</div>
+        <div class="cell-mono col-proms">FAAM 78</div>
+        <div class="col-adherence">
+          <div class="adherence-bar"><div class="adherence-fill" style="width:96%;"></div></div>
+          <div class="adherence-label">96%</div>
+        </div>
+        <div class="last-checkin recent col-checkin">oggi</div>
+        <div class="col-alert"><span class="alert-badge ok">In linea</span></div>
+        <div class="next-action none col-action">Nessuna azione</div>
+        <div class="row-arrow col-arrow">→</div>
+      </a>
+    </div>
+
+    <div class="insight-panel fade-up d-4">
+      <div>
+        <div class="ip-eye">Insight della settimana</div>
+        <h3>Hai risparmiato 4h 35m vs gestione manuale.</h3>
+        <p>
+          Senza RecoveryOS avresti dovuto scrivere personalmente a 27 pazienti
+          per chiedere come stavano. Il sistema l'ha fatto al posto tuo.
+          I 3 pazienti che richiedono attenzione sono già segnalati sopra.
+        </p>
+      </div>
+      <a href="#" class="ip-cta">Vedi report settimanale →</a>
+    </div>
+  </main>
+</div>
+
+<footer class="app-footer">
+  <div class="fineprint">
+    RecoveryOS supporta follow-up, comunicazione e documentazione clinica.
+    Evidenzia pattern e anomalie nei dati raccolti, ma non fa diagnosi e non propone trattamenti.
+    Le decisioni cliniche restano sempre al professionista.
+  </div>
+</footer>
+
+</body>
+</html>

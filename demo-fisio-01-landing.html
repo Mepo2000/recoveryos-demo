@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RecoveryOS — Più tempo. Più referrals. Pazienti che recuperano meglio.</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Manrope:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --ink: #0F1419;
+      --bone: #FBF8F2;
+      --cream: #F4EEDF;
+      --clinical: #1E3A8A;
+      --recovery: #047857;
+      --signal: #B91C1C;
+      --warmth: #C2410C;
+      --sun: #EAB308;
+
+      --n100: #F0EADC;
+      --n200: #E0D8C5;
+      --n300: #C9C0A8;
+      --n500: #8C8474;
+      --n700: #4A4434;
+
+      --font-display: 'Fraunces', Georgia, serif;
+      --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      color: var(--ink);
+      background: var(--bone);
+      line-height: 1.5;
+      font-size: 17px;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(234, 179, 8, 0.08), transparent),
+        radial-gradient(ellipse 60% 40% at 100% 0%, rgba(194, 65, 12, 0.06), transparent);
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      background: rgba(251, 248, 242, 0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--n200);
+      padding: 16px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .logo {
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: 22px;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo .mark {
+      width: 28px;
+      height: 28px;
+      background: var(--ink);
+      color: var(--bone);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 16px;
+      font-style: italic;
+    }
+
+    .nav-right { display: flex; gap: 20px; align-items: center; }
+
+    .badge {
+      background: var(--cream);
+      color: var(--n700);
+      padding: 6px 12px;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-radius: 100px;
+      border: 1px solid var(--n200);
+    }
+
+    .nav-link { color: var(--n700); text-decoration: none; font-size: 14px; font-weight: 500; }
+    .nav-link:hover { color: var(--ink); }
+
+    .container { max-width: 1320px; margin: 0 auto; padding: 0 32px; }
+
+    .hero { padding: 64px 0 96px; }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--warmth);
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .eyebrow::before {
+      content: '';
+      width: 20px;
+      height: 1.5px;
+      background: var(--warmth);
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(40px, 5.4vw, 70px);
+      font-weight: 400;
+      line-height: 1.02;
+      letter-spacing: -0.028em;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 em { font-style: italic; color: var(--warmth); }
+
+    .hero h1 .strikethrough {
+      position: relative;
+      color: var(--n500);
+      font-weight: 300;
+    }
+
+    .hero h1 .strikethrough::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0;
+      top: 52%;
+      height: 2px;
+      background: var(--n500);
+      transform: rotate(-2deg);
+    }
+
+    .hero .subhead {
+      font-size: 18px;
+      color: var(--n700);
+      max-width: 540px;
+      line-height: 1.55;
+      margin-bottom: 36px;
+    }
+
+    .cta-row { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+
+    .benefit-pills {
+      display: flex;
+      gap: 12px;
+      margin-top: 40px;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      background: var(--cream);
+      border: 1px solid var(--n200);
+      padding: 14px 18px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: all 0.2s ease;
+    }
+
+    .pill:hover { border-color: var(--warmth); transform: translateY(-2px); }
+
+    .pill-num {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 500;
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    .pill-num.warm { color: var(--warmth); }
+    .pill-num.green { color: var(--recovery); }
+    .pill-num.navy { color: var(--clinical); }
+
+    .pill-label { font-size: 12.5px; color: var(--n700); line-height: 1.3; max-width: 110px; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 26px;
+      border: none;
+      font-family: var(--font-body);
+      font-size: 14.5px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      letter-spacing: -0.005em;
+      border-radius: 8px;
+    }
+
+    .btn-primary { background: var(--ink); color: var(--bone); }
+
+    .btn-primary:hover {
+      background: var(--warmth);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(194, 65, 12, 0.25);
+    }
+
+    .btn-secondary { background: transparent; color: var(--ink); padding: 16px 20px; }
+    .btn-secondary:hover { color: var(--warmth); }
+
+    .btn .arrow {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      transition: transform 0.2s ease;
+    }
+
+    .btn:hover .arrow { transform: translateX(4px); }
+
+    .mockup {
+      background: var(--ink);
+      border-radius: 14px;
+      padding: 14px 14px 18px;
+      box-shadow:
+        0 30px 80px -20px rgba(15, 20, 25, 0.35),
+        0 12px 32px -8px rgba(194, 65, 12, 0.18);
+      transform: rotate(0.5deg);
+    }
+
+    .mockup-chrome {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 12px;
+      padding: 0 4px;
+    }
+
+    .mockup-dot { width: 11px; height: 11px; border-radius: 50%; }
+    .mockup-dot.red { background: #FF5F57; }
+    .mockup-dot.yellow { background: #FEBC2E; }
+    .mockup-dot.green { background: #28C840; }
+
+    .mockup-url {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.6);
+      margin-left: 12px;
+    }
+
+    .mockup-content {
+      background: var(--bone);
+      border-radius: 8px;
+      padding: 24px;
+      min-height: 460px;
+    }
+
+    .mockup-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--n200);
+    }
+
+    .mockup-title {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 500;
+      letter-spacing: -0.015em;
+    }
+
+    .mockup-pill {
+      background: var(--ink);
+      color: var(--bone);
+      padding: 5px 11px;
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-radius: 100px;
+    }
+
+    .mockup-stat-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .mockup-stat { background: var(--cream); padding: 10px 12px; border-radius: 6px; }
+
+    .mockup-stat .num {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 500;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      margin-bottom: 2px;
+    }
+
+    .mockup-stat .lab {
+      font-size: 10px;
+      color: var(--n700);
+      font-family: var(--font-mono);
+      letter-spacing: 0.05em;
+    }
+
+    .mockup-list { display: flex; flex-direction: column; gap: 6px; }
+
+    .mockup-row {
+      display: grid;
+      grid-template-columns: auto 1fr auto auto;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 12px;
+      background: var(--cream);
+      border-radius: 6px;
+      font-size: 12.5px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .status-dot.ok { background: var(--recovery); }
+    .status-dot.warn { background: var(--sun); }
+    .status-dot.alert { background: var(--signal); }
+
+    .mockup-row .name { font-weight: 600; }
+    .mockup-row .meta { color: var(--n500); font-size: 11px; font-family: var(--font-mono); }
+    .mockup-row .val { font-family: var(--font-mono); font-size: 11px; color: var(--n700); }
+
+    section { padding: 88px 0; }
+    section.alt { background: var(--cream); }
+
+    .section-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--warmth);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-eyebrow::before {
+      content: '';
+      width: 20px;
+      height: 1.5px;
+      background: var(--warmth);
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(32px, 4.4vw, 56px);
+      font-weight: 400;
+      line-height: 1.06;
+      letter-spacing: -0.022em;
+      margin-bottom: 48px;
+      max-width: 880px;
+    }
+
+    .section-title em { font-style: italic; color: var(--warmth); }
+
+    .value-trio {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .value-card {
+      background: var(--bone);
+      padding: 36px 32px;
+      border-radius: 16px;
+      border: 1px solid var(--n200);
+      transition: all 0.3s ease;
+    }
+
+    .value-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 50px -20px rgba(15, 20, 25, 0.15);
+    }
+
+    .value-card .icon-wrap {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: var(--cream);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 500;
+      font-style: italic;
+    }
+
+    .value-card.time .icon-wrap { background: rgba(234, 179, 8, 0.15); color: #A16207; }
+    .value-card.money .icon-wrap { background: rgba(194, 65, 12, 0.12); color: var(--warmth); }
+    .value-card.outcome .icon-wrap { background: rgba(4, 120, 87, 0.12); color: var(--recovery); }
+
+    .value-card h3 {
+      font-family: var(--font-display);
+      font-size: 30px;
+      font-weight: 500;
+      letter-spacing: -0.018em;
+      line-height: 1.1;
+      margin-bottom: 12px;
+    }
+
+    .vc-sub {
+      font-size: 14.5px;
+      color: var(--n700);
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+
+    .value-card ul { list-style: none; padding: 0; }
+
+    .value-card ul li {
+      padding: 10px 0;
+      border-top: 1px solid var(--n200);
+      font-size: 14px;
+      display: flex;
+      align-items: start;
+      gap: 10px;
+    }
+
+    .value-card ul li::before {
+      content: '→';
+      font-family: var(--font-mono);
+      color: var(--warmth);
+      flex-shrink: 0;
+    }
+
+    .personas-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .persona-card {
+      background: var(--bone);
+      padding: 40px;
+      border-radius: 16px;
+      border: 1px solid var(--n200);
+    }
+
+    .persona-card.dark {
+      background: var(--ink);
+      color: var(--bone);
+      border-color: var(--ink);
+    }
+
+    .persona-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--n500);
+      margin-bottom: 20px;
+    }
+
+    .persona-card.dark .persona-eyebrow { color: var(--n300); }
+
+    .persona-name {
+      font-family: var(--font-display);
+      font-size: 38px;
+      font-weight: 400;
+      letter-spacing: -0.022em;
+      margin-bottom: 6px;
+      line-height: 1;
+    }
+
+    .persona-detail {
+      font-size: 14px;
+      color: var(--n700);
+      margin-bottom: 28px;
+      font-weight: 500;
+    }
+
+    .persona-card.dark .persona-detail { color: var(--n300); }
+
+    .workflow-list { list-style: none; }
+
+    .workflow-list li {
+      padding: 12px 0;
+      border-top: 1px solid var(--n200);
+      font-size: 14px;
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 14px;
+      align-items: start;
+      line-height: 1.4;
+    }
+
+    .persona-card.dark .workflow-list li { border-top-color: var(--n700); }
+
+    .workflow-list li:last-child { border-bottom: 1px solid var(--n200); }
+    .persona-card.dark .workflow-list li:last-child { border-bottom-color: var(--n700); }
+
+    .workflow-list .tag {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--n500);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .persona-card.dark .workflow-list .tag { color: var(--n300); }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      padding: 5px 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 24px;
+      border-radius: 100px;
+    }
+
+    .status-pill.ok { background: rgba(4, 120, 87, 0.15); color: var(--recovery); }
+    .status-pill.warn { background: rgba(194, 65, 12, 0.18); color: var(--warmth); }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--n200);
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--n200);
+    }
+
+    .feature { background: var(--bone); padding: 32px; }
+
+    .feat-num {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--warmth);
+      letter-spacing: 0.12em;
+      margin-bottom: 14px;
+    }
+
+    .feat-title {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 500;
+      letter-spacing: -0.012em;
+      margin-bottom: 10px;
+      line-height: 1.15;
+    }
+
+    .feat-desc {
+      font-size: 14px;
+      color: var(--n700);
+      line-height: 1.55;
+      margin-bottom: 14px;
+    }
+
+    .feat-tag {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--n500);
+    }
+
+    .badge-val {
+      padding: 2px 8px;
+      border-radius: 100px;
+      font-weight: 500;
+      margin-right: 4px;
+    }
+
+    .badge-val.time { background: rgba(234, 179, 8, 0.18); color: #A16207; }
+    .badge-val.money { background: rgba(194, 65, 12, 0.15); color: var(--warmth); }
+    .badge-val.outcome { background: rgba(4, 120, 87, 0.15); color: var(--recovery); }
+
+    .evidence-block {
+      background: var(--ink);
+      color: var(--bone);
+      padding: 64px;
+      border-radius: 20px;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .evidence-block .ev-eye {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--sun);
+      margin-bottom: 20px;
+    }
+
+    .evidence-block h3 {
+      font-family: var(--font-display);
+      font-size: 36px;
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+
+    .evidence-block p {
+      color: var(--n300);
+      font-size: 14.5px;
+      line-height: 1.55;
+    }
+
+    .ev-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+
+    .ev-stat .ev-num {
+      font-family: var(--font-display);
+      font-size: 56px;
+      font-weight: 300;
+      line-height: 1;
+      letter-spacing: -0.035em;
+      margin-bottom: 12px;
+    }
+
+    .ev-stat .ev-num.up { color: var(--recovery); }
+    .ev-stat .ev-num.problem { color: var(--bone); }
+    .ev-stat .ev-num .u { font-size: 0.4em; color: var(--n500); }
+
+    .ev-stat .ev-desc {
+      font-size: 13px;
+      color: var(--n300);
+      line-height: 1.45;
+      margin-bottom: 10px;
+    }
+
+    .ev-stat .ev-src {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--n500);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .final-cta {
+      background: var(--warmth);
+      color: var(--bone);
+      padding: 96px 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .final-cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 50% 80% at 80% 50%, rgba(234, 179, 8, 0.2), transparent);
+    }
+
+    .final-cta .container { position: relative; z-index: 1; }
+
+    .final-cta .section-eyebrow { color: rgba(251, 248, 242, 0.9); }
+    .final-cta .section-eyebrow::before { background: rgba(251, 248, 242, 0.9); }
+    .final-cta .section-title { color: var(--bone); }
+    .final-cta .section-title em { color: var(--sun); }
+
+    .final-cta .lead {
+      font-size: 19px;
+      color: rgba(251, 248, 242, 0.88);
+      max-width: 620px;
+      margin-bottom: 40px;
+      line-height: 1.55;
+    }
+
+    .final-cta .btn-primary { background: var(--ink); color: var(--bone); }
+
+    .final-cta .btn-primary:hover {
+      background: var(--bone);
+      color: var(--ink);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+    }
+
+    .final-cta .btn-secondary { color: var(--bone); }
+    .final-cta .btn-secondary:hover { color: var(--sun); }
+
+    footer {
+      padding: 40px 0;
+      border-top: 1px solid var(--n200);
+      font-size: 13px;
+      color: var(--n500);
+    }
+
+    footer .row { display: flex; justify-content: space-between; align-items: center; }
+
+    footer .meta {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .disclaimer-strip {
+      background: var(--cream);
+      border-top: 1px solid var(--n200);
+      border-bottom: 1px solid var(--n200);
+      padding: 18px 0;
+      text-align: center;
+    }
+    .disclaimer-strip .ds-inner {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 0 32px;
+      font-size: 14px;
+      color: var(--n700);
+      line-height: 1.5;
+    }
+    .disclaimer-strip strong {
+      color: var(--ink);
+      font-weight: 600;
+    }
+    .disclaimer-strip .ds-icon {
+      color: var(--warmth);
+      font-family: var(--font-mono);
+      font-weight: 600;
+      margin-right: 6px;
+    }
+
+    footer .fineprint {
+      font-size: 11px;
+      color: var(--n500);
+      line-height: 1.55;
+      margin-bottom: 18px;
+      padding-bottom: 18px;
+      border-bottom: 1px dashed var(--n200);
+      max-width: 820px;
+      font-style: italic;
+    }
+
+    .network-section { padding: 88px 0; }
+    .network-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 56px;
+      align-items: center;
+    }
+    .network-bullets {
+      list-style: none;
+      margin-top: 28px;
+    }
+    .network-bullets li {
+      padding: 14px 0;
+      border-top: 1px solid var(--n200);
+      font-size: 16px;
+      color: var(--ink);
+      display: flex;
+      align-items: start;
+      gap: 14px;
+      line-height: 1.5;
+    }
+    .network-bullets li:last-child { border-bottom: 1px solid var(--n200); }
+    .network-bullets li::before {
+      content: '→';
+      font-family: var(--font-mono);
+      color: var(--warmth);
+      flex-shrink: 0;
+    }
+    .network-stat {
+      margin-top: 28px;
+      background: var(--cream);
+      border-left: 3px solid var(--warmth);
+      padding: 18px 22px;
+      border-radius: 8px;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+    .network-stat strong { color: var(--warmth); }
+    .network-diagram {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .network-diagram svg {
+      width: 100%;
+      max-width: 460px;
+      height: auto;
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid { grid-template-columns: 1fr; gap: 48px; }
+      .mockup { transform: none; }
+      .features-grid { grid-template-columns: 1fr; }
+      .value-trio { grid-template-columns: 1fr; gap: 16px; }
+      .personas-grid { grid-template-columns: 1fr; }
+      .network-grid { grid-template-columns: 1fr; gap: 40px; }
+      .evidence-block { grid-template-columns: 1fr; padding: 40px 32px; gap: 32px; }
+      .ev-stats { grid-template-columns: 1fr; gap: 24px; }
+      section { padding: 56px 0; }
+      .hero { padding: 40px 0 56px; }
+      nav { padding: 14px 20px; }
+      .container { padding: 0 20px; }
+      .benefit-pills { gap: 8px; }
+      .pill { padding: 12px 14px; }
+      .pill-num { font-size: 26px; }
+      .cta-row { flex-direction: column; align-items: stretch; }
+      .btn { justify-content: center; }
+      nav .badge { display: none; }
+    }
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(24px);
+      animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+    .d-1 { animation-delay: 0.05s; }
+    .d-2 { animation-delay: 0.15s; }
+    .d-3 { animation-delay: 0.28s; }
+    .d-4 { animation-delay: 0.42s; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.3); }
+    }
+
+    .status-dot.warn, .status-dot.alert {
+      animation: pulse 2s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="logo">
+    <span class="mark">R</span>
+    RecoveryOS
+  </a>
+  <div class="nav-right">
+    <span class="badge">Demo · Fisioterapista</span>
+    <a href="#" class="nav-link">Versione ortopedico →</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div class="hero-text">
+        <div class="eyebrow fade-up">Per fisioterapisti che vogliono lavorare meno e meglio</div>
+
+        <h1 class="fade-up d-1">
+          <span class="strikethrough">Rincorrere i pazienti</span><br>
+          su WhatsApp per sapere<br>
+          <em>se stanno facendo gli esercizi.</em>
+        </h1>
+
+        <p class="subhead fade-up d-2">
+          RecoveryOS automatizza i check-in, ti avvisa solo quando serve,
+          e produce un report mensile che il medico inviante riceve direttamente.
+          Tu lavori sui casi, lui ti rimanda i prossimi.
+        </p>
+
+        <div class="cta-row fade-up d-3">
+          <a href="demo-fisio-02-dashboard.html" class="btn btn-primary">
+            Apri la dashboard
+            <span class="arrow">→</span>
+          </a>
+          <a href="https://tally.so/r/recoveryos-fisio?source=demo_fisio" class="btn btn-secondary">
+            Compila il questionario (6 min)
+            <span class="arrow">→</span>
+          </a>
+        </div>
+
+        <div class="benefit-pills fade-up d-4">
+          <div class="pill">
+            <div class="pill-num warm">~5h</div>
+            <div class="pill-label">a settimana che ti ritornano</div>
+          </div>
+          <div class="pill">
+            <div class="pill-num green">+ referrals</div>
+            <div class="pill-label">dagli ortopedici invianti</div>
+          </div>
+          <div class="pill">
+            <div class="pill-num navy">+30%</div>
+            <div class="pill-label">aderenza dei pazienti</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-visual fade-up d-3">
+        <div class="mockup">
+          <div class="mockup-chrome">
+            <span class="mockup-dot red"></span>
+            <span class="mockup-dot yellow"></span>
+            <span class="mockup-dot green"></span>
+            <span class="mockup-url">app.recoveryos.it/pazienti</span>
+          </div>
+          <div class="mockup-content">
+            <div class="mockup-header">
+              <div class="mockup-title">I miei pazienti</div>
+              <span class="mockup-pill">Live</span>
+            </div>
+
+            <div class="mockup-stat-row">
+              <div class="mockup-stat">
+                <div class="num">27</div>
+                <div class="lab">In linea</div>
+              </div>
+              <div class="mockup-stat">
+                <div class="num">4</div>
+                <div class="lab">Da seguire</div>
+              </div>
+              <div class="mockup-stat">
+                <div class="num">2</div>
+                <div class="lab">Non rispondono</div>
+              </div>
+            </div>
+
+            <div class="mockup-list">
+              <div class="mockup-row">
+                <span class="status-dot ok"></span>
+                <span><strong class="name">Marco Rossi</strong> <span class="meta">LCA · sett. 3</span></span>
+                <span class="val">NPRS 3</span>
+                <span class="val">92%</span>
+              </div>
+              <div class="mockup-row">
+                <span class="status-dot warn"></span>
+                <span><strong class="name">Maria Conti</strong> <span class="meta">PTA anca · sett. 4</span></span>
+                <span class="val">NPRS 6</span>
+                <span class="val">40%</span>
+              </div>
+              <div class="mockup-row">
+                <span class="status-dot ok"></span>
+                <span><strong class="name">Luigi Esposito</strong> <span class="meta">spalla · sett. 8</span></span>
+                <span class="val">NPRS 2</span>
+                <span class="val">88%</span>
+              </div>
+              <div class="mockup-row">
+                <span class="status-dot ok"></span>
+                <span><strong class="name">Elena Ferrari</strong> <span class="meta">LCA · sett. 6</span></span>
+                <span class="val">NPRS 4</span>
+                <span class="val">85%</span>
+              </div>
+              <div class="mockup-row">
+                <span class="status-dot alert"></span>
+                <span><strong class="name">Giovanni Russo</strong> <span class="meta">lombalgia · sett. 2</span></span>
+                <span class="val">—</span>
+                <span class="val">0%</span>
+              </div>
+              <div class="mockup-row">
+                <span class="status-dot ok"></span>
+                <span><strong class="name">Anna Bianchi</strong> <span class="meta">cuffia · sett. 5</span></span>
+                <span class="val">NPRS 3</span>
+                <span class="val">94%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="disclaimer-strip">
+  <div class="ds-inner">
+    <span class="ds-icon">⊕</span>
+    <strong>RecoveryOS si integra con il tuo gestionale</strong>
+    (AlfaDocs, MioDottore, FisioCloud, altri). Non lo sostituisce. È il layer di follow-up e outcome sopra.
+  </div>
+</section>
+
+<section class="alt">
+  <div class="container">
+    <div class="section-eyebrow">Quello che ti restituisce</div>
+    <h2 class="section-title">Tre cose che oggi <em>non hai</em>.<br>E che non sai di poter avere.</h2>
+
+    <div class="value-trio">
+      <div class="value-card time">
+        <div class="icon-wrap">t</div>
+        <h3>Più tempo</h3>
+        <p class="vc-sub">Smetti di fare il customer service del tuo studio fuori orario.</p>
+        <ul>
+          <li>Check-in automatici settimanali</li>
+          <li>Alert solo quando serve davvero</li>
+          <li>Niente più WhatsApp alle 22</li>
+          <li>Report al medico in un click</li>
+        </ul>
+      </div>
+
+      <div class="value-card money">
+        <div class="icon-wrap">€</div>
+        <h3>Più soldi</h3>
+        <p class="vc-sub">Più referrals dagli ortopedici. Pazienti che tornano per outcome migliori.</p>
+        <ul>
+          <li>Report mensile per il medico inviante</li>
+          <li>Outcome dimostrati con PROMs validati</li>
+          <li>Pazienti che non abbandonano</li>
+          <li>Recensioni guidate dai recovery riusciti</li>
+        </ul>
+      </div>
+
+      <div class="value-card outcome">
+        <div class="icon-wrap">↑</div>
+        <h3>Outcome migliori</h3>
+        <p class="vc-sub">Vedi l'aderenza prima che si rompa. Intervieni in tempo.</p>
+        <ul>
+          <li>Dashboard recovery per paziente</li>
+          <li>Alert su peggioramento o stallo</li>
+          <li>PROMs KOOS, DASH, ODI automatici</li>
+          <li>Dati longitudinali per ogni protocollo</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-eyebrow">Due pazienti, due workflow</div>
+    <h2 class="section-title">Lo stesso strumento si adatta<br>a <em>chi hai davanti.</em></h2>
+
+    <div class="personas-grid">
+      <div class="persona-card">
+        <div class="persona-eyebrow">Persona · Caso tipico</div>
+        <h3 class="persona-name">Marco, 28</h3>
+        <p class="persona-detail">Calciatore amatoriale · post-ricostruzione LCA · settimana 3</p>
+
+        <ul class="workflow-list">
+          <li><span class="tag">Canale</span><span>Check-in WhatsApp settimanale, autonomo.</span></li>
+          <li><span class="tag">Dati</span><span>NPRS 7 → 3 in 21 giorni. Aderenza 92%.</span></li>
+          <li><span class="tag">Per te</span><span>Nessun alert. Marco è in linea con la curva.</span></li>
+          <li><span class="tag">Tempo</span><span>0 minuti spesi sulla sua gestione questa settimana.</span></li>
+        </ul>
+        <span class="status-pill ok">● In linea</span>
+      </div>
+
+      <div class="persona-card dark">
+        <div class="persona-eyebrow">Persona · Caso complesso</div>
+        <h3 class="persona-name">Maria, 72</h3>
+        <p class="persona-detail">Post-protesi anca · settimana 4 · figlio caregiver</p>
+
+        <ul class="workflow-list">
+          <li><span class="tag">Canale</span><span>Voice call AI. Chiama casa, conversa in italiano.</span></li>
+          <li><span class="tag">Dati</span><span>NPRS 6 fisso. Aderenza 40%.</span></li>
+          <li><span class="tag">Per te</span><span>Alert: nessuna risposta da 5 giorni. Chiama tu.</span></li>
+          <li><span class="tag">Bonus</span><span>Andrea (figlio) riceve summary settimanale.</span></li>
+        </ul>
+        <span class="status-pill warn">● Attenzione</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="container">
+    <div class="section-eyebrow">Le sei feature centrali</div>
+    <h2 class="section-title">Quello che fa, in <em>concreto</em>.</h2>
+
+    <div class="features-grid">
+      <div class="feature">
+        <div class="feat-num">01</div>
+        <div class="feat-title">Report mensile AI-generato per medico inviante</div>
+        <div class="feat-desc">Ogni mese RecoveryOS genera un report di sintesi per ogni medico che ti invia pazienti: trend recovery, ROM raggiunti, milestone, outcome PROMs. Lui sa che i suoi pazienti sono in buone mani. Tu ricevi più referral.</div>
+        <div class="feat-tag"><span class="badge-val money">+ soldi (referrals)</span></div>
+      </div>
+
+      <div class="feature">
+        <div class="feat-num">02</div>
+        <div class="feat-title">Check-in automatici settimanali con paziente</div>
+        <div class="feat-desc">Il paziente riceve 4 domande ogni venerdì via WhatsApp. Risponde in 90 secondi. Tu vedi tutto in dashboard, senza inseguire nessuno.</div>
+        <div class="feat-tag"><span class="badge-val time">+ tempo</span><span class="badge-val outcome">+ outcome</span></div>
+      </div>
+
+      <div class="feature">
+        <div class="feat-num">03</div>
+        <div class="feat-title">Outcome dashboard paziente con curva recovery</div>
+        <div class="feat-desc">Una pagina per paziente: curva dolore, aderenza, milestone, prossima azione consigliata.</div>
+        <div class="feat-tag"><span class="badge-val outcome">+ outcome</span></div>
+      </div>
+
+      <div class="feature">
+        <div class="feat-num">04</div>
+        <div class="feat-title">Alert intelligenti su pattern da valutare</div>
+        <div class="feat-desc">Ti avvisa quando un paziente non risponde, peggiora o segnala un pattern anomalo. Solo le segnalazioni che meritano la tua attenzione.</div>
+        <div class="feat-tag"><span class="badge-val time">+ tempo</span><span class="badge-val outcome">+ outcome</span></div>
+      </div>
+
+      <div class="feature">
+        <div class="feat-num">05</div>
+        <div class="feat-title">PROMs validati automatici (KOOS, DASH, ODI)</div>
+        <div class="feat-desc">Raccolti dal paziente nel suo tempo. Aggregati per te. Dimostri outcome con dati validati dalla letteratura.</div>
+        <div class="feat-tag"><span class="badge-val money">+ soldi</span><span class="badge-val outcome">+ outcome</span></div>
+      </div>
+
+      <div class="feature">
+        <div class="feat-num">06</div>
+        <div class="feat-title">Protocolli di recupero + library esercizi</div>
+        <div class="feat-desc">Applica in meno di un minuto un percorso completo: esercizi, check-in programmati, PROMs, alert e report al medico inviante. Salva i tuoi preset personali.</div>
+        <div class="feat-tag"><span class="badge-val time">+ tempo</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="network-section">
+  <div class="container">
+    <div class="network-grid">
+      <div class="network-text">
+        <div class="section-eyebrow">Il tuo network</div>
+        <h2 class="section-title">Tu non lavori isolato. Il sistema collega <em>tutti i lati del paziente</em>.</h2>
+        <ul class="network-bullets">
+          <li>L'ortopedico che ti invia il paziente vede il recovery in tempo reale</li>
+          <li>Tu ricevi protocollo post-op e contesto clinico, niente più anamnesi alla cieca</li>
+          <li>Il paziente non racconta la sua storia tre volte</li>
+          <li>Quando il recovery riesce, l'orto ti rimanda i prossimi</li>
+        </ul>
+        <div class="network-stat">
+          Il <strong>67% degli ortopedici</strong> dichiara di voler vedere come va il recovery dei pazienti che invia. <!-- STAT TO VALIDATE -->
+        </div>
+      </div>
+      <div class="network-diagram">
+        <svg viewBox="0 0 460 380" xmlns="http://www.w3.org/2000/svg">
+          <line x1="230" y1="190" x2="230" y2="60" stroke="#C9C0A8" stroke-width="1.5" stroke-dasharray="4,4"/>
+          <line x1="230" y1="190" x2="90" y2="310" stroke="#C9C0A8" stroke-width="1.5" stroke-dasharray="4,4"/>
+          <line x1="230" y1="190" x2="370" y2="310" stroke="#C9C0A8" stroke-width="1.5" stroke-dasharray="4,4"/>
+          <circle cx="230" cy="60" r="42" fill="#1E3A8A"/>
+          <text x="230" y="58" text-anchor="middle" fill="#FBF8F2" font-family="Manrope" font-size="11" font-weight="600" letter-spacing="0.5">ORTO</text>
+          <text x="230" y="73" text-anchor="middle" fill="#FBF8F2" font-family="Fraunces" font-size="13" font-style="italic">inviante</text>
+          <circle cx="230" cy="190" r="54" fill="#0F1419"/>
+          <text x="230" y="186" text-anchor="middle" fill="#FBF8F2" font-family="Fraunces" font-size="15" font-weight="500">RecoveryOS</text>
+          <text x="230" y="205" text-anchor="middle" fill="#EAB308" font-family="IBM Plex Mono" font-size="9" letter-spacing="1.5">HUB</text>
+          <circle cx="90" cy="310" r="42" fill="#C2410C"/>
+          <text x="90" y="308" text-anchor="middle" fill="#FBF8F2" font-family="Manrope" font-size="11" font-weight="600" letter-spacing="0.5">FISIO</text>
+          <text x="90" y="323" text-anchor="middle" fill="#FBF8F2" font-family="Fraunces" font-size="13" font-style="italic">tu</text>
+          <circle cx="370" cy="310" r="42" fill="#047857"/>
+          <text x="370" y="308" text-anchor="middle" fill="#FBF8F2" font-family="Manrope" font-size="10" font-weight="600" letter-spacing="0.5">PAZIENTE</text>
+          <text x="370" y="323" text-anchor="middle" fill="#FBF8F2" font-family="Fraunces" font-size="13" font-style="italic">+ family</text>
+          <polygon points="225,110 235,110 230,120" fill="#C9C0A8"/>
+          <polygon points="225,150 235,150 230,140" fill="#C9C0A8"/>
+          <polygon points="117,275 130,265 124,283" fill="#C9C0A8"/>
+          <polygon points="343,275 330,265 336,283" fill="#C9C0A8"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="evidence-block">
+      <div>
+        <div class="ev-eye">L'evidenza scientifica</div>
+        <h3>Non è solo intuizione.<br>È letteratura.</h3>
+        <p>Studi peer-reviewed dimostrano che strumenti di tele-rehabilitation AI-powered migliorano misurabilmente aderenza e recovery rate. Noi li portiamo nello studio del fisioterapista italiano.</p>
+      </div>
+      <div class="ev-stats">
+        <div class="ev-stat">
+          <div class="ev-num problem">30–50<span class="u">%</span></div>
+          <div class="ev-desc">aderenza al Home Exercise Program oggi.</div>
+          <div class="ev-src">Rizzoli · NCT05026346</div>
+        </div>
+        <div class="ev-stat">
+          <div class="ev-num up">+32<span class="u">%</span></div>
+          <div class="ev-desc">aderenza con AI-powered tele-rehab.</div>
+          <div class="ev-src">Lancet Digital Health · 2022</div>
+        </div>
+        <div class="ev-stat">
+          <div class="ev-num up">+25<span class="u">%</span></div>
+          <div class="ev-desc">recovery rate più rapido.</div>
+          <div class="ev-src">Lancet Digital Health · 2022</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="final-cta">
+  <div class="container">
+    <div class="section-eyebrow">Aiutaci a costruirlo bene</div>
+    <h2 class="section-title">Sei un fisioterapista.<br><em>Dicci cosa ti serve davvero.</em></h2>
+    <p class="lead">
+      Questa è una visione, non un prodotto finito. Stiamo decidendo cosa
+      costruire prima. Sei minuti del tuo tempo decidono le priorità.
+      Chi compila può ottenere un anno gratuito al lancio.
+    </p>
+    <div class="cta-row">
+      <a href="https://tally.so/r/recoveryos-fisio?source=demo_fisio" class="btn btn-primary">
+        Compila il questionario
+        <span class="arrow">→</span>
+      </a>
+      <a href="demo-fisio-02-dashboard.html" class="btn btn-secondary">
+        Continua a esplorare la demo
+        <span class="arrow">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="fineprint">
+      RecoveryOS supporta follow-up, comunicazione e documentazione clinica.
+      Evidenzia pattern e anomalie nei dati raccolti, ma non fa diagnosi e non propone trattamenti.
+      Le decisioni cliniche restano sempre al professionista.
+    </div>
+    <div class="row">
+      <div>© RecoveryOS · Bologna · Italia</div>
+      <div class="meta">Demo Fisio V1.1 · 2026-05-20</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

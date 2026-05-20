@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RecoveryOS — Demo</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Manrope:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --ink: #0F1419;
+      --bone: #FBF8F2;
+      --cream: #F4EEDF;
+      --clinical: #1E3A8A;
+      --warmth: #C2410C;
+      --recovery: #047857;
+      --sun: #EAB308;
+      --n200: #E0D8C5;
+      --n500: #8C8474;
+      --n700: #4A4434;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Manrope', -apple-system, sans-serif;
+      background: var(--bone);
+      color: var(--ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 32px;
+      -webkit-font-smoothing: antialiased;
+      position: relative;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      background:
+        radial-gradient(ellipse 60% 40% at 0% 0%, rgba(194, 65, 12, 0.06), transparent),
+        radial-gradient(ellipse 60% 40% at 100% 100%, rgba(30, 58, 138, 0.07), transparent);
+    }
+
+    .wrap {
+      max-width: 760px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Fraunces', serif;
+      font-weight: 500;
+      font-size: 18px;
+      color: var(--n700);
+      margin-bottom: 32px;
+    }
+    .mark .m {
+      width: 28px; height: 28px;
+      background: var(--ink); color: var(--bone);
+      border-radius: 7px;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-family: 'Fraunces', serif; font-weight: 600;
+      font-size: 15px; font-style: italic;
+    }
+
+    .eyebrow {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--clinical);
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(40px, 6vw, 56px);
+      font-weight: 400;
+      letter-spacing: -0.025em;
+      line-height: 1.02;
+      margin-bottom: 18px;
+    }
+    h1 em {
+      font-style: italic;
+      color: var(--warmth);
+    }
+
+    .lead {
+      font-size: 17px;
+      line-height: 1.55;
+      color: var(--n700);
+      max-width: 560px;
+      margin: 0 auto 48px;
+    }
+
+    .choices {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      text-align: left;
+    }
+
+    .choice {
+      background: #FFF;
+      border: 1px solid var(--n200);
+      border-radius: 16px;
+      padding: 32px;
+      text-decoration: none;
+      color: var(--ink);
+      transition: all 0.22s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+    .choice:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 18px 44px -18px rgba(0, 0, 0, 0.18);
+    }
+    .choice::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    .choice.fisio::before { background: var(--warmth); }
+    .choice.orto::before { background: var(--clinical); }
+
+    .choice-eye {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10.5px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--n500);
+    }
+    .choice.fisio .choice-eye { color: var(--warmth); }
+    .choice.orto .choice-eye { color: var(--clinical); }
+
+    .choice h2 {
+      font-family: 'Fraunces', serif;
+      font-size: 28px;
+      font-weight: 500;
+      letter-spacing: -0.015em;
+      line-height: 1.1;
+    }
+    .choice h2 em { font-style: italic; }
+    .choice.fisio h2 em { color: var(--warmth); }
+    .choice.orto h2 em { color: var(--clinical); }
+
+    .choice p {
+      font-size: 14px;
+      color: var(--n700);
+      line-height: 1.5;
+    }
+
+    .choice .cta {
+      margin-top: auto;
+      padding-top: 6px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .choice.fisio .cta { color: var(--warmth); }
+    .choice.orto .cta { color: var(--clinical); }
+    .choice .cta .arrow { transition: transform 0.18s ease; }
+    .choice:hover .cta .arrow { transform: translateX(4px); }
+
+    .foot {
+      margin-top: 48px;
+      font-size: 12px;
+      color: var(--n500);
+      line-height: 1.55;
+      font-style: italic;
+      max-width: 580px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    @media (max-width: 640px) {
+      .choices { grid-template-columns: 1fr; }
+      .choice { padding: 26px 24px; }
+      h1 { font-size: 36px; }
+      .lead { font-size: 15px; margin-bottom: 32px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="mark">
+      <span class="m">R</span>
+      RecoveryOS
+    </div>
+
+    <div class="eyebrow">Demo · validation phase</div>
+
+    <h1>Pre-MVP <em>demo</em></h1>
+
+    <p class="lead">
+      Vertical SaaS healthtech che connette ortopedici, fisioterapisti
+      e pazienti nel recupero post-op italiano. Due lati, due demo separate.
+      Scegli quella più rilevante per te.
+    </p>
+
+    <div class="choices">
+      <a href="demo-fisio-01-landing.html" class="choice fisio">
+        <div class="choice-eye">Demo · Fisioterapista</div>
+        <h2>Per <em>fisioterapisti</em> privati</h2>
+        <p>Check-in automatici settimanali, dashboard pazienti, library protocolli di recupero, report mensile auto-generato per il medico inviante.</p>
+        <span class="cta">Apri demo Fisio <span class="arrow">→</span></span>
+      </a>
+
+      <a href="demo-orto-01-landing.html" class="choice orto">
+        <div class="choice-eye">Demo · Ortopedico</div>
+        <h2>Per <em>ortopedici</em> privati</h2>
+        <p>AI Resume pre-controllo, follow-up post-op automatici, smart referral verso fisio collegati, audit-trail medico-legale esportabile.</p>
+        <span class="cta">Apri demo Orto <span class="arrow">→</span></span>
+      </a>
+    </div>
+
+    <div class="foot">
+      RecoveryOS supporta follow-up, comunicazione e documentazione clinica.
+      Evidenzia pattern e anomalie nei dati raccolti, ma non fa diagnosi e non propone trattamenti.
+      Le decisioni cliniche restano sempre al professionista.
+    </div>
+  </div>
+</body>
+</html>

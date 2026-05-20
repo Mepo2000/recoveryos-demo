@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RecoveryOS — Protocolli di recupero</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Manrope:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --ink: #0F1419;
+      --bone: #FBF8F2;
+      --cream: #F4EEDF;
+      --clinical: #1E3A8A;
+      --recovery: #047857;
+      --signal: #B91C1C;
+      --warmth: #C2410C;
+      --sun: #EAB308;
+
+      --n100: #F0EADC;
+      --n200: #E0D8C5;
+      --n300: #C9C0A8;
+      --n500: #8C8474;
+      --n700: #4A4434;
+
+      --font-display: 'Fraunces', Georgia, serif;
+      --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body);
+      color: var(--ink);
+      background: var(--bone);
+      line-height: 1.5;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      background: radial-gradient(ellipse 80% 50% at 0% 0%, rgba(234, 179, 8, 0.05), transparent);
+    }
+
+    /* ===== NAV ===== */
+    nav {
+      position: sticky;
+      top: 0;
+      background: rgba(251, 248, 242, 0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--n200);
+      padding: 14px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .logo {
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: 20px;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo .mark {
+      width: 26px;
+      height: 26px;
+      background: var(--ink);
+      color: var(--bone);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 14px;
+      font-style: italic;
+    }
+
+    .nav-right { display: flex; gap: 16px; align-items: center; }
+
+    .demo-badge {
+      background: var(--warmth);
+      color: var(--bone);
+      padding: 5px 11px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-radius: 100px;
+    }
+
+    .nav-link {
+      color: var(--n700);
+      text-decoration: none;
+      font-size: 13.5px;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .nav-link:hover { color: var(--ink); background: var(--cream); }
+    .nav-link.back { color: var(--warmth); }
+
+    /* ===== APP LAYOUT ===== */
+    .app {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      min-height: calc(100vh - 60px);
+    }
+
+    .sidebar {
+      border-right: 1px solid var(--n200);
+      padding: 24px 16px;
+      background: rgba(244, 238, 223, 0.4);
+    }
+
+    .sidebar-section { margin-bottom: 28px; }
+
+    .sidebar-title {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--n500);
+      padding: 0 12px;
+      margin-bottom: 8px;
+    }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      color: var(--n700);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.15s ease;
+      margin-bottom: 2px;
+    }
+
+    .sidebar-link:hover { background: var(--cream); color: var(--ink); }
+    .sidebar-link.active { background: var(--ink); color: var(--bone); }
+
+    .sidebar-link .count {
+      margin-left: auto;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      background: var(--n200);
+      color: var(--n700);
+      padding: 1px 7px;
+      border-radius: 100px;
+      font-weight: 500;
+    }
+
+    .sidebar-link.active .count { background: var(--warmth); color: var(--bone); }
+
+    .sidebar-link .icon { width: 18px; height: 18px; flex-shrink: 0; }
+
+    /* ===== MAIN ===== */
+    .main { padding: 32px 40px 48px; }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .page-title h1 {
+      font-family: var(--font-display);
+      font-size: 42px;
+      font-weight: 400;
+      letter-spacing: -0.022em;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .page-title h1 em { font-style: italic; color: var(--warmth); }
+    .page-title .sub { font-size: 14px; color: var(--n700); max-width: 520px; }
+
+    .page-actions { display: flex; gap: 10px; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border: none;
+      font-family: var(--font-body);
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      border-radius: 7px;
+    }
+
+    .btn-primary { background: var(--ink); color: var(--bone); }
+    .btn-primary:hover { background: var(--warmth); }
+    .btn-secondary { background: var(--cream); color: var(--ink); border: 1px solid var(--n200); }
+    .btn-secondary:hover { background: var(--n100); border-color: var(--n300); }
+
+    /* ===== TAB BAR ===== */
+    .tab-bar {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 28px;
+      border-bottom: 1px solid var(--n200);
+    }
+
+    .tab {
+      padding: 12px 20px;
+      font-family: var(--font-body);
+      font-size: 14.5px;
+      font-weight: 600;
+      color: var(--n500);
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      border-bottom: 2px solid transparent;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tab:hover { color: var(--ink); }
+    .tab.active {
+      color: var(--ink);
+      border-bottom-color: var(--warmth);
+    }
+
+    .tab .count {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      background: var(--n200);
+      color: var(--n700);
+      padding: 1px 7px;
+      border-radius: 100px;
+      font-weight: 500;
+    }
+
+    .tab.active .count {
+      background: var(--warmth);
+      color: var(--bone);
+    }
+
+    /* ===== INTRO STRIP ===== */
+    .intro-strip {
+      background: var(--ink);
+      color: var(--bone);
+      border-radius: 14px;
+      padding: 28px 32px;
+      margin-bottom: 32px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .intro-strip .is-eye {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--sun);
+      margin-bottom: 10px;
+    }
+
+    .intro-strip h3 {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 400;
+      letter-spacing: -0.018em;
+      line-height: 1.15;
+      margin-bottom: 6px;
+    }
+
+    .intro-strip h3 em { font-style: italic; color: var(--sun); }
+
+    .intro-strip p {
+      font-size: 14px;
+      color: var(--n300);
+      max-width: 600px;
+      line-height: 1.5;
+    }
+
+    .intro-strip .time-saved {
+      font-family: var(--font-display);
+      font-size: 56px;
+      font-weight: 300;
+      letter-spacing: -0.035em;
+      line-height: 0.9;
+      color: var(--warmth);
+    }
+
+    .intro-strip .ts-label {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--n300);
+      margin-top: 6px;
+    }
+
+    /* ===== PROTOCOL GRID ===== */
+    .protocol-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .protocol-card {
+      background: var(--bone);
+      border: 1px solid var(--n200);
+      border-radius: 14px;
+      padding: 24px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      text-decoration: none;
+      color: var(--ink);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
+    }
+
+    .protocol-card:hover {
+      border-color: var(--warmth);
+      transform: translateY(-3px);
+      box-shadow: 0 16px 40px -16px rgba(15, 20, 25, 0.18);
+    }
+
+    .protocol-card.custom {
+      background: var(--cream);
+      border-style: dashed;
+      border-color: var(--n300);
+    }
+
+    .protocol-card.custom:hover {
+      background: rgba(194, 65, 12, 0.06);
+      border-color: var(--warmth);
+      border-style: solid;
+    }
+
+    .protocol-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--warmth);
+      font-weight: 600;
+    }
+
+    .protocol-tag .dot {
+      width: 6px;
+      height: 6px;
+      background: var(--warmth);
+      border-radius: 50%;
+    }
+
+    .protocol-card.use-count-high .protocol-tag {
+      color: var(--recovery);
+    }
+
+    .protocol-card.use-count-high .protocol-tag .dot {
+      background: var(--recovery);
+    }
+
+    .protocol-name {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 500;
+      letter-spacing: -0.015em;
+      line-height: 1.15;
+      flex-grow: 1;
+    }
+
+    .protocol-name em { font-style: italic; color: var(--warmth); }
+
+    .protocol-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      padding: 14px 0;
+      border-top: 1px solid var(--n200);
+      border-bottom: 1px solid var(--n200);
+    }
+
+    .protocol-stat .ps-num {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .protocol-stat .ps-label {
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--n500);
+    }
+
+    .protocol-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .protocol-footer .use-count {
+      font-size: 12px;
+      color: var(--n500);
+      font-family: var(--font-mono);
+    }
+
+    .protocol-footer .apply-btn {
+      font-family: var(--font-body);
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--warmth);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+    }
+
+    .protocol-card:hover .apply-btn { transform: translateX(3px); }
+
+    .protocol-card.custom .protocol-name {
+      color: var(--n700);
+      text-align: center;
+      padding: 24px 0;
+      font-size: 22px;
+    }
+
+    .protocol-card.custom .plus-icon {
+      font-family: var(--font-display);
+      font-size: 48px;
+      font-weight: 300;
+      color: var(--warmth);
+      text-align: center;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .protocol-card.custom .custom-sub {
+      font-size: 13px;
+      color: var(--n700);
+      text-align: center;
+    }
+
+    /* ===== SECTION DIVIDER ===== */
+    .section-divider {
+      margin: 48px 0 28px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .section-divider h2 {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 400;
+      letter-spacing: -0.018em;
+    }
+
+    .section-divider h2 em { font-style: italic; color: var(--warmth); }
+
+    .section-divider .sd-sub {
+      font-size: 13.5px;
+      color: var(--n500);
+    }
+
+    .section-divider .sd-actions { margin-left: auto; }
+
+    /* ===== EXERCISE LIBRARY ===== */
+    .exercise-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .exercise-card {
+      background: var(--bone);
+      border: 1px solid var(--n200);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      text-decoration: none;
+      color: var(--ink);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .exercise-card:hover {
+      border-color: var(--warmth);
+      transform: translateY(-2px);
+    }
+
+    .exercise-thumb {
+      aspect-ratio: 16/10;
+      background: var(--cream);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .exercise-thumb svg {
+      width: 64%;
+      height: 64%;
+      opacity: 0.85;
+    }
+
+    .exercise-thumb .play-overlay {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      width: 32px;
+      height: 32px;
+      background: var(--ink);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--bone);
+      font-size: 11px;
+      padding-left: 2px;
+      transition: all 0.2s ease;
+    }
+
+    .exercise-card:hover .play-overlay {
+      background: var(--warmth);
+      transform: scale(1.1);
+    }
+
+    .exercise-thumb .duration {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      background: rgba(15, 20, 25, 0.85);
+      color: var(--bone);
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .exercise-body { padding: 14px 16px; }
+
+    .exercise-name {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: -0.012em;
+      line-height: 1.2;
+      margin-bottom: 6px;
+    }
+
+    .exercise-meta {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .exercise-tag {
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 100px;
+      background: var(--cream);
+      color: var(--n700);
+      font-weight: 500;
+    }
+
+    .exercise-tag.diff-low { background: rgba(4, 120, 87, 0.12); color: var(--recovery); }
+    .exercise-tag.diff-mid { background: rgba(234, 179, 8, 0.18); color: #A16207; }
+    .exercise-tag.diff-high { background: rgba(194, 65, 12, 0.15); color: var(--warmth); }
+
+    /* ===== INSIGHT CARD ===== */
+    .insight-card {
+      margin-top: 40px;
+      background: var(--warmth);
+      color: var(--bone);
+      border-radius: 14px;
+      padding: 32px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .insight-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 50% 80% at 90% 50%, rgba(234, 179, 8, 0.25), transparent);
+      pointer-events: none;
+    }
+
+    .insight-card > * { position: relative; z-index: 1; }
+
+    .insight-card .ic-eye {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(251, 248, 242, 0.85);
+      margin-bottom: 10px;
+    }
+
+    .insight-card h3 {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 400;
+      letter-spacing: -0.018em;
+      margin-bottom: 8px;
+      line-height: 1.15;
+    }
+
+    .insight-card h3 em { font-style: italic; color: var(--sun); }
+
+    .insight-card p {
+      font-size: 14.5px;
+      color: rgba(251, 248, 242, 0.88);
+      max-width: 620px;
+      line-height: 1.5;
+    }
+
+    .insight-card .ic-cta {
+      background: var(--ink);
+      color: var(--bone);
+      padding: 12px 22px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      font-weight: 600;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .insight-card .ic-cta:hover {
+      background: var(--bone);
+      color: var(--ink);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1100px) {
+      .protocol-grid { grid-template-columns: repeat(2, 1fr); }
+      .exercise-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (max-width: 880px) {
+      .app { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .main { padding: 24px 20px; }
+      .protocol-grid { grid-template-columns: 1fr; }
+      .exercise-grid { grid-template-columns: repeat(2, 1fr); }
+      .intro-strip { grid-template-columns: 1fr; }
+      .intro-strip .time-saved { font-size: 42px; }
+      .insight-card { grid-template-columns: 1fr; }
+      .page-header { flex-direction: column; align-items: stretch; }
+      .tab-bar { overflow-x: auto; }
+      .tab { white-space: nowrap; }
+    }
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+    .d-1 { animation-delay: 0.05s; }
+    .d-2 { animation-delay: 0.15s; }
+    .d-3 { animation-delay: 0.25s; }
+    .d-4 { animation-delay: 0.35s; }
+
+    .stagger > * {
+      opacity: 0;
+      animation: fadeUp 0.6s ease-out forwards;
+    }
+
+    .stagger > *:nth-child(1) { animation-delay: 0.15s; }
+    .stagger > *:nth-child(2) { animation-delay: 0.22s; }
+    .stagger > *:nth-child(3) { animation-delay: 0.29s; }
+    .stagger > *:nth-child(4) { animation-delay: 0.36s; }
+    .stagger > *:nth-child(5) { animation-delay: 0.43s; }
+    .stagger > *:nth-child(6) { animation-delay: 0.50s; }
+
+    .app-footer {
+      padding: 18px 32px 24px;
+      border-top: 1px solid var(--n200);
+      background: rgba(244, 238, 223, 0.4);
+    }
+    .app-footer .fineprint {
+      max-width: 900px;
+      margin: 0 auto;
+      font-size: 11px;
+      color: var(--n500);
+      line-height: 1.55;
+      text-align: center;
+      font-style: italic;
+    }
+    @media (max-width: 880px) {
+      .app-footer { padding: 16px 20px 24px; }
+      .app-footer .fineprint { text-align: left; }
+    }
+
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="demo-fisio-01-landing.html" class="logo">
+    <span class="mark">R</span>
+    RecoveryOS
+  </a>
+  <div class="nav-right">
+    <span class="demo-badge">Demo · Live</span>
+    <a href="demo-fisio-02-dashboard.html" class="nav-link back">← Dashboard pazienti</a>
+    <a href="https://tally.so/r/recoveryos-fisio?source=demo_protocolli" class="nav-link">Questionario →</a>
+  </div>
+</nav>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">Workspace</div>
+      <a href="demo-fisio-02-dashboard.html" class="sidebar-link">
+        <span class="icon">⊞</span>
+        Pazienti
+        <span class="count">33</span>
+      </a>
+      <a href="#" class="sidebar-link">
+        <span class="icon">⌁</span>
+        Alert
+        <span class="count">3</span>
+      </a>
+      <a href="#" class="sidebar-link">
+        <span class="icon">↗</span>
+        Outcome
+      </a>
+      <a href="#" class="sidebar-link active">
+        <span class="icon">⊜</span>
+        Protocolli
+        <span class="count">12</span>
+      </a>
+      <a href="#" class="sidebar-link">
+        <span class="icon">⌗</span>
+        Report mensili
+      </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-title">Collaborazioni</div>
+      <a href="#" class="sidebar-link">
+        <span class="icon">✦</span>
+        Medici invianti
+        <span class="count">4</span>
+      </a>
+      <a href="#" class="sidebar-link">
+        <span class="icon">⊙</span>
+        Library esercizi
+      </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-title">Studio</div>
+      <a href="#" class="sidebar-link">
+        <span class="icon">⌂</span>
+        Il mio studio
+      </a>
+      <a href="#" class="sidebar-link">
+        <span class="icon">⊠</span>
+        Impostazioni
+      </a>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="page-header fade-up">
+      <div class="page-title">
+        <h1>Protocolli di <em>recupero</em></h1>
+        <div class="sub">
+          Applica in meno di un minuto un percorso completo: esercizi, check-in programmati, PROMs, alert e report per il medico inviante.
+          Modifica liberamente. Salva quello che funziona.
+        </div>
+      </div>
+      <div class="page-actions">
+        <a href="#" class="btn btn-secondary">Importa protocollo</a>
+        <a href="#" class="btn btn-primary">
+          + Crea protocollo
+        </a>
+      </div>
+    </div>
+
+    <div class="intro-strip fade-up d-1">
+      <div>
+        <div class="is-eye">Quello che ti restituisce</div>
+        <h3>Smetti di scrivere lo <em>stesso piano</em> 30 volte all'anno.</h3>
+        <p>
+          Ogni protocollo include: esercizi + check-in programmati + PROMs ai milestone
+          + alert sui pattern da valutare + report mensile per il medico inviante.
+          Applica in un click, personalizza, salva come preset.
+        </p>
+      </div>
+      <div style="text-align: right;">
+        <div class="time-saved">~30s</div>
+        <div class="ts-label">vs 8-15 min manuale</div>
+      </div>
+    </div>
+
+    <div class="tab-bar fade-up d-2">
+      <button class="tab active">
+        Protocolli RecoveryOS <span class="count">8</span>
+      </button>
+      <button class="tab">
+        I miei preset <span class="count">4</span>
+      </button>
+      <button class="tab">
+        Library esercizi <span class="count">312</span>
+      </button>
+    </div>
+
+    <div class="protocol-grid stagger">
+      <a href="#" class="protocol-card use-count-high">
+        <div class="protocol-tag"><span class="dot"></span>Più usato</div>
+        <div class="protocol-name">LCA <em>giovane sportivo</em></div>
+        <div class="protocol-stats">
+          <div class="protocol-stat">
+            <div class="ps-num">12</div>
+            <div class="ps-label">settimane</div>
+          </div>
+          <div class="protocol-stat">
+            <div class="ps-num">15</div>
+            <div class="ps-label">esercizi</div>
+          </div>
+          <div class="protocol-stat">
+            <div class="ps-num">4</div>
+            <div class="ps-label">fasi</div>
+          </div>
+        </div>
+        <div class="protocol-footer">
+          <span class="use-count">Usato 14 volte</span>
+          <span class="apply-btn">Applica →</span>
+        </div>
+      </a>
+
+      <a href="#" class="protocol-card">
+        <div class="protocol-tag"><span class="dot"></span>Standard</div>
+        <div class="protocol-name">Protesi anca <em>over-65</em></div>
+        <div class="protocol-stats">
+          <div class="protocol-stat">
+            <div class="ps-num">16</div>
+            <div class="ps-label">settimane</div>
+          </div>
+          <div class="protocol-stat">
+            <div class="ps-num">12</div>
+            <div class="ps-label">esercizi</div>
+          </div>
+          <div class="protocol-stat">
+            <div class="ps-num">5</div>
+            <div class="ps-label">fasi</div>
+          </div>
+        </div>
+        <div class="protocol-footer">
+          <span class="use-count">Usato 9 volte</span>
+          <span class="apply-btn">Applica →</span>
+        </div>
+      </a>
+
+      <a href="#" class="protocol-card use-count-high">
+        <div class="protocol-tag"><span class="dot"></span>Più usato</div>
+        <div class="protocol-name">Cuffia rotatori <em>conservativa</em></div>
+        <div class="protocol-stats">
+          <div class="protocol-stat">
+            <div class="ps-num">10</div>
+            <div class="ps-label">settimane</div>
+          </div>
+          <div class="protocol-stat">
+            <div class="ps-num">11</div>
+            <div class="ps-label">esercizi</div>
+          </div>
+          <div class="protocol-stat">
+            <div class="ps-num">3</div>
+            <div class="ps-label">fasi</div>
+          </div>
+        </div>
+        <div class="protocol-footer">
+          <span class="use-count">Usato 11 volte</span>
+          <span class="apply-btn">Applica →</span>
+        </div>
+      </a>
+
+      <a href="#" class="protocol-card">
+        <div class="protocol-tag"><span class="dot"></span>Standard</div>
+        <div class="protocol-name">Frattura femore <em>over-80</em></div>
+        <div class="protocol-stats">
+          <div class="protocol-stat">
+            <div class="ps-num">20</div>
+            <div class="ps-label">settimane</div>
+          </div>
+          <div class="protocol-stat">
+            <div class="ps-num">9</div>
+            <div class="ps-label">esercizi</div>
+          </div>
+          <div class="protocol-stat">
+            <div class="ps-num">6</div>
+            <div class="ps-label">fasi</div>
+          </div>
+        </div>
+        <div class="protocol-footer">
+          <span class="use-count">Usato 4 volte</span>
+          <span class="apply-btn">Applica →</span>
+        </div>
+      </a>
+
+      <a href="#" class="protocol-card">
+        <div class="protocol-tag"><span class="dot"></span>Standard</div>
+        <div class="protocol-name">Lombalgia <em>cronica</em></div>
+        <div class="protocol-stats">
+          <div class="protocol-stat">
+            <div class="ps-num">8</div>
+            <div class="ps-label">settimane</div>
+          </div>
+          <div class="protocol-stat">
+            <div class="ps-num">10</div>
+            <div class="ps-label">esercizi</div>
+          </div>
+          <div class="protocol-stat">
+            <div class="ps-num">3</div>
+            <div class="ps-label">fasi</div>
+          </div>
+        </div>
+        <div class="protocol-footer">
+          <span class="use-count">Usato 7 volte</span>
+          <span class="apply-btn">Applica →</span>
+        </div>
+      </a>
+
+      <a href="#" class="protocol-card">
+        <div class="protocol-tag"><span class="dot"></span>Standard</div>
+        <div class="protocol-name">Distorsione <em>caviglia</em></div>
+        <div class="protocol-stats">
+          <div class="protocol-stat">
+            <div class="ps-num">6</div>
+            <div class="ps-label">settimane</div>
+          </div>
+          <div class="protocol-stat">
+            <div class="ps-num">8</div>
+            <div class="ps-label">esercizi</div>
+          </div>
+          <div class="protocol-stat">
+            <div class="ps-num">3</div>
+            <div class="ps-label">fasi</div>
+          </div>
+        </div>
+        <div class="protocol-footer">
+          <span class="use-count">Usato 6 volte</span>
+          <span class="apply-btn">Applica →</span>
+        </div>
+      </a>
+
+      <a href="#" class="protocol-card">
+        <div class="protocol-tag"><span class="dot"></span>Standard</div>
+        <div class="protocol-name">Menisco <em>post-artroscopia</em></div>
+        <div class="protocol-stats">
+          <div class="protocol-stat">
+            <div class="ps-num">8</div>
+            <div class="ps-label">settimane</div>
+          </div>
+          <div class="protocol-stat">
+            <div class="ps-num">11</div>
+            <div class="ps-label">esercizi</div>
+          </div>
+          <div class="protocol-stat">
+            <div class="ps-num">3</div>
+            <div class="ps-label">fasi</div>
+          </div>
+        </div>
+        <div class="protocol-footer">
+          <span class="use-count">Usato 5 volte</span>
+          <span class="apply-btn">Applica →</span>
+        </div>
+      </a>
+
+      <a href="#" class="protocol-card custom">
+        <div class="plus-icon">+</div>
+        <div class="protocol-name">Crea il tuo<br>preset personalizzato</div>
+        <div class="custom-sub">Parti da un protocollo esistente o da zero. Salvalo per riusarlo sui prossimi pazienti.</div>
+      </a>
+    </div>
+
+    <div class="section-divider fade-up">
+      <h2>I tuoi <em>preset</em></h2>
+      <div class="sd-sub">4 protocolli personalizzati che hai creato tu</div>
+      <div class="sd-actions">
+        <a href="#" class="btn btn-secondary">+ Nuovo preset</a>
+      </div>
+    </div>
+
+    <div class="protocol-grid stagger">
+      <a href="#" class="protocol-card use-count-high">
+        <div class="protocol-tag"><span class="dot"></span>Tuo preset</div>
+        <div class="protocol-name">LCA <em>20enne sport agonistico</em></div>
+        <div class="protocol-stats">
+          <div class="protocol-stat">
+            <div class="ps-num">14</div>
+            <div class="ps-label">settimane</div>
+          </div>
+          <div class="protocol-stat">
+            <div class="ps-num">18</div>
+            <div class="ps-label">esercizi</div>
+          </div>
+          <div class="protocol-stat">
+            <div class="ps-num">5</div>
+            <div class="ps-label">fasi</div>
+          </div>
+        </div>
+        <div class="protocol-footer">
+          <span class="use-count">Usato 8 volte</span>
+          <span class="apply-btn">Applica →</span>
+        </div>
+      </a>
+
+      <a href="#" class="protocol-card use-count-high">
+        <div class="protocol-tag"><span class="dot"></span>Tuo preset</div>
+        <div class="protocol-name">Femore <em>50enne sedentario</em></div>
+        <div class="protocol-stats">
+          <div class="protocol-stat">
+            <div class="ps-num">18</div>
+            <div class="ps-label">settimane</div>
+          </div>
+          <div class="protocol-stat">
+            <div class="ps-num">10</div>
+            <div class="ps-label">esercizi</div>
+          </div>
+          <div class="protocol-stat">
+            <div class="ps-num">5</div>
+            <div class="ps-label">fasi</div>
+          </div>
+        </div>
+        <div class="protocol-footer">
+          <span class="use-count">Usato 6 volte</span>
+          <span class="apply-btn">Applica →</span>
+        </div>
+      </a>
+
+      <a href="#" class="protocol-card">
+        <div class="protocol-tag"><span class="dot"></span>Tuo preset</div>
+        <div class="protocol-name">Spalla <em>nuotatore amatoriale</em></div>
+        <div class="protocol-stats">
+          <div class="protocol-stat">
+            <div class="ps-num">10</div>
+            <div class="ps-label">settimane</div>
+          </div>
+          <div class="protocol-stat">
+            <div class="ps-num">12</div>
+            <div class="ps-label">esercizi</div>
+          </div>
+          <div class="protocol-stat">
+            <div class="ps-num">3</div>
+            <div class="ps-label">fasi</div>
+          </div>
+        </div>
+        <div class="protocol-footer">
+          <span class="use-count">Usato 3 volte</span>
+          <span class="apply-btn">Applica →</span>
+        </div>
+      </a>
+
+      <a href="#" class="protocol-card">
+        <div class="protocol-tag"><span class="dot"></span>Tuo preset</div>
+        <div class="protocol-name">Ginocchio <em>runner amatoriale</em></div>
+        <div class="protocol-stats">
+          <div class="protocol-stat">
+            <div class="ps-num">8</div>
+            <div class="ps-label">settimane</div>
+          </div>
+          <div class="protocol-stat">
+            <div class="ps-num">9</div>
+            <div class="ps-label">esercizi</div>
+          </div>
+          <div class="protocol-stat">
+            <div class="ps-num">3</div>
+            <div class="ps-label">fasi</div>
+          </div>
+        </div>
+        <div class="protocol-footer">
+          <span class="use-count">Usato 2 volte</span>
+          <span class="apply-btn">Applica →</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="section-divider fade-up">
+      <h2>Library <em>esercizi</em></h2>
+      <div class="sd-sub">312 esercizi con video, istruzioni e parametri</div>
+      <div class="sd-actions">
+        <a href="#" class="btn btn-secondary">Esplora tutti →</a>
+      </div>
+    </div>
+
+    <div class="exercise-grid stagger">
+      <a href="#" class="exercise-card">
+        <div class="exercise-thumb">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="22" r="9" fill="#1E3A8A" opacity="0.85"/>
+            <line x1="50" y1="31" x2="50" y2="62" stroke="#1E3A8A" stroke-width="5" stroke-linecap="round"/>
+            <line x1="50" y1="42" x2="32" y2="52" stroke="#1E3A8A" stroke-width="4" stroke-linecap="round"/>
+            <line x1="50" y1="42" x2="68" y2="52" stroke="#1E3A8A" stroke-width="4" stroke-linecap="round"/>
+            <line x1="50" y1="62" x2="38" y2="88" stroke="#1E3A8A" stroke-width="5" stroke-linecap="round"/>
+            <line x1="50" y1="62" x2="62" y2="88" stroke="#1E3A8A" stroke-width="5" stroke-linecap="round"/>
+          </svg>
+          <span class="duration">0:45</span>
+          <span class="play-overlay">▶</span>
+        </div>
+        <div class="exercise-body">
+          <div class="exercise-name">Squat parziale</div>
+          <div class="exercise-meta">
+            <span class="exercise-tag">Ginocchio</span>
+            <span class="exercise-tag diff-low">Base</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="#" class="exercise-card">
+        <div class="exercise-thumb">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="35" cy="50" r="9" fill="#C2410C" opacity="0.85"/>
+            <line x1="44" y1="50" x2="76" y2="50" stroke="#C2410C" stroke-width="5" stroke-linecap="round"/>
+            <line x1="76" y1="50" x2="80" y2="35" stroke="#C2410C" stroke-width="4" stroke-linecap="round"/>
+            <line x1="76" y1="50" x2="80" y2="65" stroke="#C2410C" stroke-width="4" stroke-linecap="round"/>
+            <line x1="35" y1="59" x2="28" y2="85" stroke="#C2410C" stroke-width="5" stroke-linecap="round"/>
+            <line x1="35" y1="59" x2="42" y2="85" stroke="#C2410C" stroke-width="5" stroke-linecap="round"/>
+          </svg>
+          <span class="duration">1:20</span>
+          <span class="play-overlay">▶</span>
+        </div>
+        <div class="exercise-body">
+          <div class="exercise-name">Ponte gluteo</div>
+          <div class="exercise-meta">
+            <span class="exercise-tag">Anca</span>
+            <span class="exercise-tag diff-mid">Medio</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="#" class="exercise-card">
+        <div class="exercise-thumb">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="22" r="9" fill="#047857" opacity="0.85"/>
+            <line x1="50" y1="31" x2="50" y2="62" stroke="#047857" stroke-width="5" stroke-linecap="round"/>
+            <line x1="50" y1="38" x2="22" y2="32" stroke="#047857" stroke-width="4" stroke-linecap="round"/>
+            <line x1="50" y1="38" x2="78" y2="32" stroke="#047857" stroke-width="4" stroke-linecap="round"/>
+            <line x1="50" y1="62" x2="42" y2="88" stroke="#047857" stroke-width="5" stroke-linecap="round"/>
+            <line x1="50" y1="62" x2="58" y2="88" stroke="#047857" stroke-width="5" stroke-linecap="round"/>
+          </svg>
+          <span class="duration">0:30</span>
+          <span class="play-overlay">▶</span>
+        </div>
+        <div class="exercise-body">
+          <div class="exercise-name">Estensione spalla</div>
+          <div class="exercise-meta">
+            <span class="exercise-tag">Spalla</span>
+            <span class="exercise-tag diff-low">Base</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="#" class="exercise-card">
+        <div class="exercise-thumb">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="28" r="9" fill="#A16207" opacity="0.85"/>
+            <path d="M 50 37 Q 50 55 35 70 L 35 90" stroke="#A16207" stroke-width="5" stroke-linecap="round" fill="none"/>
+            <path d="M 50 37 Q 50 55 65 70 L 65 90" stroke="#A16207" stroke-width="5" stroke-linecap="round" fill="none"/>
+            <line x1="50" y1="42" x2="30" y2="56" stroke="#A16207" stroke-width="4" stroke-linecap="round"/>
+            <line x1="50" y1="42" x2="70" y2="56" stroke="#A16207" stroke-width="4" stroke-linecap="round"/>
+          </svg>
+          <span class="duration">2:10</span>
+          <span class="play-overlay">▶</span>
+        </div>
+        <div class="exercise-body">
+          <div class="exercise-name">Affondo frontale</div>
+          <div class="exercise-meta">
+            <span class="exercise-tag">Ginocchio</span>
+            <span class="exercise-tag diff-high">Avanzato</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="#" class="exercise-card">
+        <div class="exercise-thumb">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="25" cy="40" r="8" fill="#1E3A8A" opacity="0.85"/>
+            <line x1="33" y1="42" x2="58" y2="55" stroke="#1E3A8A" stroke-width="5" stroke-linecap="round"/>
+            <line x1="58" y1="55" x2="82" y2="40" stroke="#1E3A8A" stroke-width="5" stroke-linecap="round"/>
+            <line x1="25" y1="48" x2="20" y2="80" stroke="#1E3A8A" stroke-width="5" stroke-linecap="round"/>
+            <line x1="58" y1="55" x2="62" y2="85" stroke="#1E3A8A" stroke-width="5" stroke-linecap="round"/>
+          </svg>
+          <span class="duration">1:00</span>
+          <span class="play-overlay">▶</span>
+        </div>
+        <div class="exercise-body">
+          <div class="exercise-name">Plank laterale</div>
+          <div class="exercise-meta">
+            <span class="exercise-tag">Core</span>
+            <span class="exercise-tag diff-mid">Medio</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="#" class="exercise-card">
+        <div class="exercise-thumb">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="25" r="9" fill="#C2410C" opacity="0.85"/>
+            <line x1="50" y1="34" x2="50" y2="65" stroke="#C2410C" stroke-width="5" stroke-linecap="round"/>
+            <line x1="50" y1="40" x2="30" y2="20" stroke="#C2410C" stroke-width="4" stroke-linecap="round"/>
+            <line x1="50" y1="40" x2="70" y2="20" stroke="#C2410C" stroke-width="4" stroke-linecap="round"/>
+            <line x1="50" y1="65" x2="38" y2="92" stroke="#C2410C" stroke-width="5" stroke-linecap="round"/>
+            <line x1="50" y1="65" x2="62" y2="92" stroke="#C2410C" stroke-width="5" stroke-linecap="round"/>
+          </svg>
+          <span class="duration">0:50</span>
+          <span class="play-overlay">▶</span>
+        </div>
+        <div class="exercise-body">
+          <div class="exercise-name">Elevazione braccia</div>
+          <div class="exercise-meta">
+            <span class="exercise-tag">Spalla</span>
+            <span class="exercise-tag diff-mid">Medio</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="#" class="exercise-card">
+        <div class="exercise-thumb">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="22" r="9" fill="#047857" opacity="0.85"/>
+            <path d="M 50 31 L 50 50 L 30 85" stroke="#047857" stroke-width="5" stroke-linecap="round" fill="none"/>
+            <path d="M 50 50 L 70 85" stroke="#047857" stroke-width="5" stroke-linecap="round" fill="none"/>
+            <line x1="50" y1="40" x2="35" y2="55" stroke="#047857" stroke-width="4" stroke-linecap="round"/>
+            <line x1="50" y1="40" x2="65" y2="55" stroke="#047857" stroke-width="4" stroke-linecap="round"/>
+          </svg>
+          <span class="duration">0:35</span>
+          <span class="play-overlay">▶</span>
+        </div>
+        <div class="exercise-body">
+          <div class="exercise-name">Mobilizzazione caviglia</div>
+          <div class="exercise-meta">
+            <span class="exercise-tag">Caviglia</span>
+            <span class="exercise-tag diff-low">Base</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="#" class="exercise-card">
+        <div class="exercise-thumb">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="32" cy="55" r="9" fill="#A16207" opacity="0.85"/>
+            <line x1="40" y1="58" x2="68" y2="58" stroke="#A16207" stroke-width="5" stroke-linecap="round"/>
+            <line x1="68" y1="58" x2="78" y2="40" stroke="#A16207" stroke-width="4" stroke-linecap="round"/>
+            <line x1="68" y1="58" x2="78" y2="76" stroke="#A16207" stroke-width="4" stroke-linecap="round"/>
+            <line x1="32" y1="64" x2="22" y2="88" stroke="#A16207" stroke-width="5" stroke-linecap="round"/>
+            <line x1="32" y1="64" x2="42" y2="88" stroke="#A16207" stroke-width="5" stroke-linecap="round"/>
+          </svg>
+          <span class="duration">1:30</span>
+          <span class="play-overlay">▶</span>
+        </div>
+        <div class="exercise-body">
+          <div class="exercise-name">Estensione lombare</div>
+          <div class="exercise-meta">
+            <span class="exercise-tag">Lombare</span>
+            <span class="exercise-tag diff-mid">Medio</span>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <div class="insight-card">
+      <div>
+        <div class="ic-eye">Quello che ti ritorna</div>
+        <h3>Hai prescritto <em>11 piani</em> questo mese.<br>Tempo speso: 6 minuti.</h3>
+        <p>
+          Senza protocolli pre-fatti avresti scritto manualmente ognuno dei
+          piani (8-15 minuti l'uno). Il tempo risparmiato lo hai dedicato
+          a 4 sedute in più. A €60 a seduta, fanno €240 di ricavi extra.
+        </p>
+      </div>
+      <a href="#" class="ic-cta">Vedi report mensile →</a>
+    </div>
+  </main>
+</div>
+
+<footer class="app-footer">
+  <div class="fineprint">
+    RecoveryOS supporta follow-up, comunicazione e documentazione clinica.
+    Evidenzia pattern e anomalie nei dati raccolti, ma non fa diagnosi e non propone trattamenti.
+    Le decisioni cliniche restano sempre al professionista.
+  </div>
+</footer>
+
+</body>
+</html>
