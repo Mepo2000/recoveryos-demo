@@ -568,6 +568,130 @@
       .ac-grid { grid-template-columns: 1fr; }
     }
 
+    /* ===== VOICE MEMO POST-VISITA ===== */
+    .voice-memo-card {
+      background: linear-gradient(135deg, var(--ink) 0%, #1a2530 100%);
+      color: var(--bone);
+      border-radius: 14px;
+      padding: 28px 32px;
+      margin: 20px 0;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 18px 40px -22px rgba(15, 20, 25, 0.35);
+    }
+    .voice-memo-card::before {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: -80px;
+      width: 280px; height: 280px;
+      background: radial-gradient(circle, rgba(234, 179, 8, 0.16), transparent 70%);
+      pointer-events: none;
+    }
+    .voice-memo-card > * { position: relative; z-index: 1; }
+    .vm-roadmap-tag {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      background: var(--sun);
+      color: var(--ink);
+      padding: 4px 11px;
+      border-radius: 12px;
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 700;
+      z-index: 2;
+    }
+    .vm-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--sun);
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    .voice-memo-card h3 {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 400;
+      letter-spacing: -0.015em;
+      margin: 0 0 8px;
+      color: var(--bone);
+      line-height: 1.2;
+      max-width: 600px;
+    }
+    .voice-memo-card h3 em { font-style: italic; color: var(--sun); }
+    .voice-memo-card > p {
+      margin: 0;
+      color: rgba(251, 248, 242, 0.78);
+      font-size: 14px;
+      line-height: 1.55;
+      max-width: 600px;
+    }
+    .vm-grid {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 32px;
+      align-items: center;
+      margin-top: 22px;
+    }
+    .vm-mic-mock {
+      background: rgba(251, 248, 242, 0.06);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+    }
+    .vm-mic-icon {
+      font-size: 44px;
+      color: var(--signal);
+      margin-bottom: 10px;
+      animation: pulse 2s ease-in-out infinite;
+      line-height: 1;
+    }
+    .vm-time {
+      font-family: var(--font-mono);
+      font-size: 26px;
+      color: var(--sun);
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .vm-time-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(251, 248, 242, 0.6);
+      margin-top: 6px;
+    }
+    .vm-output-label {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--sun);
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    .vm-output-item {
+      padding: 10px 14px;
+      background: rgba(251, 248, 242, 0.06);
+      border-radius: 7px;
+      margin-bottom: 7px;
+      border-left: 2px solid var(--sun);
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: rgba(251, 248, 242, 0.88);
+    }
+    .vm-output-item strong { color: var(--sun); font-weight: 600; }
+    @media (max-width: 880px) {
+      .voice-memo-card { padding: 22px 22px; }
+      .vm-grid { grid-template-columns: 1fr; gap: 20px; }
+      .vm-mic-mock { padding: 20px; }
+      .voice-memo-card h3 { font-size: 20px; }
+    }
+
     .quick-nav {
       display: flex;
       gap: 8px;
@@ -892,6 +1016,34 @@
         <div class="ac-stat">
           <div class="ac-stat-val">Outcome</div>
           <div class="ac-stat-lbl">a lungo termine misurato</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="voice-memo-card fade-up d-2">
+      <div class="vm-roadmap-tag">Roadmap v2</div>
+      <div class="vm-eyebrow">⊹ Voice memo post-visita</div>
+      <h3>30 secondi di voice. L'AI fa <em>il resto.</em></h3>
+      <p>Finisci la visita, registri 30 secondi sul telefono. RecoveryOS genera nota cartella, lettera al MMG, prossimo follow-up programmato. Niente più digitazione fuori orario.</p>
+
+      <div class="vm-grid">
+        <div class="vm-mic-mock">
+          <div class="vm-mic-icon">🎙</div>
+          <div class="vm-time">00:34</div>
+          <div class="vm-time-label">Registrazione · Marco Bianchi</div>
+        </div>
+
+        <div>
+          <div class="vm-output-label">⊹ Output generato in 8 secondi</div>
+          <div class="vm-output-item">
+            <strong>Nota cartella:</strong> Controllo 3 mesi post-LCA. Recovery oltre la media. ROM 0–130°, NPRS 2/10, KOOS-Sport 78. Stabilità articolare buona, nessuna instabilità riferita.
+          </div>
+          <div class="vm-output-item">
+            <strong>Lettera al MMG:</strong> generata per Dr. Verdi — "Paziente in fase finale di riabilitazione, ritorno graduale a corsa controllata da 3 settimane…"
+          </div>
+          <div class="vm-output-item">
+            <strong>Prossimo follow-up:</strong> visita controllo 6 mesi programmata automaticamente, reminder paziente + caregiver attivati.
+          </div>
         </div>
       </div>
     </div>

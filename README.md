@@ -20,9 +20,14 @@ Punto di ingresso: [`index.html`](index.html) — landing principale con scelta 
 - [`demo-orto-04-visite-oggi.html`](demo-orto-04-visite-oggi.html) — briefing AI delle 8 visite del giorno con AI Resume per ognuna
 - [`demo-orto-05-detail-giuseppina.html`](demo-orto-05-detail-giuseppina.html) — dettaglio paziente con **AI Resume block** (money shot) + "Come funziona" 7 segnali
 
-### Roadmap v2 previews (cross-vertical o orto)
+### Roadmap v2 previews (cross-vertical, orto, fisio)
 - [`demo-cross-04-constraints-checker.html`](demo-cross-04-constraints-checker.html) — **Protocol Constraints Checker** (cross-vertical, gradient navy+terracotta): l'orto imposta vincoli, il fisio li riceve auto-validati
 - [`demo-orto-06-discharge-pack.html`](demo-orto-06-discharge-pack.html) — **Hospital Discharge Auto-Pack** (orto): mobile mockup del paziente alla dimissione con farmaci, esercizi, decision tree, calendario, contatti, istruzioni caregiver
+- [`demo-fisio-04-session-flow.html`](demo-fisio-04-session-flow.html) — **Fisio workflow in 3 atti** (fisio): Session Prep AI prima della seduta + End-of-Session Update 20s + Non-Adherence Rescue micro-intervento
+
+Inoltre, 2 Roadmap v2 features sono integrate come section dentro pagine demo MVP:
+- **Recovery Completion Certificate** — in [`demo-orto-05-detail-giuseppina.html`](demo-orto-05-detail-giuseppina.html) (PDF firmato fine percorso)
+- **Voice memo post-visita** — in [`demo-orto-02-dashboard.html`](demo-orto-02-dashboard.html) (30s voice → nota cartella + lettera MMG + follow-up)
 
 Le feature in Roadmap v2 sono marcate con badge `Roadmap v2` o `v2` mini-pill nelle sidebar. Servono a misurare interesse via questionario, non sono nell'MVP attuale.
 

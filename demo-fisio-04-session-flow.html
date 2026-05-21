@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RecoveryOS — Fisio Workflow in 3 atti (Roadmap v2)</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Manrope:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --ink: #0F1419;
+      --bone: #FBF8F2;
+      --cream: #F4EEDF;
+      --clinical: #1E3A8A;
+      --recovery: #047857;
+      --signal: #B91C1C;
+      --warmth: #C2410C;
+      --sun: #EAB308;
+      --n100: #F0EADC;
+      --n200: #E0D8C5;
+      --n300: #C9C0A8;
+      --n500: #8C8474;
+      --n700: #4A4434;
+      --font-display: 'Fraunces', Georgia, serif;
+      --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-body);
+      color: var(--ink);
+      background: var(--bone);
+      line-height: 1.5;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+    }
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      pointer-events: none; z-index: -1;
+      background: radial-gradient(ellipse 80% 50% at 0% 0%, rgba(194, 65, 12, 0.05), transparent);
+    }
+
+    nav {
+      position: sticky; top: 0;
+      background: rgba(251, 248, 242, 0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--n200);
+      padding: 14px 32px;
+      display: flex; justify-content: space-between; align-items: center;
+      z-index: 100;
+    }
+    .logo {
+      font-family: var(--font-display); font-weight: 500;
+      font-size: 20px; letter-spacing: -0.02em;
+      color: var(--ink); text-decoration: none;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .logo .mark {
+      width: 26px; height: 26px;
+      background: var(--ink); color: var(--bone);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-weight: 600;
+      font-size: 14px; font-style: italic;
+    }
+    .nav-right { display: flex; gap: 16px; align-items: center; }
+    .demo-badge {
+      background: var(--warmth); color: var(--bone);
+      padding: 5px 11px;
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      border-radius: 100px;
+    }
+    .nav-link {
+      color: var(--n700); text-decoration: none;
+      font-size: 13.5px; font-weight: 500;
+      padding: 6px 12px; border-radius: 6px;
+      transition: all 0.2s ease;
+    }
+    .nav-link:hover { color: var(--ink); background: var(--cream); }
+    .nav-link.back { color: var(--warmth); }
+
+    .app {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      min-height: calc(100vh - 60px);
+    }
+    .sidebar {
+      border-right: 1px solid var(--n200);
+      padding: 24px 16px;
+      background: rgba(244, 238, 223, 0.4);
+    }
+    .sidebar-section { margin-bottom: 28px; }
+    .sidebar-title {
+      font-family: var(--font-mono); font-size: 10px;
+      text-transform: uppercase; letter-spacing: 0.12em;
+      color: var(--n500); padding: 0 12px; margin-bottom: 8px;
+    }
+    .sidebar-link {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 12px; border-radius: 8px;
+      color: var(--n700); text-decoration: none;
+      font-size: 14px; font-weight: 500;
+      transition: all 0.15s ease;
+      margin-bottom: 2px;
+    }
+    .sidebar-link:hover { background: var(--cream); color: var(--ink); }
+    .sidebar-link.active { background: var(--ink); color: var(--bone); }
+    .sidebar-link .count {
+      margin-left: auto;
+      font-family: var(--font-mono); font-size: 11px;
+      background: var(--n200); color: var(--n700);
+      padding: 1px 7px; border-radius: 100px;
+      font-weight: 500;
+    }
+    .sidebar-link.active .count { background: var(--warmth); color: var(--bone); }
+    .sidebar-link .icon { width: 18px; flex-shrink: 0; }
+    .roadmap-mini {
+      margin-left: auto;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      padding: 2px 6px;
+      background: var(--sun);
+      color: var(--ink);
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+
+    .main { padding: 32px 40px 64px; }
+    .page-header { margin-bottom: 16px; }
+    .page-header .sub {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--n500);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .roadmap-badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 16px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 14px;
+      background: rgba(194, 65, 12, 0.12);
+      color: var(--warmth);
+    }
+
+    .page-hero h1 {
+      font-family: var(--font-display);
+      font-size: 42px;
+      font-weight: 400;
+      letter-spacing: -0.022em;
+      line-height: 1.08;
+      margin: 14px 0 14px;
+    }
+    .page-hero h1 em { font-style: italic; color: var(--warmth); }
+    .page-hero p {
+      font-size: 17px;
+      color: var(--n700);
+      line-height: 1.55;
+      max-width: 720px;
+    }
+
+    /* ===== WORKFLOW ACTS ===== */
+    .workflow-act {
+      margin: 36px 0;
+      padding: 36px;
+      border-radius: 16px;
+      border-left: 4px solid var(--warmth);
+      background: var(--bone);
+      border-top: 1px solid var(--n200);
+      border-right: 1px solid var(--n200);
+      border-bottom: 1px solid var(--n200);
+      box-shadow: 0 8px 24px -16px rgba(15, 20, 25, 0.06);
+    }
+    .wa-act-num {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--warmth);
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    .wa-title {
+      font-family: var(--font-display);
+      font-size: 30px;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin: 0 0 12px;
+    }
+    .wa-title em { font-style: italic; color: var(--warmth); }
+    .wa-sub {
+      color: var(--n700);
+      font-size: 15.5px;
+      line-height: 1.55;
+      margin: 0 0 24px;
+      max-width: 760px;
+    }
+
+    /* === ACT 01: Session Prep === */
+    .session-prep-card {
+      background: #FFF;
+      border: 1px solid var(--n200);
+      border-radius: 10px;
+      padding: 22px 26px;
+      font-family: var(--font-body);
+    }
+    .spc-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--n200);
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .spc-patient {
+      font-family: var(--font-display);
+      font-size: 19px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+    }
+    .spc-time {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--warmth);
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+    .spc-resume {
+      font-family: var(--font-display);
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--ink);
+      margin-bottom: 14px;
+    }
+    .spc-resume strong {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--warmth);
+      font-weight: 600;
+    }
+    .spc-resume em { font-style: italic; color: var(--n700); }
+    .spc-checklist { margin-top: 18px; }
+    .spc-checklist-label {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--n500);
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    .spc-check {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 14px;
+      background: var(--cream);
+      border-radius: 7px;
+      margin-bottom: 6px;
+      font-size: 13.5px;
+      color: var(--ink);
+    }
+    .spc-check::before {
+      content: "→";
+      color: var(--warmth);
+      font-family: var(--font-mono);
+      font-weight: 700;
+    }
+
+    /* === ACT 02: End-of-Session Form === */
+    .end-session-form {
+      background: #FFF;
+      border: 2px solid var(--warmth);
+      border-radius: 10px;
+      padding: 26px 28px;
+    }
+    .esf-row {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 14px;
+      padding: 12px 0;
+      border-bottom: 1px dashed var(--n200);
+      align-items: center;
+    }
+    .esf-row:last-of-type { border-bottom: none; }
+    .esf-label {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--n700);
+      font-weight: 600;
+    }
+    .esf-input {
+      font-family: var(--font-mono);
+      font-size: 13.5px;
+      color: var(--ink);
+    }
+    .esf-input .up { color: var(--recovery); font-weight: 600; }
+    .esf-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+    .esf-pill {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 5px 11px;
+      border-radius: 12px;
+      background: var(--cream);
+      border: 1px solid var(--n300);
+      color: var(--n700);
+    }
+    .esf-pill.selected {
+      background: var(--warmth);
+      color: var(--bone);
+      border-color: var(--warmth);
+      font-weight: 600;
+    }
+    .esf-notes {
+      font-family: var(--font-body);
+      font-size: 13px;
+      color: var(--n700);
+      line-height: 1.5;
+      font-style: italic;
+    }
+    .esf-timer {
+      text-align: center;
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid var(--n200);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--recovery);
+      letter-spacing: 0.05em;
+    }
+    .esf-timer strong {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    /* === ACT 03: Non-Adherence Rescue (dark card) === */
+    .adherence-rescue-card {
+      background: linear-gradient(135deg, var(--ink) 0%, #1a2530 100%);
+      color: var(--bone);
+      border-radius: 12px;
+      padding: 28px 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    .adherence-rescue-card::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 240px; height: 240px;
+      background: radial-gradient(circle, rgba(234, 179, 8, 0.15), transparent 70%);
+      pointer-events: none;
+    }
+    .adherence-rescue-card > * { position: relative; z-index: 1; }
+    .arc-header {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+    .arc-name {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      color: var(--bone);
+    }
+    .arc-meta {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: rgba(251, 248, 242, 0.6);
+      letter-spacing: 0.05em;
+    }
+    .arc-issue {
+      background: rgba(185, 28, 28, 0.22);
+      color: #FCA5A5;
+      padding: 13px 18px;
+      border-radius: 8px;
+      margin-bottom: 18px;
+      font-size: 14px;
+      line-height: 1.5;
+      border-left: 3px solid var(--signal);
+    }
+    .arc-question {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--sun);
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    .arc-reason {
+      background: rgba(234, 179, 8, 0.12);
+      padding: 14px 18px;
+      border-radius: 8px;
+      margin-bottom: 18px;
+      font-size: 14px;
+      border-left: 3px solid var(--sun);
+      line-height: 1.55;
+      color: rgba(251, 248, 242, 0.92);
+    }
+    .arc-reason strong { color: var(--sun); }
+    .arc-reason em { font-style: italic; color: rgba(251, 248, 242, 0.7); }
+    .arc-action {
+      background: rgba(4, 120, 87, 0.22);
+      padding: 16px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      border-left: 3px solid var(--recovery);
+      line-height: 1.6;
+      color: rgba(251, 248, 242, 0.92);
+    }
+    .arc-action strong {
+      color: #6EE7B7;
+      font-weight: 600;
+    }
+    .arc-action em { font-style: italic; color: rgba(251, 248, 242, 0.72); }
+
+    /* ===== TALLY CTA ===== */
+    .tally-cta-card {
+      background: var(--cream);
+      padding: 36px;
+      border-radius: 14px;
+      margin: 36px 0 24px;
+      text-align: center;
+      border: 1px solid var(--n200);
+    }
+    .tally-cta-card h3 {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 400;
+      letter-spacing: -0.015em;
+      margin: 0 0 12px;
+    }
+    .tally-cta-card h3 em { font-style: italic; color: var(--warmth); }
+    .tally-cta-card p {
+      color: var(--n700);
+      max-width: 580px;
+      margin: 0 auto 22px;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+    .cd-btn-primary {
+      display: inline-block;
+      background: var(--ink);
+      color: var(--bone);
+      padding: 14px 24px;
+      border-radius: 7px;
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.18s ease;
+    }
+    .cd-btn-primary:hover { background: var(--warmth); transform: translateY(-1px); }
+
+    /* ===== APP FOOTER ===== */
+    .app-footer {
+      padding: 18px 32px 24px;
+      border-top: 1px solid var(--n200);
+      background: rgba(244, 238, 223, 0.4);
+    }
+    .app-footer .data-footnote,
+    .app-footer .fineprint {
+      max-width: 900px;
+      margin: 0 auto;
+      font-size: 11px;
+      color: var(--n500);
+      line-height: 1.55;
+      text-align: center;
+      font-style: italic;
+    }
+    .app-footer .data-footnote { margin-bottom: 10px; }
+    .app-footer .meta {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--n500);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-align: center;
+      margin-top: 14px;
+    }
+
+    @media (max-width: 880px) {
+      .app { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .main { padding: 24px 20px; }
+      .page-hero h1 { font-size: 30px; }
+      .workflow-act { padding: 24px 22px; }
+      .wa-title { font-size: 22px; }
+      .session-prep-card,
+      .end-session-form,
+      .adherence-rescue-card { padding: 20px 22px; }
+      .esf-row { grid-template-columns: 1fr; gap: 8px; }
+      .tally-cta-card { padding: 28px 22px; }
+      .app-footer { padding: 16px 20px 24px; }
+      .app-footer .data-footnote,
+      .app-footer .fineprint { text-align: left; }
+    }
+
+    .fade-up {
+      opacity: 0; transform: translateY(16px);
+      animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    .d-1 { animation-delay: 0.05s; }
+    .d-2 { animation-delay: 0.14s; }
+    .d-3 { animation-delay: 0.24s; }
+    .d-4 { animation-delay: 0.36s; }
+    .d-5 { animation-delay: 0.48s; }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.55; transform: scale(1.15); }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="demo-fisio-01-landing.html" class="logo">
+    <span class="mark">R</span>
+    RecoveryOS
+  </a>
+  <div class="nav-right">
+    <span class="demo-badge">Roadmap v2 · Fisio workflow</span>
+    <a href="demo-fisio-02-dashboard.html" class="nav-link back">← Dashboard pazienti</a>
+    <a href="https://tally.so/r/recoveryos-fisio?source=demo_session_flow" class="nav-link">Questionario →</a>
+  </div>
+</nav>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">Workspace</div>
+      <a href="demo-fisio-02-dashboard.html" class="sidebar-link">
+        <span class="icon">⊞</span>
+        Pazienti
+        <span class="count">33</span>
+      </a>
+      <a href="#" class="sidebar-link active">
+        <span class="icon">⊜</span>
+        Session flow
+        <span class="roadmap-mini">v2</span>
+      </a>
+      <a href="#" class="sidebar-link">
+        <span class="icon">⌁</span>
+        Alert
+        <span class="count">3</span>
+      </a>
+      <a href="#" class="sidebar-link">
+        <span class="icon">↗</span>
+        Outcome
+      </a>
+      <a href="demo-fisio-03-protocolli.html" class="sidebar-link">
+        <span class="icon">⊜</span>
+        Protocolli
+        <span class="count">12</span>
+      </a>
+      <a href="demo-cross-04-constraints-checker.html" class="sidebar-link">
+        <span class="icon">⌁</span>
+        Constraints
+        <span class="roadmap-mini">v2</span>
+      </a>
+      <a href="#" class="sidebar-link">
+        <span class="icon">⌗</span>
+        Report mensili
+      </a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">Collaborazioni</div>
+      <a href="#" class="sidebar-link">
+        <span class="icon">✦</span>
+        Medici invianti
+        <span class="count">4</span>
+      </a>
+      <a href="#" class="sidebar-link">
+        <span class="icon">⊙</span>
+        Library esercizi
+      </a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">Studio</div>
+      <a href="#" class="sidebar-link">
+        <span class="icon">⌂</span>
+        Il mio studio
+      </a>
+      <a href="#" class="sidebar-link">
+        <span class="icon">⌀</span>
+        Impostazioni
+      </a>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="page-header fade-up">
+      <div class="sub">⊜ Fisio Session Flow · feature preview</div>
+    </div>
+
+    <div class="page-hero fade-up d-1">
+      <div class="roadmap-badge">⊹ Roadmap v2 · Fisio workflow</div>
+      <h1>Il workflow fisio <em>in 3 atti</em>.</h1>
+      <p>Tre momenti chiave della tua giornata, ognuno con un'AI dedicata che fa il lavoro di documentazione e pensiero ripetitivo al posto tuo. Tu lavori sul paziente, non sul gestionale.</p>
+    </div>
+
+    <!-- ATTO 01: SESSION PREP -->
+    <div class="workflow-act fade-up d-2">
+      <div class="wa-act-num">Atto 01 · 5 min prima della seduta</div>
+      <h2 class="wa-title">Fisio <em>Session Prep AI</em></h2>
+      <p class="wa-sub">Apri il paziente e l'AI ha già preparato il contesto delle ultime 4 settimane. Non parti da zero, non scrolli WhatsApp, non rileggi cartelle vecchie.</p>
+
+      <div class="session-prep-card">
+        <div class="spc-header">
+          <div class="spc-patient">Marco Rossi · LCA · settimana 4</div>
+          <div class="spc-time">⊕ 10:30 · tra 5 min</div>
+        </div>
+        <div class="spc-resume">
+          Negli ultimi <strong>4 giorni</strong> Marco ha riferito dolore medio <strong>5/10</strong> (era 3/10 la settimana scorsa). Ha <strong>saltato 2 sessioni</strong> di esercizi domiciliari e riferisce <strong>rigidità mattutina</strong>. ROM precedente <strong>0–95°</strong>. L'ortopedico (Dr. Bianchi) ha impostato il vincolo: <em>no catena cinetica chiusa fino a settimana 6</em>.
+        </div>
+
+        <div class="spc-checklist">
+          <div class="spc-checklist-label">⊹ Cosa guardare oggi</div>
+          <div class="spc-check">Rivalutare estensione completa</div>
+          <div class="spc-check">Capire perché ha saltato 2 sessioni domiciliari</div>
+          <div class="spc-check">Adattare carico se ROM è regredito</div>
+          <div class="spc-check">Aggiornare Dr. Bianchi se il trend persiste</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ATTO 02: END-OF-SESSION UPDATE 20s -->
+    <div class="workflow-act fade-up d-3">
+      <div class="wa-act-num">Atto 02 · a fine seduta · 20 secondi</div>
+      <h2 class="wa-title">Inserisci <em>3 dati</em>, il sistema fa il resto.</h2>
+      <p class="wa-sub">Niente cartelle lunghe da compilare a fine giornata. 3 campi strutturati, 20 secondi. L'AI genera nota cartella, aggiornamento al paziente e report al medico inviante. Tu chiudi la seduta e vai.</p>
+
+      <div class="end-session-form">
+        <div class="esf-row">
+          <div class="esf-label">ROM oggi</div>
+          <div class="esf-input">0–110° <span class="up">↑ +15° vs sett 3</span></div>
+        </div>
+        <div class="esf-row">
+          <div class="esf-label">Qualità movimento</div>
+          <div class="esf-pills">
+            <span class="esf-pill">Scadente</span>
+            <span class="esf-pill">Adeguata</span>
+            <span class="esf-pill selected">Buona</span>
+            <span class="esf-pill">Eccellente</span>
+          </div>
+        </div>
+        <div class="esf-row">
+          <div class="esf-label">Aderenza HEP</div>
+          <div class="esf-pills">
+            <span class="esf-pill">&lt;30%</span>
+            <span class="esf-pill selected">~50%</span>
+            <span class="esf-pill">~75%</span>
+            <span class="esf-pill">&gt;90%</span>
+          </div>
+        </div>
+        <div class="esf-row">
+          <div class="esf-label">Note libere</div>
+          <div class="esf-notes">"Dolore residuo ma controllabile, motivazione bassa per esercizi a casa, da rinforzare aderenza."</div>
+        </div>
+        <div class="esf-timer">⊹ Compilato in <strong>22 secondi</strong> · l'AI genera nota cartella + messaggio paziente + report Dr. Bianchi</div>
+      </div>
+    </div>
+
+    <!-- ATTO 03: NON-ADHERENCE RESCUE -->
+    <div class="workflow-act fade-up d-4">
+      <div class="wa-act-num">Atto 03 · tra una seduta e l'altra</div>
+      <h2 class="wa-title">Non solo <em>"non aderisce"</em>. Perché?</h2>
+      <p class="wa-sub">Quando l'aderenza scende, RecoveryOS chiede direttamente al paziente perché. Tap rapidi, niente ostacoli. In base alla risposta, attiva il micro-intervento giusto — non un alert generico.</p>
+
+      <div class="adherence-rescue-card">
+        <div class="arc-header">
+          <div class="arc-name">Marco Rossi</div>
+          <span class="arc-meta">Aderenza scesa al 38% in 7 giorni</span>
+        </div>
+
+        <div class="arc-issue">
+          ⚠ Pattern rilevato: aderenza in calo da <strong>92% → 38%</strong> in 7 giorni. 2 risposte ai check-in mancanti.
+        </div>
+
+        <div class="arc-question">⊹ L'AI ha chiesto a Marco</div>
+        <div class="arc-reason">
+          "Notiamo che hai saltato gli ultimi esercizi. Cosa è successo? <em>Tap rapido:</em><br>
+          ☐ Non capisco l'esercizio &nbsp; ☐ Troppo dolore &nbsp; ☐ Mi dimentico<br>
+          ☐ Non ho tempo &nbsp; ☐ Paura di sbagliare &nbsp; ☐ Non vedo miglioramenti &nbsp; ☐ Altro"
+        </div>
+
+        <div class="arc-question">⊹ Marco ha risposto 2 minuti fa</div>
+        <div class="arc-reason">
+          <strong>"Troppo dolore"</strong> — Marco ha selezionato questa opzione.
+        </div>
+
+        <div class="arc-action">
+          <strong>Azione suggerita dall'AI:</strong> ridurre temporaneamente intensità degli esercizi 3–4 per 7 giorni, aggiungere check-in dedicato dolore notturno, considerare consultazione Dr. Bianchi se il dolore persiste oltre la settimana. <em>L'AI ha già preparato un messaggio per Marco con la modifica del piano. Lo rivedi, lo invii in un click.</em>
+        </div>
+      </div>
+    </div>
+
+    <div class="tally-cta-card fade-up d-5">
+      <h3>Ti farebbe risparmiare <em>tempo davvero</em>?</h3>
+      <p>Compila il questionario fisio e dicci quali di questi 3 atti ti serve di più. I primi 10 fisioterapisti selezionati entrano nel Founding Program.</p>
+      <a href="https://tally.so/r/recoveryos-fisio?source=demo_session_flow" class="cd-btn-primary">Compila questionario (6 min) →</a>
+    </div>
+  </main>
+</div>
+
+<footer class="app-footer">
+  <div class="data-footnote">
+    *Dati illustrativi da letteratura o da validare con la raccolta reale nei primi 6 mesi di adozione.
+  </div>
+  <div class="fineprint">
+    RecoveryOS supporta follow-up, comunicazione e documentazione clinica.
+    Evidenzia pattern e anomalie nei dati raccolti, ma non fa diagnosi e non propone trattamenti.
+    Le decisioni cliniche restano sempre al professionista.
+  </div>
+  <div class="meta">Roadmap Preview · V1.6.E · 2026-05-21</div>
+</footer>
+
+</body>
+</html>

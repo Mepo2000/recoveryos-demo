@@ -404,6 +404,154 @@
       min-width: 24px;
     }
 
+    /* ===== RECOVERY COMPLETION CERTIFICATE ===== */
+    .completion-card {
+      background: linear-gradient(135deg, var(--bone) 0%, var(--cream) 100%);
+      border: 2px solid var(--clinical);
+      border-radius: 16px;
+      padding: 32px 36px;
+      margin: 32px 0 0;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 14px 36px -22px rgba(30, 58, 138, 0.25);
+    }
+    .cc-roadmap-tag {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      background: var(--sun);
+      color: var(--ink);
+      padding: 4px 11px;
+      border-radius: 12px;
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .cc-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--clinical);
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    .completion-card h3 {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 400;
+      letter-spacing: -0.018em;
+      line-height: 1.2;
+      margin: 0 0 12px;
+    }
+    .completion-card h3 em { font-style: italic; color: var(--clinical); }
+    .completion-card > p {
+      color: var(--n700);
+      font-size: 14.5px;
+      line-height: 1.55;
+      max-width: 720px;
+      margin: 0 0 18px;
+    }
+    .cc-pdf-preview {
+      background: #FFF;
+      border-radius: 10px;
+      padding: 24px 26px;
+      margin-top: 18px;
+      box-shadow: 0 8px 24px rgba(15, 20, 25, 0.08);
+    }
+    .cc-pdf-header {
+      border-bottom: 2px solid var(--ink);
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+    }
+    .cc-pdf-title {
+      font-family: var(--font-display);
+      font-size: 19px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+    }
+    .cc-pdf-meta {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: var(--n500);
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+    .cc-pdf-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .cc-pdf-stat .cc-stat-lbl {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--warmth);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+    .cc-pdf-stat .cc-stat-val {
+      font-size: 13.5px;
+      color: var(--ink);
+    }
+    .cc-pdf-stat .cc-stat-val strong {
+      font-family: var(--font-mono);
+      font-weight: 600;
+    }
+    .cc-pdf-conclusion {
+      font-size: 12.5px;
+      color: var(--n700);
+      line-height: 1.55;
+      padding-top: 14px;
+      border-top: 1px solid var(--n200);
+    }
+    .cc-pdf-conclusion strong { color: var(--ink); }
+    .cc-pdf-ctas {
+      margin-top: 18px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .cc-pdf-btn-primary {
+      background: var(--clinical);
+      color: var(--bone);
+      padding: 11px 18px;
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.18s ease;
+    }
+    .cc-pdf-btn-primary:hover { background: var(--ink); }
+    .cc-pdf-btn-secondary {
+      background: var(--bone);
+      color: var(--ink);
+      border: 1px solid var(--n300);
+      padding: 11px 18px;
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.18s ease;
+    }
+    .cc-pdf-btn-secondary:hover { background: var(--cream); border-color: var(--n500); }
+
+    @media (max-width: 880px) {
+      .completion-card { padding: 24px 22px; }
+      .completion-card h3 { font-size: 22px; }
+      .cc-pdf-preview { padding: 20px 22px; }
+      .cc-pdf-grid { grid-template-columns: 1fr; }
+    }
+
     /* LAYOUT GRID: curve + timeline | network sidepanel */
     .detail-grid {
       display: grid;
@@ -1137,6 +1285,51 @@
           </div>
         </div>
       </aside>
+    </div>
+
+    <div class="completion-card fade-up">
+      <div class="cc-roadmap-tag">Roadmap v2</div>
+      <div class="cc-eyebrow">⊕ Recovery Completion Certificate</div>
+      <h3>Giuseppina è a 30 giorni dalla dimissione.<br><em>Genera il report di chiusura?</em></h3>
+      <p>
+        A fine percorso, RecoveryOS genera un PDF firmato con outcome completi, milestone raggiunti, PROMs e note multi-attore.
+        Lo invii alla paziente (e al caregiver) come chiusura formale + materiale per case study autorizzato.
+      </p>
+
+      <div class="cc-pdf-preview">
+        <div class="cc-pdf-header">
+          <div class="cc-pdf-title">Certificato di Recupero · Giuseppina Russo</div>
+          <div class="cc-pdf-meta">Fissazione femore · D+0 → D+30 · Studio Dr. Bianchi</div>
+        </div>
+
+        <div class="cc-pdf-grid">
+          <div class="cc-pdf-stat">
+            <div class="cc-stat-lbl">Outcome dolore</div>
+            <div class="cc-stat-val">NPRS <strong>7 → 4</strong> in 30 giorni</div>
+          </div>
+          <div class="cc-pdf-stat">
+            <div class="cc-stat-lbl">Outcome funzione</div>
+            <div class="cc-stat-val">HOOS-12 <strong>32 → 51</strong> · +59%</div>
+          </div>
+          <div class="cc-pdf-stat">
+            <div class="cc-stat-lbl">Aderenza fisio</div>
+            <div class="cc-stat-val"><strong>80%</strong> media periodo</div>
+          </div>
+          <div class="cc-pdf-stat">
+            <div class="cc-stat-lbl">Milestone</div>
+            <div class="cc-stat-val"><strong>4 / 5</strong> raggiunti</div>
+          </div>
+        </div>
+
+        <div class="cc-pdf-conclusion">
+          <strong>Recovery in linea</strong> con il protocollo previsto per fissazione frattura femore in paziente over-75 con caregiver attivo. Da proseguire fisioterapia per altre 4–6 settimane. Controllo previsto a 90 giorni.
+        </div>
+
+        <div class="cc-pdf-ctas">
+          <a href="#" class="cc-pdf-btn-primary">Scarica PDF firmato</a>
+          <a href="#" class="cc-pdf-btn-secondary">Invia a paziente / caregiver</a>
+        </div>
+      </div>
     </div>
 
   </main>
