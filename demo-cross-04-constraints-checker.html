@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RecoveryOS — Protocol Constraints Checker (Roadmap v2)</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Manrope:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --ink: #0F1419;
+      --bone: #FBF8F2;
+      --cream: #F4EEDF;
+      --clinical: #1E3A8A;
+      --recovery: #047857;
+      --signal: #B91C1C;
+      --warmth: #C2410C;
+      --sun: #EAB308;
+      --n100: #F0EADC;
+      --n200: #E0D8C5;
+      --n300: #C9C0A8;
+      --n500: #8C8474;
+      --n700: #4A4434;
+      --font-display: 'Fraunces', Georgia, serif;
+      --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-body);
+      color: var(--ink);
+      background: var(--bone);
+      line-height: 1.5;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+    }
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      pointer-events: none; z-index: -1;
+      background:
+        radial-gradient(ellipse 60% 40% at 0% 0%, rgba(30, 58, 138, 0.05), transparent),
+        radial-gradient(ellipse 60% 40% at 100% 100%, rgba(194, 65, 12, 0.04), transparent);
+    }
+
+    nav {
+      position: sticky; top: 0;
+      background: rgba(251, 248, 242, 0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--n200);
+      padding: 14px 32px;
+      display: flex; justify-content: space-between; align-items: center;
+      z-index: 100;
+    }
+    .logo {
+      font-family: var(--font-display); font-weight: 500;
+      font-size: 20px; letter-spacing: -0.02em;
+      color: var(--ink); text-decoration: none;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .logo .mark {
+      width: 26px; height: 26px;
+      background: linear-gradient(135deg, var(--clinical) 0%, var(--warmth) 100%);
+      color: var(--bone); border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-weight: 600;
+      font-size: 14px; font-style: italic;
+    }
+    .nav-right { display: flex; gap: 16px; align-items: center; }
+    .demo-badge {
+      background: linear-gradient(135deg, var(--clinical) 0%, var(--warmth) 100%);
+      color: var(--bone); padding: 5px 11px;
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      border-radius: 100px;
+    }
+    .nav-link {
+      color: var(--n700); text-decoration: none;
+      font-size: 13.5px; font-weight: 500;
+      padding: 6px 12px; border-radius: 6px;
+      transition: all 0.2s ease;
+    }
+    .nav-link:hover { color: var(--ink); background: var(--cream); }
+    .nav-link.back { color: var(--clinical); }
+
+    .app {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      min-height: calc(100vh - 60px);
+    }
+    .sidebar {
+      border-right: 1px solid var(--n200);
+      padding: 24px 16px;
+      background: rgba(244, 238, 223, 0.4);
+    }
+    .sidebar-section { margin-bottom: 28px; }
+    .sidebar-title {
+      font-family: var(--font-mono); font-size: 10px;
+      text-transform: uppercase; letter-spacing: 0.12em;
+      color: var(--n500); padding: 0 12px; margin-bottom: 8px;
+    }
+    .sidebar-link {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 12px; border-radius: 8px;
+      color: var(--n700); text-decoration: none;
+      font-size: 14px; font-weight: 500;
+      transition: all 0.15s ease;
+      margin-bottom: 2px;
+    }
+    .sidebar-link:hover { background: var(--cream); color: var(--ink); }
+    .sidebar-link.active {
+      background: linear-gradient(135deg, var(--clinical) 0%, var(--warmth) 100%);
+      color: var(--bone);
+    }
+    .sidebar-link .icon { width: 18px; flex-shrink: 0; }
+    .roadmap-mini {
+      margin-left: auto;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      padding: 2px 6px;
+      background: var(--sun);
+      color: var(--ink);
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+
+    .main { padding: 32px 40px 64px; }
+    .page-header {
+      margin-bottom: 24px;
+    }
+    .page-header .sub {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--n500);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* ===== CROSS HERO ===== */
+    .cross-hero {
+      background: linear-gradient(135deg, #1E3A8A 0%, #C2410C 100%);
+      color: var(--bone);
+      padding: 48px;
+      border-radius: 18px;
+      margin-bottom: 36px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 28px 64px -32px rgba(15, 20, 25, 0.45);
+    }
+    .cross-hero::before {
+      content: '';
+      position: absolute;
+      top: -80px; right: -80px;
+      width: 360px; height: 360px;
+      background: radial-gradient(circle, rgba(234, 179, 8, 0.22), transparent 70%);
+      pointer-events: none;
+    }
+    .cross-hero > * { position: relative; z-index: 1; }
+    .roadmap-badge {
+      display: inline-block;
+      background: rgba(234, 179, 8, 0.22);
+      color: var(--sun);
+      padding: 6px 14px;
+      border-radius: 16px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+      font-weight: 600;
+    }
+    .cross-hero-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.85);
+      margin-bottom: 14px;
+    }
+    .cross-hero h1 {
+      font-family: var(--font-display);
+      font-size: 42px;
+      font-weight: 400;
+      letter-spacing: -0.022em;
+      line-height: 1.1;
+      margin: 0 0 16px;
+      color: var(--bone);
+    }
+    .cross-hero h1 em { font-style: italic; color: var(--sun); }
+    .cross-hero-sub {
+      color: rgba(255, 255, 255, 0.88);
+      font-size: 17px;
+      max-width: 720px;
+      line-height: 1.55;
+    }
+
+    /* ===== CONSTRAINT DEMO ===== */
+    .constraint-demo {
+      background: var(--bone);
+      border-radius: 14px;
+      padding: 32px;
+      margin: 32px 0;
+      border: 1px solid var(--n200);
+      box-shadow: 0 8px 24px -12px rgba(15, 20, 25, 0.08);
+    }
+    .cd-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--n700);
+      margin-bottom: 14px;
+    }
+    .cd-fisio-action {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 20px;
+      background: #FFF;
+      border: 1px solid var(--n200);
+      border-radius: 8px;
+      margin-bottom: 12px;
+      font-size: 14.5px;
+      color: var(--ink);
+    }
+    .cd-fisio-action::before {
+      content: "+";
+      font-family: var(--font-mono);
+      color: var(--recovery);
+      font-weight: 700;
+      font-size: 16px;
+    }
+    .cd-fisio-action.violates {
+      background: #FEF2F2;
+      border-color: var(--signal);
+    }
+    .cd-fisio-action.violates::before {
+      content: "⚠";
+      color: var(--signal);
+    }
+    .cd-warning {
+      background: #FEF2F2;
+      border: 2px solid var(--signal);
+      border-radius: 10px;
+      padding: 20px 22px;
+      margin: 16px 0 6px;
+    }
+    .cd-warning-header {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--signal);
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+    .cd-warning-msg {
+      font-size: 15px;
+      line-height: 1.55;
+      color: var(--ink);
+      margin-bottom: 12px;
+    }
+    .cd-warning-msg strong { color: var(--signal); }
+    .cd-warning-msg em { font-style: italic; color: var(--n700); }
+    .cd-warning-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+    .cd-btn-primary {
+      background: var(--clinical);
+      color: var(--bone);
+      padding: 11px 18px;
+      border-radius: 7px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.18s ease;
+    }
+    .cd-btn-primary:hover { background: var(--ink); transform: translateY(-1px); }
+    .cd-btn-secondary {
+      background: var(--bone);
+      color: var(--ink);
+      border: 1px solid var(--n300);
+      padding: 11px 18px;
+      border-radius: 7px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.18s ease;
+    }
+    .cd-btn-secondary:hover { background: var(--cream); border-color: var(--n500); }
+
+    /* ===== SCENARIOS GRID ===== */
+    .scenarios-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin: 40px 0;
+    }
+    .scenario-card {
+      background: var(--cream);
+      border-radius: 12px;
+      padding: 28px;
+      border-top: 3px solid var(--clinical);
+      transition: all 0.2s ease;
+    }
+    .scenario-card:hover { transform: translateY(-2px); box-shadow: 0 12px 28px -16px rgba(15, 20, 25, 0.12); }
+    .scenario-card.fisio { border-top-color: var(--warmth); }
+    .scenario-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--clinical);
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+    .scenario-card.fisio .scenario-label { color: var(--warmth); }
+    .scenario-card h3 {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 500;
+      letter-spacing: -0.012em;
+      margin: 0 0 12px;
+      line-height: 1.2;
+    }
+    .scenario-card p {
+      font-size: 14.5px;
+      line-height: 1.55;
+      color: var(--n700);
+    }
+
+    /* ===== HOW IT WORKS ===== */
+    .how-it-works {
+      background: linear-gradient(135deg, var(--ink) 0%, #1a2530 100%);
+      color: var(--bone);
+      border-radius: 16px;
+      padding: 44px;
+      margin: 40px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .how-it-works::before {
+      content: '';
+      position: absolute;
+      bottom: -100px; left: -100px;
+      width: 320px; height: 320px;
+      background: radial-gradient(circle, rgba(234, 179, 8, 0.15), transparent 70%);
+      pointer-events: none;
+    }
+    .how-it-works > * { position: relative; z-index: 1; }
+    .hiw-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--sun);
+      margin-bottom: 12px;
+    }
+    .hiw-title {
+      font-family: var(--font-display);
+      font-size: 30px;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      color: var(--bone);
+      margin: 0 0 28px;
+    }
+    .hiw-title em { font-style: italic; color: var(--sun); }
+    .hiw-step {
+      display: grid;
+      grid-template-columns: 60px 1fr;
+      gap: 18px;
+      margin-bottom: 24px;
+      align-items: start;
+    }
+    .hiw-num {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 500;
+      color: var(--sun);
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+    .hiw-content h4 {
+      font-family: var(--font-display);
+      font-size: 19px;
+      font-weight: 500;
+      margin: 0 0 6px;
+      color: var(--bone);
+    }
+    .hiw-content p {
+      color: rgba(251, 248, 242, 0.78);
+      font-size: 14.5px;
+      line-height: 1.55;
+      margin: 0;
+    }
+
+    /* ===== TALLY CTA ===== */
+    .tally-cta-card {
+      background: var(--cream);
+      padding: 36px;
+      border-radius: 14px;
+      margin: 36px 0;
+      text-align: center;
+      border: 1px solid var(--n200);
+    }
+    .tally-cta-card h3 {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 400;
+      letter-spacing: -0.015em;
+      margin: 0 0 12px;
+    }
+    .tally-cta-card h3 em { font-style: italic; color: var(--clinical); }
+    .tally-cta-card p {
+      color: var(--n700);
+      max-width: 580px;
+      margin: 0 auto 22px;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+    .tally-cta-card .cd-btn-primary {
+      display: inline-block;
+      font-size: 14px;
+      padding: 14px 26px;
+      background: var(--ink);
+    }
+    .tally-cta-card .cd-btn-primary:hover { background: var(--clinical); }
+
+    /* ===== APP FOOTER ===== */
+    .app-footer {
+      padding: 18px 32px 24px;
+      border-top: 1px solid var(--n200);
+      background: rgba(244, 238, 223, 0.4);
+    }
+    .app-footer .data-footnote,
+    .app-footer .fineprint {
+      max-width: 900px;
+      margin: 0 auto;
+      font-size: 11px;
+      color: var(--n500);
+      line-height: 1.55;
+      text-align: center;
+      font-style: italic;
+    }
+    .app-footer .data-footnote { margin-bottom: 10px; }
+    .app-footer .meta {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--n500);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-align: center;
+      margin-top: 14px;
+    }
+
+    @media (max-width: 1100px) {
+      .scenarios-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 880px) {
+      .app { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .main { padding: 24px 20px; }
+      .cross-hero { padding: 32px 24px; }
+      .cross-hero h1 { font-size: 30px; }
+      .constraint-demo { padding: 24px 22px; }
+      .how-it-works { padding: 32px 24px; }
+      .hiw-title { font-size: 24px; }
+      .tally-cta-card { padding: 28px 22px; }
+      .app-footer { padding: 16px 20px 24px; }
+      .app-footer .data-footnote,
+      .app-footer .fineprint { text-align: left; }
+    }
+
+    .fade-up {
+      opacity: 0; transform: translateY(16px);
+      animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    .d-1 { animation-delay: 0.05s; }
+    .d-2 { animation-delay: 0.14s; }
+    .d-3 { animation-delay: 0.24s; }
+    .d-4 { animation-delay: 0.36s; }
+    .d-5 { animation-delay: 0.48s; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">
+    <span class="mark">R</span>
+    RecoveryOS
+  </a>
+  <div class="nav-right">
+    <span class="demo-badge">Roadmap v2 · Cross-vertical</span>
+    <a href="index.html" class="nav-link back">← Tutte le demo</a>
+    <a href="https://tally.so/r/recoveryos-orto?source=demo_constraints" class="nav-link">Questionario →</a>
+  </div>
+</nav>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">Cross-vertical</div>
+      <a href="#" class="sidebar-link active">
+        <span class="icon">⌁</span>
+        Constraints
+        <span class="roadmap-mini">v2</span>
+      </a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">Demo Orto</div>
+      <a href="demo-orto-01-landing.html" class="sidebar-link">
+        <span class="icon">⊕</span>
+        Landing
+      </a>
+      <a href="demo-orto-02-dashboard.html" class="sidebar-link">
+        <span class="icon">⊕</span>
+        Dashboard
+      </a>
+      <a href="demo-orto-04-visite-oggi.html" class="sidebar-link">
+        <span class="icon">⊹</span>
+        Visite oggi
+      </a>
+      <a href="demo-orto-06-discharge-pack.html" class="sidebar-link">
+        <span class="icon">⊕</span>
+        Discharge Pack
+        <span class="roadmap-mini">v2</span>
+      </a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">Demo Fisio</div>
+      <a href="demo-fisio-01-landing.html" class="sidebar-link">
+        <span class="icon">⊜</span>
+        Landing
+      </a>
+      <a href="demo-fisio-02-dashboard.html" class="sidebar-link">
+        <span class="icon">⊜</span>
+        Dashboard
+      </a>
+      <a href="demo-fisio-03-protocolli.html" class="sidebar-link">
+        <span class="icon">⊜</span>
+        Protocolli
+      </a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">Studio</div>
+      <a href="#" class="sidebar-link">
+        <span class="icon">⌂</span>
+        Il mio studio
+      </a>
+      <a href="#" class="sidebar-link">
+        <span class="icon">⌀</span>
+        Impostazioni
+      </a>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="page-header fade-up">
+      <div class="sub">⌁ Protocol Constraints Checker · feature preview</div>
+    </div>
+
+    <div class="cross-hero fade-up d-1">
+      <div class="roadmap-badge">⊹ Roadmap v2 · Cross-vertical</div>
+      <div class="cross-hero-eyebrow">Protocol Constraints Checker</div>
+      <h1>Il piano fisio <em>rispetta i tuoi vincoli</em>.<br>Automatico. Verificato. Loggato.</h1>
+      <p class="cross-hero-sub">L'ortopedico imposta i vincoli post-op una volta. RecoveryOS verifica ogni esercizio del piano fisio prima che venga assegnato al paziente. Niente più telefonate per chiarire ROM, carico, esercizi vietati.</p>
+    </div>
+
+    <div class="constraint-demo fade-up d-2">
+      <div class="cd-label">⚙ Scenario · Studio Fisio Bologna · Marco Bianchi, LCA · Settimana 4 protocollo</div>
+
+      <div class="cd-fisio-action">Squat parziale · 3 serie × 12 ripetizioni</div>
+      <div class="cd-fisio-action violates">Pressa orizzontale · 2 serie × 15 ripetizioni</div>
+
+      <div class="cd-warning">
+        <div class="cd-warning-header">⚠ Constraint violation rilevata</div>
+        <div class="cd-warning-msg">
+          L'esercizio <strong>"Pressa orizzontale"</strong> non è compatibile con i vincoli operatori impostati dal Dr. Bianchi: <em>"no catena cinetica chiusa fino a settimana 6"</em>. Il paziente è attualmente in <strong>settimana 4</strong> del protocollo.
+        </div>
+        <div class="cd-warning-actions">
+          <a href="#" class="cd-btn-primary">Sostituisci con esercizio compatibile</a>
+          <a href="#" class="cd-btn-secondary">Chiedi al Dr. Bianchi</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="scenarios-grid fade-up d-3">
+      <div class="scenario-card">
+        <div class="scenario-label">⊕ Lato Ortopedico</div>
+        <h3>Imposti i vincoli una volta</h3>
+        <p>Durante il setup paziente, definisci ROM consentito, carico massimo, esercizi vietati per fase e durata vincoli. Tutto strutturato, niente foglio generico, niente ambiguità.</p>
+      </div>
+      <div class="scenario-card fisio">
+        <div class="scenario-label">⊜ Lato Fisio</div>
+        <h3>Il piano si valida da solo</h3>
+        <p>Quando crei il piano riabilitativo, ogni esercizio viene controllato contro i vincoli del chirurgo. Se viola, vedi warning + alternative compatibili in tempo reale.</p>
+      </div>
+    </div>
+
+    <div class="how-it-works fade-up d-4">
+      <div class="hiw-label">⊹ Come funziona</div>
+      <h2 class="hiw-title"><em>3 step</em>, zero ambiguità.</h2>
+
+      <div class="hiw-step">
+        <div class="hiw-num">01</div>
+        <div class="hiw-content">
+          <h4>Ortopedico imposta vincoli post-op</h4>
+          <p>Form strutturato 30 secondi: tipo intervento, ROM consentito per fase, carico permesso, esercizi vietati con motivazione clinica. Il vincolo è loggato e versionato.</p>
+        </div>
+      </div>
+
+      <div class="hiw-step">
+        <div class="hiw-num">02</div>
+        <div class="hiw-content">
+          <h4>Fisio costruisce il piano riabilitativo</h4>
+          <p>Crea il programma esercizi normalmente, dalla library RecoveryOS o dai suoi preset. Il sistema controlla in tempo reale ogni esercizio contro i vincoli attivi.</p>
+        </div>
+      </div>
+
+      <div class="hiw-step">
+        <div class="hiw-num">03</div>
+        <div class="hiw-content">
+          <h4>Warning + risoluzione collaborativa</h4>
+          <p>Se un esercizio viola i vincoli, il fisio vede warning + alternative compatibili + bottone per chiedere chiarimento al chirurgo. Tutto loggato nell'audit-trail medico-legale.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="tally-cta-card fade-up d-5">
+      <h3>Ti interesserebbe <em>questa feature</em>?</h3>
+      <p>La stiamo valutando per la roadmap v2. Compila il questionario e dicci se è una priorità per la tua pratica. Le 3 feature più richieste diventano la roadmap concreta.</p>
+      <a href="https://tally.so/r/recoveryos-orto?source=demo_constraints" class="cd-btn-primary">Compila questionario (6 min) →</a>
+    </div>
+  </main>
+</div>
+
+<footer class="app-footer">
+  <div class="data-footnote">
+    *Dati illustrativi da letteratura o da validare con la raccolta reale nei primi 6 mesi di adozione.
+  </div>
+  <div class="fineprint">
+    RecoveryOS supporta follow-up, comunicazione e documentazione clinica.
+    Evidenzia pattern e anomalie nei dati raccolti, ma non fa diagnosi e non propone trattamenti.
+    Le decisioni cliniche restano sempre al professionista.
+  </div>
+  <div class="meta">Roadmap Preview · V1.6 · 2026-05-21</div>
+</footer>
+
+</body>
+</html>

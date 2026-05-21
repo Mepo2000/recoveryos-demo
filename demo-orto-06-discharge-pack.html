@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RecoveryOS — Hospital Discharge Auto-Pack (Roadmap v2)</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Manrope:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --ink: #0F1419;
+      --bone: #FBF8F2;
+      --cream: #F4EEDF;
+      --clinical: #1E3A8A;
+      --recovery: #047857;
+      --signal: #B91C1C;
+      --warmth: #C2410C;
+      --sun: #EAB308;
+      --n100: #F0EADC;
+      --n200: #E0D8C5;
+      --n300: #C9C0A8;
+      --n500: #8C8474;
+      --n700: #4A4434;
+      --font-display: 'Fraunces', Georgia, serif;
+      --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-body);
+      color: var(--ink);
+      background: var(--bone);
+      line-height: 1.5;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+    }
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      pointer-events: none; z-index: -1;
+      background: radial-gradient(ellipse 80% 50% at 0% 0%, rgba(30, 58, 138, 0.06), transparent);
+    }
+
+    nav {
+      position: sticky; top: 0;
+      background: rgba(251, 248, 242, 0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--n200);
+      padding: 14px 32px;
+      display: flex; justify-content: space-between; align-items: center;
+      z-index: 100;
+    }
+    .logo {
+      font-family: var(--font-display); font-weight: 500;
+      font-size: 20px; letter-spacing: -0.02em;
+      color: var(--ink); text-decoration: none;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .logo .mark {
+      width: 26px; height: 26px;
+      background: var(--ink); color: var(--bone);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-weight: 600;
+      font-size: 14px; font-style: italic;
+    }
+    .nav-right { display: flex; gap: 16px; align-items: center; }
+    .demo-badge {
+      background: var(--clinical); color: var(--bone);
+      padding: 5px 11px;
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      border-radius: 100px;
+    }
+    .nav-link {
+      color: var(--n700); text-decoration: none;
+      font-size: 13.5px; font-weight: 500;
+      padding: 6px 12px; border-radius: 6px;
+      transition: all 0.2s ease;
+    }
+    .nav-link:hover { color: var(--ink); background: var(--cream); }
+    .nav-link.back { color: var(--clinical); }
+
+    .app {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      min-height: calc(100vh - 60px);
+    }
+    .sidebar {
+      border-right: 1px solid var(--n200);
+      padding: 24px 16px;
+      background: rgba(244, 238, 223, 0.4);
+    }
+    .sidebar-section { margin-bottom: 28px; }
+    .sidebar-title {
+      font-family: var(--font-mono); font-size: 10px;
+      text-transform: uppercase; letter-spacing: 0.12em;
+      color: var(--n500); padding: 0 12px; margin-bottom: 8px;
+    }
+    .sidebar-link {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 12px; border-radius: 8px;
+      color: var(--n700); text-decoration: none;
+      font-size: 14px; font-weight: 500;
+      transition: all 0.15s ease;
+      margin-bottom: 2px;
+    }
+    .sidebar-link:hover { background: var(--cream); color: var(--ink); }
+    .sidebar-link.active { background: var(--ink); color: var(--bone); }
+    .sidebar-link .count {
+      margin-left: auto;
+      font-family: var(--font-mono); font-size: 11px;
+      background: var(--n200); color: var(--n700);
+      padding: 1px 7px; border-radius: 100px;
+      font-weight: 500;
+    }
+    .sidebar-link.active .count { background: var(--clinical); color: var(--bone); }
+    .sidebar-link .icon { width: 18px; flex-shrink: 0; }
+    .roadmap-mini {
+      margin-left: auto;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      padding: 2px 6px;
+      background: var(--sun);
+      color: var(--ink);
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+
+    .main { padding: 32px 40px 64px; }
+    .page-header { margin-bottom: 24px; }
+    .page-header .sub {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--n500);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .roadmap-badge {
+      display: inline-block;
+      background: rgba(234, 179, 8, 0.18);
+      color: #92400e;
+      padding: 6px 14px;
+      border-radius: 16px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 18px;
+    }
+
+    .cd-btn-primary {
+      display: inline-block;
+      background: var(--ink);
+      color: var(--bone);
+      padding: 13px 22px;
+      border-radius: 7px;
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.18s ease;
+      letter-spacing: -0.005em;
+    }
+    .cd-btn-primary:hover { background: var(--clinical); transform: translateY(-1px); }
+
+    /* ===== DISCHARGE LAYOUT ===== */
+    .discharge-layout {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 56px;
+      align-items: start;
+      margin: 8px 0 40px;
+    }
+    .dl-text h1 {
+      font-family: var(--font-display);
+      font-size: 42px;
+      font-weight: 400;
+      letter-spacing: -0.022em;
+      line-height: 1.08;
+      margin: 0 0 18px;
+    }
+    .dl-text h1 em { font-style: italic; color: var(--clinical); }
+    .dl-text > p {
+      font-size: 16px;
+      line-height: 1.55;
+      color: var(--n700);
+      margin-bottom: 14px;
+    }
+    .dl-text > p strong { color: var(--ink); }
+
+    .dl-features {
+      margin-top: 32px;
+      background: var(--cream);
+      border-radius: 12px;
+      padding: 20px 24px;
+      border: 1px solid var(--n200);
+    }
+    .dl-features-label {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--clinical);
+      margin-bottom: 12px;
+    }
+    .dl-feat {
+      display: grid;
+      grid-template-columns: 32px 1fr;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--n200);
+    }
+    .dl-feat:last-child { border-bottom: none; padding-bottom: 4px; }
+    .dl-feat-num {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--clinical);
+    }
+    .dl-feat-title {
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 15px;
+      margin-bottom: 4px;
+      color: var(--ink);
+    }
+    .dl-feat-desc {
+      font-size: 13.5px;
+      color: var(--n700);
+      line-height: 1.5;
+    }
+
+    /* ===== PHONE FRAME ===== */
+    .phone-frame {
+      background: var(--ink);
+      border-radius: 36px;
+      padding: 10px;
+      position: sticky;
+      top: 96px;
+      box-shadow: 0 36px 64px -28px rgba(0, 0, 0, 0.5);
+    }
+    .phone-screen {
+      background: var(--bone);
+      border-radius: 28px;
+      padding: 22px 18px;
+      height: 640px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+    }
+    .phone-screen::-webkit-scrollbar { width: 4px; }
+    .phone-screen::-webkit-scrollbar-thumb { background: var(--n300); border-radius: 100px; }
+    .phone-header {
+      text-align: center;
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--n200);
+    }
+    .phone-greeting {
+      font-family: var(--font-display);
+      font-size: 19px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+    }
+    .phone-sub {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--n500);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+    .discharge-card {
+      background: #FFF;
+      border-radius: 12px;
+      padding: 13px 16px;
+      margin-bottom: 10px;
+      border-left: 3px solid var(--clinical);
+      box-shadow: 0 1px 4px rgba(15, 20, 25, 0.04);
+    }
+    .discharge-card.urgent { border-left-color: var(--signal); }
+    .discharge-card.success { border-left-color: var(--recovery); }
+    .discharge-card.warm { border-left-color: var(--warmth); }
+    .dc-label {
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--n500);
+      margin-bottom: 4px;
+    }
+    .dc-title {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 4px;
+      color: var(--ink);
+    }
+    .dc-detail {
+      font-size: 12px;
+      color: var(--n700);
+      line-height: 1.45;
+    }
+
+    /* ===== TALLY CTA ===== */
+    .tally-cta-card {
+      background: var(--cream);
+      padding: 36px;
+      border-radius: 14px;
+      margin: 36px 0 24px;
+      text-align: center;
+      border: 1px solid var(--n200);
+    }
+    .tally-cta-card h3 {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 400;
+      letter-spacing: -0.015em;
+      margin: 0 0 12px;
+    }
+    .tally-cta-card h3 em { font-style: italic; color: var(--clinical); }
+    .tally-cta-card p {
+      color: var(--n700);
+      max-width: 580px;
+      margin: 0 auto 22px;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    /* ===== APP FOOTER ===== */
+    .app-footer {
+      padding: 18px 32px 24px;
+      border-top: 1px solid var(--n200);
+      background: rgba(244, 238, 223, 0.4);
+    }
+    .app-footer .data-footnote,
+    .app-footer .fineprint {
+      max-width: 900px;
+      margin: 0 auto;
+      font-size: 11px;
+      color: var(--n500);
+      line-height: 1.55;
+      text-align: center;
+      font-style: italic;
+    }
+    .app-footer .data-footnote { margin-bottom: 10px; }
+    .app-footer .meta {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--n500);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-align: center;
+      margin-top: 14px;
+    }
+
+    @media (max-width: 1100px) {
+      .discharge-layout { grid-template-columns: 1fr; gap: 32px; }
+      .phone-frame { position: static; max-width: 380px; margin: 0 auto; }
+    }
+    @media (max-width: 880px) {
+      .app { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .main { padding: 24px 20px; }
+      .dl-text h1 { font-size: 30px; }
+      .tally-cta-card { padding: 28px 22px; }
+      .app-footer { padding: 16px 20px 24px; }
+      .app-footer .data-footnote,
+      .app-footer .fineprint { text-align: left; }
+    }
+
+    .fade-up {
+      opacity: 0; transform: translateY(16px);
+      animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    .d-1 { animation-delay: 0.05s; }
+    .d-2 { animation-delay: 0.14s; }
+    .d-3 { animation-delay: 0.24s; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="demo-orto-01-landing.html" class="logo">
+    <span class="mark">R</span>
+    RecoveryOS
+  </a>
+  <div class="nav-right">
+    <span class="demo-badge">Roadmap v2 · Orto</span>
+    <a href="demo-orto-02-dashboard.html" class="nav-link back">← Dashboard operati</a>
+    <a href="https://tally.so/r/recoveryos-orto?source=demo_discharge" class="nav-link">Questionario →</a>
+  </div>
+</nav>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">Workspace</div>
+      <a href="demo-orto-04-visite-oggi.html" class="sidebar-link">
+        <span class="icon">⊹</span>
+        Visite oggi
+        <span class="count">8</span>
+      </a>
+      <a href="demo-orto-02-dashboard.html" class="sidebar-link">
+        <span class="icon">⊕</span>
+        Operati
+        <span class="count">47</span>
+      </a>
+      <a href="#" class="sidebar-link active">
+        <span class="icon">⊕</span>
+        Discharge Pack
+        <span class="roadmap-mini">v2</span>
+      </a>
+      <a href="demo-cross-04-constraints-checker.html" class="sidebar-link">
+        <span class="icon">⌁</span>
+        Constraints
+        <span class="roadmap-mini">v2</span>
+      </a>
+      <a href="#" class="sidebar-link">
+        <span class="icon">⌁</span>
+        Alert
+        <span class="count">3</span>
+      </a>
+      <a href="demo-orto-03-outcome-storytelling.html" class="sidebar-link">
+        <span class="icon">↗</span>
+        Outcome
+      </a>
+      <a href="demo-orto-03-outcome-storytelling.html" class="sidebar-link">
+        <span class="icon">◆</span>
+        Case study
+        <span class="count">12</span>
+      </a>
+      <a href="#" class="sidebar-link">
+        <span class="icon">↻</span>
+        Recall
+        <span class="count">8</span>
+      </a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">Network</div>
+      <a href="#" class="sidebar-link">
+        <span class="icon">✷</span>
+        Medici colleghi
+        <span class="count">2</span>
+      </a>
+      <a href="#" class="sidebar-link">
+        <span class="icon">✦</span>
+        Fisio partner
+        <span class="count">5</span>
+      </a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">Studio</div>
+      <a href="#" class="sidebar-link">
+        <span class="icon">⌂</span>
+        Il mio studio
+      </a>
+      <a href="#" class="sidebar-link">
+        <span class="icon">⌀</span>
+        Impostazioni
+      </a>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="page-header fade-up">
+      <div class="sub">⊕ Hospital Discharge Auto-Pack · feature preview</div>
+    </div>
+
+    <div class="discharge-layout">
+      <div class="dl-text fade-up d-1">
+        <div class="roadmap-badge">⊹ Roadmap v2 · Orto</div>
+        <h1>Il paziente esce.<br>Esce con <em>tutto.</em></h1>
+        <p>Le prime <strong>72 ore post-dimissione</strong> sono dove succede il 40%* dei drop-off e delle complicanze evitabili. Oggi il paziente esce con 4 fogli stampati che perderà. Con RecoveryOS, esce con un pacchetto digitale già attivo sul suo telefono.</p>
+        <p>Lo generi in <strong>30 secondi durante la dimissione</strong>. Il paziente lo riceve via WhatsApp o SMS. Niente app, niente account.</p>
+
+        <div class="dl-features">
+          <div class="dl-features-label">⊹ Cosa contiene il pacchetto</div>
+          <div class="dl-feat">
+            <div class="dl-feat-num">01</div>
+            <div>
+              <div class="dl-feat-title">Schema farmaci con reminder</div>
+              <div class="dl-feat-desc">Orari, dosaggi, alert se salta una dose, segnalazione interazioni note.</div>
+            </div>
+          </div>
+          <div class="dl-feat">
+            <div class="dl-feat-num">02</div>
+            <div>
+              <div class="dl-feat-title">Video esercizi prime 72h</div>
+              <div class="dl-feat-desc">3–5 video da 30 secondi ciascuno, eseguibili senza dubbi anche da paziente fragile.</div>
+            </div>
+          </div>
+          <div class="dl-feat">
+            <div class="dl-feat-num">03</div>
+            <div>
+              <div class="dl-feat-title">"Cosa fare se…" decision tree</div>
+              <div class="dl-feat-desc">Dolore &gt;7, gonfiore, febbre, sintomi atipici. Risposte già pronte + escalation guidata alla chiamata studio.</div>
+            </div>
+          </div>
+          <div class="dl-feat">
+            <div class="dl-feat-num">04</div>
+            <div>
+              <div class="dl-feat-title">Calendario follow-up</div>
+              <div class="dl-feat-desc">Check-in D+3, D+7, D+14, controllo D+30 già programmato. Reminder automatici al paziente e al caregiver.</div>
+            </div>
+          </div>
+          <div class="dl-feat">
+            <div class="dl-feat-num">05</div>
+            <div>
+              <div class="dl-feat-title">Contatti emergenza</div>
+              <div class="dl-feat-desc">Numero studio, numero fisio collegato, caregiver, pronto soccorso più vicino — pre-compilati.</div>
+            </div>
+          </div>
+          <div class="dl-feat">
+            <div class="dl-feat-num">06</div>
+            <div>
+              <div class="dl-feat-title">Istruzioni caregiver</div>
+              <div class="dl-feat-desc">Versione semplificata per figlio o partner che assiste il paziente fragile. Stessi contenuti, lingua diversa.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phone-frame fade-up d-2">
+        <div class="phone-screen">
+          <div class="phone-header">
+            <div class="phone-greeting">Ciao Giuseppina 👋</div>
+            <div class="phone-sub">Dimissione · Oggi · D+0</div>
+          </div>
+
+          <div class="discharge-card urgent">
+            <div class="dc-label">⊕ Farmaci · OGGI ore 22:00</div>
+            <div class="dc-title">Antibiotico Augmentin 1g</div>
+            <div class="dc-detail">1 compressa con acqua, dopo cena. Reminder attivo.</div>
+          </div>
+
+          <div class="discharge-card">
+            <div class="dc-label">⊜ Esercizio · Domani mattina</div>
+            <div class="dc-title">Mobilizzazione caviglia</div>
+            <div class="dc-detail">Video 30 sec · 3 serie da 10 movimenti · eseguibile da letto</div>
+          </div>
+
+          <div class="discharge-card success">
+            <div class="dc-label">⌁ Cosa fare se…</div>
+            <div class="dc-title">Senti dolore &gt;7/10?</div>
+            <div class="dc-detail">Tap qui per il decision tree guidato. Se rosso → chiama studio.</div>
+          </div>
+
+          <div class="discharge-card">
+            <div class="dc-label">⌁ Calendario</div>
+            <div class="dc-title">Check-in venerdì · D+3</div>
+            <div class="dc-detail">Andrea (caregiver) riceverà notifica parallela.</div>
+          </div>
+
+          <div class="discharge-card warm">
+            <div class="dc-label">☏ Emergenze</div>
+            <div class="dc-title">Studio Dr. Bianchi</div>
+            <div class="dc-detail">+39 051 12 34 567 · Reperibile 8:00 – 20:00</div>
+          </div>
+
+          <div class="discharge-card success">
+            <div class="dc-label">✦ Caregiver attivo</div>
+            <div class="dc-title">Andrea (tuo figlio)</div>
+            <div class="dc-detail">Riceverà gli aggiornamenti e i reminder paralleli ai tuoi.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tally-cta-card fade-up d-3">
+      <h3>Ti interesserebbe <em>questo pacchetto</em>?</h3>
+      <p>La stiamo valutando per la roadmap v2. Compila il questionario e dicci se è una priorità per la tua pratica. Le 3 feature più richieste diventano la roadmap concreta.</p>
+      <a href="https://tally.so/r/recoveryos-orto?source=demo_discharge" class="cd-btn-primary">Compila questionario (6 min) →</a>
+    </div>
+  </main>
+</div>
+
+<footer class="app-footer">
+  <div class="data-footnote">
+    *Dati illustrativi da letteratura o da validare con la raccolta reale nei primi 6 mesi di adozione.
+  </div>
+  <div class="fineprint">
+    RecoveryOS supporta follow-up, comunicazione e documentazione clinica.
+    Evidenzia pattern e anomalie nei dati raccolti, ma non fa diagnosi e non propone trattamenti.
+    Le decisioni cliniche restano sempre al professionista.
+  </div>
+  <div class="meta">Roadmap Preview · V1.6 · 2026-05-21</div>
+</footer>
+
+</body>
+</html>

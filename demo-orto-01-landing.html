@@ -908,6 +908,275 @@
       color: var(--n500);
     }
 
+    /* ===== ROADMAP BADGE (cross-section) ===== */
+    .roadmap-badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 16px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+    .roadmap-badge.navy { background: rgba(30, 58, 138, 0.12); color: var(--clinical); }
+    .roadmap-badge.warm { background: rgba(194, 65, 12, 0.12); color: var(--warmth); }
+    .roadmap-badge.green { background: rgba(4, 120, 87, 0.12); color: var(--recovery); }
+    .roadmap-badge.sun { background: rgba(234, 179, 8, 0.22); color: #92400e; }
+
+    /* ===== HANDOFF SECTION ===== */
+    .handoff-section {
+      background: var(--bone);
+      border: 1px solid var(--n200);
+      border-radius: 16px;
+      padding: 40px 44px;
+      margin: 32px 0;
+    }
+    .handoff-section h2 {
+      font-family: var(--font-display);
+      font-size: 30px;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin: 8px 0;
+    }
+    .handoff-section h2 em { font-style: italic; color: var(--clinical); }
+    .handoff-section > p {
+      color: var(--n700);
+      font-size: 15.5px;
+      line-height: 1.55;
+      max-width: 720px;
+      margin: 0 0 18px;
+    }
+    .handoff-grid {
+      display: grid;
+      grid-template-columns: 1fr 60px 1fr;
+      gap: 14px;
+      align-items: stretch;
+      margin-top: 24px;
+    }
+    .handoff-side {
+      padding: 22px 24px;
+      background: var(--cream);
+      border-radius: 10px;
+    }
+    .handoff-side.left { border-top: 3px solid var(--clinical); }
+    .handoff-side.right { border-top: 3px solid var(--warmth); }
+    .hs-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+    .handoff-side.left .hs-label { color: var(--clinical); }
+    .handoff-side.right .hs-label { color: var(--warmth); }
+    .hs-list { list-style: none; padding: 0; margin: 0; }
+    .hs-list li {
+      padding: 8px 0;
+      font-size: 13.5px;
+      color: var(--ink);
+      line-height: 1.45;
+    }
+    .hs-list li::before {
+      content: "+ ";
+      color: var(--n500);
+      font-family: var(--font-mono);
+      font-weight: 600;
+    }
+    .handoff-arrow {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      text-align: center;
+      color: var(--n300);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ===== CAREGIVER MOCKUP ===== */
+    .caregiver-section {
+      background: var(--cream);
+      border-radius: 16px;
+      padding: 40px 44px;
+      margin: 32px 0;
+    }
+    .caregiver-grid {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 40px;
+      align-items: center;
+      margin-top: 18px;
+    }
+    .caregiver-text h2 {
+      font-family: var(--font-display);
+      font-size: 30px;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin: 0 0 14px;
+    }
+    .caregiver-text h2 em { font-style: italic; color: var(--recovery); }
+    .caregiver-text p {
+      color: var(--n700);
+      font-size: 15px;
+      line-height: 1.55;
+      margin: 0 0 12px;
+    }
+    .caregiver-phone {
+      background: var(--ink);
+      border-radius: 28px;
+      padding: 8px;
+      box-shadow: 0 24px 48px -22px rgba(15, 20, 25, 0.4);
+    }
+    .caregiver-screen {
+      background: var(--bone);
+      border-radius: 22px;
+      padding: 18px 16px;
+      min-height: 360px;
+    }
+    .caregiver-header {
+      text-align: center;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--n200);
+      margin-bottom: 14px;
+    }
+    .caregiver-greeting {
+      font-family: var(--font-display);
+      font-size: 17px;
+      font-weight: 500;
+    }
+    .caregiver-sub {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--n500);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+    .caregiver-card {
+      background: #FFF;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      border-left: 3px solid var(--clinical);
+      box-shadow: 0 1px 3px rgba(15, 20, 25, 0.05);
+    }
+    .caregiver-card.green { border-left-color: var(--recovery); }
+    .caregiver-card.warm { border-left-color: var(--warmth); }
+    .cgc-label {
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--n500);
+      margin-bottom: 3px;
+    }
+    .cgc-title { font-weight: 600; font-size: 13px; color: var(--ink); }
+    .cgc-detail { font-size: 11.5px; color: var(--n700); margin-top: 3px; line-height: 1.4; }
+
+    /* ===== FUTURE ROADMAP SECTION ===== */
+    .future-roadmap {
+      background: linear-gradient(135deg, var(--ink) 0%, #1a2530 100%);
+      color: var(--bone);
+      border-radius: 18px;
+      padding: 48px;
+      margin: 40px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .future-roadmap::before {
+      content: '';
+      position: absolute;
+      top: -100px; right: -100px;
+      width: 360px; height: 360px;
+      background: radial-gradient(circle, rgba(234, 179, 8, 0.16), transparent 70%);
+      pointer-events: none;
+    }
+    .future-roadmap > * { position: relative; z-index: 1; }
+    .fr-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--sun);
+      margin-bottom: 14px;
+    }
+    .fr-title {
+      font-family: var(--font-display);
+      font-size: 34px;
+      font-weight: 400;
+      letter-spacing: -0.022em;
+      margin: 0 0 14px;
+      color: var(--bone);
+      line-height: 1.12;
+    }
+    .fr-title em { font-style: italic; color: var(--sun); }
+    .fr-sub {
+      color: rgba(251, 248, 242, 0.78);
+      font-size: 15px;
+      line-height: 1.55;
+      margin: 0 0 30px;
+      max-width: 720px;
+    }
+    .fr-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+    .fr-card {
+      background: rgba(251, 248, 242, 0.06);
+      padding: 22px 24px;
+      border-radius: 10px;
+      border-left: 3px solid var(--sun);
+      transition: all 0.2s ease;
+    }
+    .fr-card:hover {
+      background: rgba(251, 248, 242, 0.1);
+      transform: translateY(-2px);
+    }
+    .fr-card h4 {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 500;
+      margin: 0 0 8px;
+      color: var(--bone);
+      letter-spacing: -0.01em;
+    }
+    .fr-card p {
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: rgba(251, 248, 242, 0.7);
+      margin: 0 0 12px;
+    }
+    .fr-link {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--sun);
+      text-decoration: none;
+      font-weight: 600;
+      transition: opacity 0.15s ease;
+    }
+    .fr-link:hover { opacity: 0.75; }
+
+    @media (max-width: 980px) {
+      .handoff-section,
+      .caregiver-section { padding: 28px 24px; }
+      .handoff-grid { grid-template-columns: 1fr; gap: 14px; }
+      .handoff-arrow { transform: rotate(90deg); padding: 6px 0; }
+      .caregiver-grid { grid-template-columns: 1fr; gap: 28px; }
+      .caregiver-phone { max-width: 320px; margin: 0 auto; }
+      .future-roadmap { padding: 32px 24px; }
+      .fr-title { font-size: 26px; }
+      .fr-grid { grid-template-columns: 1fr; }
+      .handoff-section h2,
+      .caregiver-text h2 { font-size: 24px; }
+    }
+
     .network-section { padding: 88px 0; }
     .network-grid {
       display: grid;
@@ -1356,6 +1625,78 @@
   </div>
 </section>
 
+<section>
+  <div class="container">
+    <div class="handoff-section">
+      <div class="roadmap-badge navy">⊹ Roadmap v2 · Cross-vertical</div>
+      <h2>Recovery Handoff <em>strutturato</em>, non foglio WhatsApp.</h2>
+      <p>Imposti il piano operatorio in 30 secondi. Il fisio collegato lo riceve già strutturato, con vincoli, target ROM e milestone clinici. Niente più telefonate per chiarire.</p>
+      <div class="handoff-grid">
+        <div class="handoff-side left">
+          <div class="hs-label">⊕ Tu imposti</div>
+          <ul class="hs-list">
+            <li>Tipo intervento e data</li>
+            <li>Vincoli post-op (es. no carico fino sett 4)</li>
+            <li>ROM consentito per fase</li>
+            <li>Esercizi vietati con motivazione</li>
+            <li>Fisio collegato + protocollo di riferimento</li>
+            <li>Timeline controlli previsti</li>
+          </ul>
+        </div>
+        <div class="handoff-arrow">→</div>
+        <div class="handoff-side right">
+          <div class="hs-label">⊜ Il fisio riceve</div>
+          <ul class="hs-list">
+            <li>Briefing chirurgico completo</li>
+            <li>Vincoli strutturati per fase</li>
+            <li>Target ROM e milestone clinici</li>
+            <li>Diretta visibilità del caso operatorio</li>
+            <li>Auto-check vincoli sul piano riabilitativo</li>
+            <li>Alert se devia dal target atteso</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="caregiver-section">
+      <div class="roadmap-badge green">⊹ Roadmap v2 · Caregiver</div>
+      <div class="caregiver-grid">
+        <div class="caregiver-text">
+          <h2>Andrea segue sua madre. <em>Anche RecoveryOS.</em></h2>
+          <p>Per il 60% delle protesi anca/ginocchio (over 65), il caregiver è il vero "completer" del recupero. RecoveryOS dà al figlio Andrea una dashboard mobile per vedere come va sua madre, confermare aderenza, ricevere alert.</p>
+          <p>Niente app, niente account. Link mobile diretto via WhatsApp o SMS.</p>
+        </div>
+        <div class="caregiver-phone">
+          <div class="caregiver-screen">
+            <div class="caregiver-header">
+              <div class="caregiver-greeting">Ciao Andrea 👋</div>
+              <div class="caregiver-sub">Tua mamma · D+14</div>
+            </div>
+            <div class="caregiver-card green">
+              <div class="cgc-label">Stato oggi</div>
+              <div class="cgc-title">In linea ✓</div>
+            </div>
+            <div class="caregiver-card">
+              <div class="cgc-label">Domani · ore 10</div>
+              <div class="cgc-title">Esercizio mobilità · 15 min</div>
+              <div class="cgc-detail">Aiuta tua madre o tap "Già fatto"</div>
+            </div>
+            <div class="caregiver-card warm">
+              <div class="cgc-label">Aggiorna per lei</div>
+              <div class="cgc-title">Dolore oggi: 4/10</div>
+              <div class="cgc-detail">Tap per modificare</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="alt">
   <div class="container">
     <div class="section-eyebrow">Data moat</div>
@@ -1381,6 +1722,39 @@
         <div class="stage-num">Anno 2+</div>
         <h4>Predittivo</h4>
         <p>Drop-off risk, milestone probability, protocol optimization sui tuoi dati operativi aggregati.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="future-roadmap">
+      <div class="fr-eyebrow">⊹ Roadmap v2 · Cosa stiamo decidendo</div>
+      <h2 class="fr-title">Tu decidi <em>cosa costruiamo</em> per primo.</h2>
+      <p class="fr-sub">Queste sono feature che stiamo valutando per la prossima release. Compila il questionario e dicci quali sono prioritarie per la tua pratica. Le 3 più richieste diventano la nostra roadmap concreta.</p>
+
+      <div class="fr-grid">
+        <div class="fr-card">
+          <h4>⊕ Protocol Constraints Checker</h4>
+          <p>I vincoli che imposti vengono verificati automaticamente sul piano del fisio. Niente più telefonate per chiarire ROM e carico.</p>
+          <a href="demo-cross-04-constraints-checker.html" class="fr-link">Vedi preview →</a>
+        </div>
+        <div class="fr-card">
+          <h4>⊕ Hospital Discharge Auto-Pack</h4>
+          <p>Il paziente esce dall'ospedale con tutto sul telefono: farmaci, esercizi, calendario follow-up, decision tree red flag.</p>
+          <a href="demo-orto-06-discharge-pack.html" class="fr-link">Vedi preview →</a>
+        </div>
+        <div class="fr-card">
+          <h4>⊕ Voice memo post-visita</h4>
+          <p>30 secondi dopo la visita, l'AI struttura nota cartella, lettera al MMG, prossimo follow-up. Tempo restituito ogni giorno.</p>
+          <span class="fr-link" style="opacity: 0.55;">In valutazione</span>
+        </div>
+        <div class="fr-card">
+          <h4>⊕ Recovery Completion Certificate</h4>
+          <p>A fine percorso, report firmato per il paziente: outcome, milestone, PROMs. Materiale per case study + chiusura formale del percorso.</p>
+          <span class="fr-link" style="opacity: 0.55;">In valutazione</span>
+        </div>
       </div>
     </div>
   </div>

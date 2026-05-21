@@ -470,6 +470,104 @@
     }
     .insight-panel .ip-cta:hover { background: var(--bone); color: var(--ink); }
 
+    .roadmap-mini {
+      margin-left: auto;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      padding: 2px 6px;
+      background: var(--sun);
+      color: var(--ink);
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+
+    .anniversary-card {
+      background: linear-gradient(135deg, #1E3A8A 0%, #047857 100%);
+      color: var(--bone);
+      border-radius: 14px;
+      padding: 28px 32px;
+      margin: 24px 0;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 18px 40px -22px rgba(15, 20, 25, 0.35);
+    }
+    .anniversary-card::before {
+      content: "ROADMAP v2";
+      position: absolute;
+      top: 14px;
+      right: 18px;
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      letter-spacing: 0.18em;
+      color: rgba(255, 255, 255, 0.55);
+      font-weight: 600;
+    }
+    .ac-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--sun);
+      margin-bottom: 10px;
+    }
+    .ac-headline {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 500;
+      letter-spacing: -0.015em;
+      margin: 0 0 12px;
+      color: var(--bone);
+      line-height: 1.2;
+    }
+    .ac-headline em { font-style: italic; color: var(--sun); }
+    .anniversary-card > p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.86);
+      font-size: 14px;
+      line-height: 1.55;
+      max-width: 720px;
+    }
+    .ac-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 22px;
+    }
+    .ac-stat {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 14px 16px;
+      border-radius: 8px;
+    }
+    .ac-stat-val {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 500;
+      color: var(--sun);
+      letter-spacing: -0.015em;
+      line-height: 1;
+    }
+    .ac-stat-val .star {
+      color: rgba(255, 255, 255, 0.55);
+      font-size: 0.45em;
+      vertical-align: super;
+      margin-left: 2px;
+      font-weight: 400;
+    }
+    .ac-stat-lbl {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      color: rgba(255, 255, 255, 0.7);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 6px;
+    }
+    @media (max-width: 880px) {
+      .anniversary-card { padding: 22px 22px; }
+      .ac-headline { font-size: 20px; }
+      .ac-grid { grid-template-columns: 1fr; }
+    }
+
     .quick-nav {
       display: flex;
       gap: 8px;
@@ -623,6 +721,16 @@
         Visite oggi
         <span class="count">8</span>
       </a>
+      <a href="demo-orto-06-discharge-pack.html" class="sidebar-link">
+        <span class="icon">⊕</span>
+        Discharge Pack
+        <span class="roadmap-mini">v2</span>
+      </a>
+      <a href="demo-cross-04-constraints-checker.html" class="sidebar-link">
+        <span class="icon">⌁</span>
+        Constraints
+        <span class="roadmap-mini">v2</span>
+      </a>
       <a href="#" class="sidebar-link active">
         <span class="icon">⊕</span>
         Operati
@@ -760,6 +868,30 @@
             <div class="pqb-reason">Sintesi pre-controllo pronta · D+30 lunedì</div>
           </div>
           <a href="demo-orto-05-detail-giuseppina.html" class="action-cell navy">Apri AI Resume</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="anniversary-card fade-up d-2">
+      <div class="ac-eyebrow">⊹ Anniversary Recall · 12 mesi automatico</div>
+      <h3 class="ac-headline">3 pazienti in <em>anniversario</em> questa settimana.</h3>
+      <p>
+        Maria Rossi (LCA, 1 anno fa), Carlo De Lucca (PTG, 1 anno fa), Anna Verdi (cuffia, 1 anno fa).
+        RecoveryOS invia automaticamente il PROM 12 mesi e propone check-up annuale —
+        outcome a lungo termine misurato, revenue ricorrente, paziente che torna nel tuo studio.
+      </p>
+      <div class="ac-grid">
+        <div class="ac-stat">
+          <div class="ac-stat-val">78%<span class="star">*</span></div>
+          <div class="ac-stat-lbl">PROM 12m completato</div>
+        </div>
+        <div class="ac-stat">
+          <div class="ac-stat-val">€450<span class="star">*</span></div>
+          <div class="ac-stat-lbl">Revenue medio check-up</div>
+        </div>
+        <div class="ac-stat">
+          <div class="ac-stat-val">Outcome</div>
+          <div class="ac-stat-lbl">a lungo termine misurato</div>
         </div>
       </div>
     </div>
